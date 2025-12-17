@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <title>Humo eSport Winter Tournament</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForHumo — Jamoa Ro‘yxati</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
 
-<div class="container">
-  <h1>Humo eSport Winter Tournament 2025</h1>
-  <p class="subtitle">Ro‘yxatdan o‘tish 20-dekabrdan boshlanadi</p>
+        <h1 class="title">Humo eSport — Winter Tournament</h1>
+        <p class="subtitle">Rasmiy roʻyhatdan oʻtish sahifasi</p>
 
-  <a class="btn" href="register.html">Ro‘yxatdan o‘tish</a>
-</div>
+        <form id="registerForm">
 
+            <label>Jamoa nomi:</label>
+            <input type="text" name="teamName" required placeholder="Masalan: ASSASIN’S">
+
+            <label>Jamoa logosi (PNG/JPG):</label>
+            <input type="file" name="teamLogo" accept="image/*" required>
+
+            <label>Sardor Nickname:</label>
+            <input type="text" name="captainNick" required placeholder="Sardor nickname">
+
+            <label>Sardor MLBB ID:</label>
+            <input type="text" name="captainID" required placeholder="123456789">
+
+            <label>Sardor Telegram manzili:</label>
+            <input type="text" name="telegram" required placeholder="@username">
+
+            <button type="submit" class="btn">Roʻyhatdan oʻtish</button>
+        </form>
+
+        <p id="result" class="result"></p>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
