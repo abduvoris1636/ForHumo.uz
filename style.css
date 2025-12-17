@@ -68,3 +68,32 @@ input {
     margin-top: 15px;
     font-size: 16px;
 }
+
+/* ❄ SNOW REAL EFFECT */
+.snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.snow {
+    position: absolute;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    filter: blur(1px);
+    animation: fall 8s linear infinite;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) translateX(-20px);
+    }
+}
