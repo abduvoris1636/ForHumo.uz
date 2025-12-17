@@ -9,7 +9,7 @@ export const config = {
 };
 
 const BOT_TOKEN = "8450838728:AAEfQjdrCd3VgVev3Af6W2QoiD8IF4hEUD8";
-const CHAT_ID = "YOUR_TELEGRAM_ID"; // O'zingizniki qo'ying
+const CHAT_ID = "6579383715"; // O'zingizniki qo'ying
 
 export default async function handler(req, res) {
     if (req.method !== "POST") {
