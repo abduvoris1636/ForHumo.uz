@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForHumo — Jamoa Ro‘yxati</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Winter Tournament 2026 – Ro‘yxatdan O‘tish</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container">
 
-        <h1 class="title">Humo eSport — Winter Tournament</h1>
-        <p class="subtitle">Rasmiy roʻyhatdan oʻtish sahifasi</p>
+<div class="container">
 
-        <form id="registerForm">
+    <h1 class="title">Winter Tournament 2026</h1>
+    <p class="subtitle">Jamoangizni ro‘yxatdan o‘tkazing</p>
 
-            <label>Jamoa nomi:</label>
-            <input type="text" name="teamName" required placeholder="Masalan: ASSASIN’S">
+    <form id="registerForm" enctype="multipart/form-data">
 
-            <label>Jamoa logosi (PNG/JPG):</label>
-            <input type="file" name="teamLogo" accept="image/*" required>
+        <label>Jamoa nomi</label>
+        <input type="text" name="teamName" required>
 
-            <label>Sardor Nickname:</label>
-            <input type="text" name="captainNick" required placeholder="Sardor nickname">
+        <label>Sardor (Nickname)</label>
+        <input type="text" name="captainName" required>
 
-            <label>Sardor MLBB ID:</label>
-            <input type="text" name="captainID" required placeholder="123456789">
+        <label>Sardor MLBB ID</label>
+        <input type="number" name="mlbbId" required>
 
-            <label>Sardor Telegram manzili:</label>
-            <input type="text" name="telegram" required placeholder="@username">
+        <label>Telegram manzili (@username)</label>
+        <input type="text" name="telegram" required>
 
-            <button type="submit" class="btn">Roʻyhatdan oʻtish</button>
-        </form>
+        <label>Jamoa logosi (majburiy)</label>
+        <input type="file" name="logo" accept="image/*" required>
 
-        <p id="result" class="result"></p>
-    </div>
+        <button type="submit" id="submitBtn">Yuborish</button>
 
-    <script src="script.js"></script>
+    </form>
+
+    <p id="status"></p>
+
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
