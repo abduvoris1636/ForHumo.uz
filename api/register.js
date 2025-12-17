@@ -71,3 +71,37 @@ export default async function handler(req, res) {
         }
     });
 }
+
+// === Registered.json bilan ishlash ===
+const filePath = "./registered.json";
+
+// Fayl bo'lmasa avtomatik yaratamiz
+if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, JSON.stringify([]));
+}
+
+// Mavjud ro'yhatni o'qish
+const registeredTeams = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+// Tekshirish: MLBB ID yoki Telegram username oldindan bor emasmi?
+const already = registeredTeams.find(
+    t => t.mlbbId === mlbbId || t.telegram === telegram
+);
+
+if (already) {
+    return res.status(400).json({
+        error: "Bu sardor avval ro'yxatdan o'tgan. Takror ruxsat yo'q!"
+    });
+}
+
+// Yangi jamoani ro'yhatga qo'shamiz
+registeredTeams.push({
+    teamName,
+    captainName,
+    mlbbId,
+    telegram,
+    time: new Date().toISOString()
+});
+
+// Bazaga yozish
+fs.writeFileSync(filePath, JSON.stringify(registeredTeams, null, 2));
