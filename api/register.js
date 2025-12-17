@@ -4,14 +4,11 @@ import FormData from "form-data";
 import fetch from "node-fetch";
 
 export const config = {
-    api: {
-        bodyParser: false
-    }
+    api: { bodyParser: false }
 };
 
 const BOT_TOKEN = "8450838728:AAEfQjdrCd3VgVev3Af6W2QoiD8IF4hEUD8";
 const CHAT_ID = "6579383715";
-const filePath = "./registered.json";
 
 export default async function handler(req, res) {
     if (req.method !== "POST") {
@@ -26,25 +23,26 @@ export default async function handler(req, res) {
         const { teamName, captainName, mlbbId, telegram } = fields;
         const file = files.teamLogo;
 
-        // === REGISTERED.JSON bilan ishlash ===
+        // === JSON TEKSHIRISH ===
+        const filePath = "./registered.json";
+
         if (!fs.existsSync(filePath)) {
             fs.writeFileSync(filePath, JSON.stringify([]));
         }
 
         const registeredTeams = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-        // Takror kirishni tekshirish
         const already = registeredTeams.find(
             t => t.mlbbId === mlbbId || t.telegram === telegram
         );
 
         if (already) {
             return res.status(400).json({
-                error: "Bu sardor avval ro'yxatdan o'tgan. Takror ruxsat yo‘q!"
+                error: "Bu sardor avval ro'yxatdan o'tgan!"
             });
         }
 
-        // Yangi jamoani jsonga yozamiz
+        // Yangi ma'lumotni qo'shamiz
         registeredTeams.push({
             teamName,
             captainName,
@@ -55,45 +53,42 @@ export default async function handler(req, res) {
 
         fs.writeFileSync(filePath, JSON.stringify(registeredTeams, null, 2));
 
-        // === Telegramga yuborish ===
-        const caption = 
-`Yangi jamoa ro‘yxatdan o‘tdi!
-🏆 *Jamoa nomi:* ${teamName}
-👑 *Sardor:* ${captainName}
-🆔 *MLBB ID:* ${mlbbId}
-📩 *Telegram:* ${telegram}
-`;
-
+        // === TELEGRAMGA YUBORISH ===
         try {
-            const fileBuffer = fs.readFileSync(file.filepath);
+            const buffer = fs.readFileSync(file.filepath);
 
-            const telegramForm = new FormData();
-            telegramForm.append("chat_id", CHAT_ID);
-            telegramForm.append("caption", caption);
-            telegramForm.append("parse_mode", "Markdown");
-            telegramForm.append("photo", fileBuffer, file.originalFilename);
+            const tgForm = new FormData();
+            tgForm.append("chat_id", CHAT_ID);
+            tgForm.append("caption",
+                `Yangi jamoa ro‘yxatdan o‘tdi!
+🏆 Jamoa nomi: ${teamName}
+👑 Sardor: ${captainName}
+🆔 MLBB ID: ${mlbbId}
+📩 Telegram: ${telegram}`
+            );
+            tgForm.append("photo", buffer, file.originalFilename);
 
             const tgRes = await fetch(
                 `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
                 {
                     method: "POST",
-                    body: telegramForm,
-                    headers: telegramForm.getHeaders()
+                    body: tgForm,
+                    headers: tgForm.getHeaders()
                 }
             );
 
             const result = await tgRes.json();
+
             if (!result.ok) {
-                return res.status(500).json({ error: "Telegram xato", result });
+                console.log("Telegram error:", result);
+                return res.status(500).json({ error: "Telegram xato", detail: result });
             }
 
-            res.status(200).json({ ok: true });
+            return res.status(200).json({ ok: true });
 
         } catch (e) {
-            res.status(500).json({
-                error: "Telegramga yuborishda xato",
-                detail: e.toString()
-            });
+            console.log("Catch error:", e);
+            return res.status(500).json({ error: "Yuborilmadi", detail: e.toString() });
         }
     });
 }
