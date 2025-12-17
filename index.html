@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humo eSport — MLBB Winter Tournament</title>
+
+<style>
+* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+body {
+  margin: 0;
+  background: linear-gradient(135deg,#0b0f1a,#111827);
+  color: #fff;
+  padding: 24px;
+}
+.container {
+  max-width: 560px;
+  margin: auto;
+  background: rgba(255,255,255,0.06);
+  border-radius: 18px;
+  padding: 24px;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.logo img { height: 44px; }
+
+h1 { text-align: center; margin-bottom: 4px; }
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  opacity: .8;
+  margin-bottom: 18px;
+}
+
+label { font-size: 13px; margin-top: 12px; display: block; }
+input {
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 6px;
+}
+
+.player {
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: #ffcc00;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.admin {
+  margin-top: 18px;
+  font-size: 12px;
+  text-align: center;
+  opacity: .7;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- LOGOLAR -->
+  <div class="logo">
+    <img src="/images/logo-humo.png">
+    <img src="/images/logo-winter.png">
+    <img src="/images/logo-mlbb.png">
+  </div>
+
+  <h1>Humo eSport</h1>
+  <div class="subtitle">MLBB Winter Tournament — Jamoa ro‘yxatdan o‘tishi</div>
+
+  <!-- TEAM -->
+  <label>Jamoa nomi</label>
+  <input id="team" placeholder="Masalan: Humo Legends">
+
+  <label>Jamoa logosi</label>
+  <input type="file" id="logo" accept="image/*">
+
+  <!-- CAPTAIN -->
+  <div class="player">
+    <strong>Kapitan</strong>
+    <label>Ism / Nick</label>
+    <input id="capName">
+    <label>MLBB ID</label>
+    <input id="capId">
+  </div>
+
+  <!-- PLAYERS -->
+  <div id="players"></div>
+
+  <button onclick="register()">Ro‘yxatdan o‘tish</button>
+
+  <div class="admin" onclick="downloadData()">
+    📥 Admin: ro‘yxatni yuklab olish
+  </div>
+
+</div>
+
+<script>
+const playersDiv = document.getElementById("players");
+
+// 4 ta qo‘shimcha o‘yinchi (jami 5)
+for (let i = 1; i <= 4; i++) {
+  playersDiv.innerHTML += `
+    <div class="player">
+      <strong>O‘yinchi ${i+1}</strong>
+      <label>Ism / Nick</label>
+      <input class="pname">
+      <label>MLBB ID</label>
+      <input class="pid">
+    </div>`;
+}
+
+function register() {
+  const team = document.getElementById("team").value.trim();
+  const capName = document.getElementById("capName").value.trim();
+  const capId = document.getElementById("capId").value.trim();
+  const logoFile = document.getElementById("logo").files[0];
+
+  if (!team || !capName || !capId) {
+    alert("Asosiy ma’lumotlarni to‘ldiring!");
+    return;
+  }
+
+  const players = [];
+  document.querySelectorAll(".player").forEach((box, i) => {
+    const name = box.querySelector(".pname")?.value || capName;
+    const id = box.querySelector(".pid")?.value || capId;
+    players.push({ name, mlbbId: id });
+  });
+
+  const saveData = (logoBase64) => {
+    const data = JSON.parse(localStorage.getItem("registrations") || "[]");
+    data.push({
+      team,
+      logo: logoBase64 || null,
+      players,
+      time: new Date().toLocaleString()
+    });
+    localStorage.setItem("registrations", JSON.stringify(data));
+    alert("Jamoa muvaffaqiyatli ro‘yxatdan o‘tdi!");
+  };
+
+  if (logoFile) {
+    const reader = new FileReader();
+    reader.onload = () => saveData(reader.result);
+    reader.readAsDataURL(logoFile);
+  } else {
+    saveData(null);
+  }
+}
+
+function downloadData() {
+  const data = localStorage.getItem("registrations");
+  if (!data) return alert("Hozircha ro‘yxat yo‘q");
+  const blob = new Blob([data], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "humo-mlbb-teams.json";
+  a.click();
+}
+</script>
+
+</body>
+</html>
