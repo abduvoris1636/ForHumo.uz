@@ -1,23 +1,18 @@
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
+document.getElementById("registerForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const form = document.getElementById("registerForm");
+    const status = document.getElementById("status");
+
     const formData = new FormData(form);
 
-    document.getElementById("result").innerText = "Yuborilmoqda...";
+    status.innerHTML = "Yuborilmoqda...";
 
-    // BU YERGA KEYIN TELEGRAM BOT API YOZAMIZ
-    const BOT_URL = "YOUR_API_URL_HERE";
-
-    const res = await fetch(BOT_URL, {
+    let response = await fetch("/api/register", {
         method: "POST",
         body: formData
     });
 
-    if (res.ok) {
-        document.getElementById("result").innerText = "Jamoa muvaffaqiyatli roʻyhatdan o'tdi!";
-        form.reset();
-    } else {
-        document.getElementById("result").innerText = "Xatolik yuz berdi!";
-    }
+    let result = await response.text();
+    status.innerHTML = result;
 });
