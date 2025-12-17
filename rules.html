@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnir Qoidalari - HUMO ESPORT Winter Tournament 2026</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-circle"></div>
+                <div class="logo-text">HUMO</div>
+            </div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-text">Yuklanmoqda...</div>
+        </div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <canvas id="particles-canvas"></canvas>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-wrapper" onclick="window.location.href='index.html'">
+                    <div class="logo-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-main">HUMO</span>
+                        <span class="logo-sub">ESPORTS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Bosh Sahifa</span>
+                </a>
+                <a href="rules.html" class="nav-link active">
+                    <i class="fas fa-book"></i>
+                    <span>Qoidalar</span>
+                </a>
+                <a href="register.html" class="nav-link cta-nav">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Ro'yxatdan o'tish</span>
+                </a>
+                <a href="participants.html" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Ishtirokchilar</span>
+                </a>
+                <a href="contact.html" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Aloqa</span>
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <div class="mobile-menu-content">
+                <a href="index.html" class="mobile-link">
+                    <i class="fas fa-home"></i>
+                    <span>Bosh Sahifa</span>
+                </a>
+                <a href="rules.html" class="mobile-link active">
+                    <i class="fas fa-book"></i>
+                    <span>Qoidalar</span>
+                </a>
+                <a href="register.html" class="mobile-link">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Ro'yxatdan o'tish</span>
+                </a>
+                <a href="participants.html" class="mobile-link">
+                    <i class="fas fa-users"></i>
+                    <span>Ishtirokchilar</span>
+                </a>
+                <a href="contact.html" class="mobile-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Aloqa</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Rules Main Section -->
+    <main class="rules-main">
+        <div class="rules-container">
+            <!-- Rules Header -->
+            <div class="rules-header">
+                <h1 class="rules-title">Turnir Qoidalari va Format</h1>
+                <p class="rules-subtitle">Mobile Legends: Bang Bang — Winter Tournament 2026</p>
+                
+                <div class="rules-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <div class="meta-content">
+                            <div class="meta-label">Oxirgi yangilanish</div>
+                            <div class="meta-value">15-dekabr, 2025</div>
+                        </div>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-file-contract"></i>
+                        <div class="meta-content">
+                            <div class="meta-label">Versiya</div>
+                            <div class="meta-value">2.0.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Navigation -->
+            <div class="quick-nav">
+                <div class="nav-sticky">
+                    <div class="nav-title">
+                        <i class="fas fa-list"></i>
+                        <span>Tez o'tish</span>
+                    </div>
+                    <div class="nav-links">
+                        <a href="#general" class="nav-link active" data-section="general">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Umumiy qoidalar</span>
+                        </a>
+                        <a href="#format" class="nav-link" data-section="format">
+                            <i class="fas fa-chess-board"></i>
+                            <span>Turnir formati</span>
+                        </a>
+                        <a href="#schedule" class="nav-link" data-section="schedule">
+                            <i class="fas fa-calendar"></i>
+                            <span>Jadval</span>
+                        </a>
+                        <a href="#prizes" class="nav-link" data-section="prizes">
+                            <i class="fas fa-trophy"></i>
+                            <span>Mukofotlar</span>
+                        </a>
+                        <a href="#requirements" class="nav-link" data-section="requirements">
+                            <i class="fas fa-user-check"></i>
+                            <span>Talablar</span>
+                        </a>
+                        <a href="#rules" class="nav-link" data-section="rules">
+                            <i class="fas fa-gavel"></i>
+                            <span>Qoidabuzarliklar</span>
+                        </a>
+                        <a href="#faq" class="nav-link" data-section="faq">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Savol-javob</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rules Content -->
+            <div class="rules-content">
+                <!-- General Rules -->
+                <section id="general" class="rules-section active">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Umumiy Qoidalar
+                        </h2>
+                        <p class="section-description">Turnirning asosiy tamoyillari va tashkiliy jihatlari</p>
+                    </div>
+
+                    <div class="rules-grid">
+                        <div class="rule-card">
+                            <div class="rule-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="rule-title">Jamoa Tarkibi</h3>
+                            <p class="rule-description">
+                                Har bir jamoa 5 ta asosiy va 1 ta zaxira o'yinchidan iborat bo'lishi shart.
+                                Jami 6 kishi.
+                            </p>
+                        </div>
+
+                        <div class="rule-card">
+                            <div class="rule-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <h3 class="rule-title">Ro'yxatdan O'tish</h3>
+                            <p class="rule-description">
+                                Faqat 16 ta to'liq jamoa turnirga qabul qilinadi. Ro'yxat to'lgach,
+                                ortiqcha jamoalar kutish ro'yxatiga olinadi.
+                            </p>
+                        </div>
+
+                        <div class="rule-card">
+                            <div class="rule-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="rule-title">Vaqtida Kelish</h3>
+                            <p class="rule-description">
+                                Jamoalar o'yin vaqtidan 10 daqiqa oldin tayyor turishi shart.
+                                Kechikkan jamoa avtomatik technical lose oladi.
+                            </p>
+                        </div>
+
+                        <div class="rule-card">
+                            <div class="rule-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <h3 class="rule-title">Haqiqiy Ma'lumotlar</h3>
+                            <p class="rule-description">
+                                Barcha o'yinchilar haqiqiy ma'lumotlarini kiritishlari shart.
+                                Noto'g'ri ma'lumot diskvalifikatsiyaga olib keladi.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="rules-note">
+                        <div class="note-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="note-content">
+                            <h4>Muhim Eslatma</h4>
+                            <p>
+                                Turnir davomida barcha qararlar Humo eSport tashkilotchilari tomonidan qabul qilinadi
+                                va ular yakuniy hisoblanadi. Tashkilotchilar zarurat tug'ilganda qoidalarni o'zgartirish
+                                huquqini o'zida saqlaydi.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tournament Format -->
+                <section id="format" class="rules-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-chess-board"></i>
+                            Turnir Formati
+                        </h2>
+                        <p class="section-description">O'yinlar qanday tashkil etilgani va qoidalari</p>
+                    </div>
+
+                    <div class="format-details">
+                        <div class="format-overview">
+                            <h3 class="overview-title">Play-Off (Single Elimination)</h3>
+                            <p class="overview-description">
+                                Turnir Play-Off tizimida o'tkaziladi. Har bir juftlik BO3 (Best of 3) formatida kurashadi.
+                            </p>
+                        </div>
+
+                        <div class="format-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>BO3 Format</h4>
+                                    <p>
+                                        Har bir o'yin uchun 3 ta map o'ynaladi. 2:0 yoki 2:1 hisobi bilan g'alaba qozongan
+                                        jamoa keyingi bosqichga o'tadi.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Map Vetolari</h4>
+                                    <p>
+                                        Har bir o'yin boshlanishidan oldin, jamoalar navbatma-navbat map vetolashadi.
+                                        Qolgan map turnir tashkilotchilari tomonidan tanlanadi.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>G'olib Aniqlash</h4>
+                                    <p>
+                                        Agar jamoa 2 ta mapda g'alaba qozonsa, uchinchi map o'ynalmasdan g'olib aniq

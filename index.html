@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUMO ESPORT — Winter Tournament 2026</title>
+    <meta name="description" content="Humo eSport Winter Tournament 2026 - Mobile Legends: Bang Bang turniri">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="logo-circle"></div>
+                <div class="logo-text">HUMO</div>
+            </div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-text">Yuklanmoqda...</div>
+        </div>
+    </div>
+
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <canvas id="particles-canvas"></canvas>
+        <div class="grid-overlay"></div>
+        <div class="glowing-lines">
+            <div class="line line-1"></div>
+            <div class="line line-2"></div>
+            <div class="line line-3"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-wrapper">
+                    <div class="logo-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-main">HUMO</span>
+                        <span class="logo-sub">ESPORTS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Bosh Sahifa</span>
+                </a>
+                <a href="rules.html" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Qoidalar</span>
+                </a>
+                <a href="register.html" class="nav-link cta-nav">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Ro'yxatdan o'tish</span>
+                </a>
+                <a href="participants.html" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Ishtirokchilar</span>
+                </a>
+                <a href="contact.html" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Aloqa</span>
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </div>
+                <div class="mobile-menu-btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <div class="mobile-menu-content">
+                <a href="index.html" class="mobile-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Bosh Sahifa</span>
+                </a>
+                <a href="rules.html" class="mobile-link">
+                    <i class="fas fa-book"></i>
+                    <span>Qoidalar</span>
+                </a>
+                <a href="register.html" class="mobile-link">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Ro'yxatdan o'tish</span>
+                </a>
+                <a href="participants.html" class="mobile-link">
+                    <i class="fas fa-users"></i>
+                    <span>Ishtirokchilar</span>
+                </a>
+                <a href="contact.html" class="mobile-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Aloqa</span>
+                </a>
+                <div class="mobile-social">
+                    <a href="https://t.me/ForHumo_eSport" target="_blank" class="social-icon">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@ForHumo_eSport" target="_blank" class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://www.instagram.com/humo_esport" target="_blank" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="tournament-badge">
+                    <div class="badge-year">2026</div>
+                    <div class="badge-text">WINTER TOURNAMENT</div>
+                </div>
+                
+                <h1 class="hero-title">
+                    <span class="title-line-1">MOBILE LEGENDS</span>
+                    <span class="title-line-2">WINTER TOURNAMENT</span>
+                    <span class="title-highlight">2026</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    O'zbekistonning eng yirik Mobile Legends turniri.
+                    <span class="highlight-text">500,000 so'm mukofot jamg'armasi</span> va unutilmas raqobat sizni kutmoqda!
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">500K so'm</div>
+                            <div class="stat-label">Mukofot jamg'armasi</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">16 ta jamoa</div>
+                            <div class="stat-label">Ishtirokchi limiti</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value">15 kun</div>
+                            <div class="stat-label">Turnir davomiyligi</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-cta">
+                    <a href="register.html" class="cta-button primary-cta">
+                        <span class="cta-text">Hoziroq ro'yxatdan o'ting</span>
+                        <span class="cta-icon">
+                            <i class="fas fa-arrow-right"></i>
+                        </span>
+                        <div class="cta-glow"></div>
+                    </a>
+                    
+                    <a href="#details" class="cta-button secondary-cta">
+                        <span class="cta-text">Batafsil ma'lumot</span>
+                        <span class="cta-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="floating-trophy">
+                    <div class="trophy-base"></div>
+                    <div class="trophy-cup"></div>
+                    <div class="trophy-glow"></div>
+                </div>
+                <div class="game-characters">
+                    <div class="character character-1"></div>
+                    <div class="character character-2"></div>
+                    <div class="character character-3"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <div class="scroll-text">Pastga o'ting</div>
+        </div>
+    </section>
+
+    <!-- Countdown Timer -->
+    <section class="countdown-section" id="countdown">
+        <div class="countdown-container">
+            <div class="countdown-header">
+                <h2 class="section-title">Ro'yxatdan o'tish yakunlanadi</h2>
+                <p class="section-subtitle">2-yanvar, 2026 yil soat 23:59:59 (Toshkent vaqti GMT+5)</p>
+            </div>
+            
+            <div class="countdown-timer">
+                <div class="time-unit">
+                    <div class="time-value" id="days">00</div>
+                    <div class="time-label">Kun</div>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <div class="time-value" id="hours">00</div>
+                    <div class="time-label">Soat</div>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <div class="time-value" id="minutes">00</div>
+                    <div class="time-label">Daqiqa</div>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <div class="time-value" id="seconds">00</div>
+                    <div class="time-label">Sonniya</div>
+                </div>
+            </div>
+            
+            <div class="countdown-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span class="progress-current" id="progress-current">0</span>
+                    <span class="progress-total">/16 jamoa ro'yxatdan o'tdi</span>
+                </div>
+            </div>
+            
+            <a href="register.html" class="countdown-cta">
+                <i class="fas fa-rocket"></i>
+                <span>Turnirga qo'shiling</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Tournament Details -->
+    <section class="details-section" id="details">
+        <div class="details-container">
+            <div class="section-header">
+                <h2 class="section-title">Turnir Tafsilotlari</h2>
+                <p class="section-subtitle">Mobile Legends: Bang Bang — Winter Tournament 2026</p>
+                <div class="section-decoration">
+                    <div class="decoration-line"></div>
+                    <div class="decoration-dot"></div>
+                    <div class="decoration-line"></div>
+                </div>
+            </div>
+            
+            <div class="details-grid">
+                <div class="detail-card prize-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h3 class="card-title">Mukofot Jamg'armasi</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="prize-distribution">
+                            <div class="prize-winner first-prize">
+                                <div class="winner-rank">🥇</div>
+                                <div class="winner-details">
+                                    <div class="winner-prize">300,000 so'm</div>
+                                    <div class="winner-label">1-o'rin</div>
+                                </div>
+                            </div>
+                            <div class="prize-winner second-prize">
+                                <div class="winner-rank">🥈</div>
+                                <div class="winner-details">
+                                    <div class="winner-prize">150,000 so'm</div>
+                                    <div class="winner-label">2-o'rin</div>
+                                </div>
+                            </div>
+                            <div class="prize-winner third-prize">
+                                <div class="winner-rank">🥉</div>
+                                <div class="winner-details">
+                                    <div class="winner-prize">50,000 so'm</div>
+                                    <div class="winner-label">3-o'rin</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="prize-total">
+                            <div class="total-label">Jami mukofot:</div>
+                            <div class="total-amount">500,000 so'm</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-card format-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chess-board"></i>
+                        </div>
+                        <h3 class="card-title">Turnir Formati</h3>
+                    </div>
+                    <div class="card-content">
+                        <ul class="format-list">
+                            <li class="format-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>Play-Off (Single Elimination)</strong></span>
+                            </li>
+                            <li class="format-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>BO3 (Best of 3)</strong> har bir juftlik</span>
+                            </li>
+                            <li class="format-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>16 ta jamoa</strong> limiti</span>
+                            </li>
+                            <li class="format-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>5+1</strong> tarkib (5 asosiy + 1 zaxira)</span>
+                            </li>
+                            <li class="format-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span><strong>15 kun</strong> davomiylik</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="detail-card schedule-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="card-title">Muhim Sanalar</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="schedule-timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">20 Dek, 2025</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Ro'yxatdan o'tish boshlanishi</div>
+                                    <div class="timeline-desc">Jamoalar ro'yxatdan o'ta boshlaydi</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item active">
+                                <div class="timeline-date">2 Yan, 2026</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Ro'yxatdan o'tish tugashi</div>
+                                    <div class="timeline-desc">Soat 23:59:59 (GMT+5)</div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">3 Yan, 2026</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Turnir boshlanishi</div>
+                                    <div class="timeline-desc">1/8 Final bosqichi</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Stream Section -->
+    <section class="stream-section">
+        <div class="stream-container">
+            <div class="stream-content">
+                <h2 class="section-title">Jonli Translyatsiya</h2>
+                <p class="section-subtitle">Barcha o'yinlar YouTube platformasida jonli efirga uzatiladi</p>
+                
+                <div class="stream-info">
+                    <div class="stream-platform">
+                        <div class="platform-icon">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div class="platform-details">
+                            <h3>YouTube Kanal</h3>
+                            <p>@ForHumo_eSport</p>
+                            <a href="https://www.youtube.com/@ForHumo_eSport" target="_blank" class="stream-link">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Kanalga o'tish</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="stream-schedule">
+                        <h3>O'yin Jadvali</h3>
+                        <ul class="schedule-list">
+                            <li>
+                                <i class="fas fa-play-circle"></i>
+                                <span>Har kuni soat 22:00 dan boshlab</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                <span>3 ta o'yin (BO3 formatida)</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-calendar"></i>
+                                <span>15 kun davomida</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="stream-notice">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <p>Turnir davomida barcha o'yinlar jonli ko'rsatiladi. Kanalga obuna bo'lib, yangiliklardan xabardor bo'ling!</p>
+                </div>
+            </div>
+            
+            <div class="stream-preview">
+                <div class="youtube-placeholder">
+                    <div class="youtube-logo">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="placeholder-text">
+                        <h3>Jonli Translyatsiya</h3>
+                        <p>Turnir boshlanganda ushbu joyda jonli efir ko'rsatiladi</p>
+                    </div>
+                    <div class="live-badge">
+                        <div class="live-dot"></div>
+                        <span>LIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requirements Section -->
+    <section class="requirements-section">
+        <div class="requirements-container">
+            <div class="section-header">
+                <h2 class="section-title">Talablar va Shartlar</h2>
+                <p class="section-subtitle">Turnirga qatnashish uchun zarur shartlar</p>
+            </div>
+            
+            <div class="requirements-grid">
+                <div class="requirement-card">
+                    <div class="req-number">01</div>
+                    <h3 class="req-title">Jamoa Tarkibi</h3>
+                    <p class="req-desc">Har bir jamoa 5 ta asosiy va 1 ta zaxira o'yinchidan iborat bo'lishi shart. Jami 6 kishi.</p>
+                </div>
+                
+                <div class="requirement-card">
+                    <div class="req-number">02</div>
+                    <h3 class="req-title">Yosh Chegarasi</h3>
+                    <p class="req-desc">Barcha o'yinchilar kamida 16 yoshda bo'lishi kerak. Yosh chegarasi turnir qoidalariga muvofiq.</p>
+                </div>
+                
+                <div class="requirement-card">
+                    <div class="req-number">03</div>
+                    <h3 class="req-title">To'liq Ma'lumotlar</h3>
+                    <p class="req-desc">Ro'yxatdan o'tishda barcha o'yinchilarning to'liq ma'lumotlari kiritilishi shart.</p>
+                </div>
+                
+                <div class="requirement-card">
+                    <div class="req-number">04</div>
+                    <h3 class="req-title">Vaqtida Kelish</h3>
+                    <p class="req-desc">O'yin vaqtidan 10 daqiqa oldin tayyor bo'lish majburiy. Kechikish technical lose hisoblanadi.</p>
+                </div>
+            </div>
+            
+            <div class="requirements-notice">
+                <div class="notice-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="notice-content">
+                    <h4>Diqqat: Cheklovlar</h4>
+                    <p>Xakerlik, bug'lar yoki uchinchi tomon dasturlaridan foydalanish qat'iyan man etiladi. Qoidabuzarlik diskvalifikatsiyaga olib keladi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="final-cta">
+        <div class="cta-container">
+            <div class="cta-content">
+                <h2 class="cta-title">Turnir Ishtirokchisi Bo'ling!</h2>
+                <p class="cta-text">16 ta jamoa chegarasi tez to'lishi mumkin. O'z joyingizni band qiling va 500,000 so'm mukofot jamg'armasi uchun kurashing!</p>
+                
+                <div class="cta-buttons">
+                    <a href="register.html" class="cta-button main-cta">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Ro'yxatdan o'tish</span>
+                    </a>
+                    <a href="rules.html" class="cta-button outline-cta">
+                        <i class="fas fa-book"></i>
+                        <span>Qoidalarni o'qish</span>
+                    </a>
+                </div>
+                
+                <div class="cta-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="registered-teams">0</div>
+                        <div class="stat-label">Ro'yxatdan o'tgan jamoa</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">16</div>
+                        <div class="stat-label">Jami joylar</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="available-teams">16</div>
+                        <div class="stat-label">Bo'sh joylar</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-visual">
+                <div class="glowing-orb"></div>
+                <div class="floating-elements">
+                    <div class="float-element el-1"><i class="fas fa-gamepad"></i></div>
+                    <div class="float-element el-2"><i class="fas fa-trophy"></i></div>
+                    <div class="float-element el-3"><i class="fas fa-medal"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-circle"></div>
+                        <div class="logo-text">
+                            <span class="logo-main">HUMO</span>
+                            <span class="logo-sub">ESPORTS</span>
+                        </div>
+                    </div>
+                    <p class="footer-tagline">O'zbekistonning yetakchi esports tashkiloti. Professional turnirlar va raqobatbardosh o'yinlar.</p>
+                    <div class="footer-social">
+                        <a href="https://t.me/ForHumo_eSport" target="_blank" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@ForHumo_eSport" target="_blank" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://www.instagram.com/humo_esport" target="_blank" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h3 class="link-title">Turnir</h3>
+                        <a href="index.html" class="footer-link">Bosh sahifa</a>
+                        <a href="rules.html" class="footer-link">Qoidalar</a>
+                        <a href="register.html" class="footer-link">Ro'yxatdan o'tish</a>
+                        <a href="participants.html" class="footer-link">Ishtirokchilar</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h3 class="link-title">Ma'lumot</h3>
+                        <a href="#details" class="footer-link">Turnir tafsilotlari</a>
+                        <a href="#countdown" class="footer-link">Hisoblagich</a>
+                        <a href="contact.html" class="footer-link">Aloqa</a>
+                        <a href="#" class="footer-link">FAQ</a>
+                    </div>
+                    
+                    <div class="link-group">
+                        <h3 class="link-title">Qo'llab-quvvatlash</h3>
+                        <a href="contact.html" class="footer-link">Texnik yordam</a>
+                        <a href="https://t.me/ForHumo_eSport" target="_blank" class="footer-link">Telegram kanal</a>
+                        <a href="mailto:tournament@humoesport.uz" class="footer-link">Email</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-middle">
+                <div class="newsletter">
+                    <h3 class="newsletter-title">Yangiliklardan xabardor bo'ling</h3>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Email manzilingiz" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; 2025-2026 Humo eSport. Barcha huquqlar himoyalangan.</p>
+                </div>
+                
+                <div class="footer-legal">
+                    <a href="#" class="legal-link">Maxfiylik siyosati</a>
+                    <a href="#" class="legal-link">Foydalanish shartlari</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>

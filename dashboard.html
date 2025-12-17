@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HUMO Admin</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="admin-dashboard">
+    <!-- Loading Screen -->
+    <div class="admin-loading" id="adminLoading">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="loading-text">Dashboard yuklanmoqda...</div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="admin-brand">
+                <i class="fas fa-shield-alt"></i>
+                <div class="brand-text">
+                    <span class="brand-main">HUMO</span>
+                    <span class="brand-sub">Admin Panel</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-info">
+                <div class="user-name" id="currentAdmin">humo_admin</div>
+                <div class="user-role">Administrator</div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="teams.html" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Jamoalar</span>
+                <span class="menu-badge" id="teamsCount">0</span>
+            </a>
+            
+            <a href="participants.html" class="menu-item">
+                <i class="fas fa-user-friends"></i>
+                <span>O'yinchilar</span>
+                <span class="menu-badge" id="playersCount">0</span>
+            </a>
+            
+            <a href="export.html" class="menu-item">
+                <i class="fas fa-download"></i>
+                <span>Eksport</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Sozlamalar</span>
+            </a>
+            
+            <a href="logs.html" class="menu-item">
+                <i class="fas fa-history"></i>
+                <span>Loglar</span>
+            </a>
+            
+            <a href="backup.html" class="menu-item">
+                <i class="fas fa-database"></i>
+                <span>Backup</span>
+            </a>
+            
+            <div class="menu-divider"></div>
+            
+            <button class="menu-item logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Chiqish</span>
+            </button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="system-status">
+                <div class="status-indicator online"></div>
+                <span>Tizim faol</span>
+            </div>
+            <div class="sidebar-version">v2.0.0</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Top Bar -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1 class="page-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </h1>
+                <div class="breadcrumb">
+                    <span>Admin Panel</span>
+                    <i class="fas fa-chevron-right"></i>
+                    <span class="active">Dashboard</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="header-actions">
+                    <button class="header-btn" id="refreshBtn" title="Yangilash">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    
+                    <button class="header-btn" id="notificationsBtn" title="Bildirishnomalar">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count" id="notificationCount">3</span>
+                    </button>
+                    
+                    <div class="user-dropdown">
+                        <button class="header-btn user-btn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="adminUsername">humo_admin</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="profile.html" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profil
+                            </a>
+                            <a href="settings.html" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Sozlamalar
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item logout-dropdown">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Chiqish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card total-teams">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalTeams">0</div>
+                        <div class="stat-label">Jami Jamoalar</div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Bugun: <span id="teamsToday">0</span></span>
+                    </div>
+                </div>
+
+                <div class="stat-card total-players">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="totalPlayers">0</div>
+                        <div class="stat-label">Jami O'yinchilar</div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Bugun: <span id="playersToday">0</span></span>
+                    </div>
+                </div>
+
+                <div class="stat-card slots-left">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="slotsLeft">16</div>
+                        <div class="stat-label">Bo'sh Joylar</div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-percentage"></i>
+                        <span><span id="slotsPercent">0</span>% to'ldi</span>
+                    </div>
+                </div>
+
+                <div class="stat-card registration-status">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="daysLeft">15</div>
+                        <div class="stat-label">Qolgan Kunlar</div>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-clock"></i>
+                        <span><span id="hoursLeft">0</span> soat</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-line"></i>
+                            Ro'yxatdan O'tish Statistikasi
+                        </h3>
+                        <div class="chart-actions">
+                            <select class="chart-period" id="chartPeriod">
+                                <option value="7">Oxirgi 7 kun</option>
+                                <option value="30" selected>Oxirgi 30 kun</option>
+                                <option value="90">Oxirgi 90 kun</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="registrationChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Hududlar Bo'yicha Taqsimot
+                        </h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="regionsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-section">
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-history"></i>
+                        So'nggi Faoliyat
+                    </h3>
+                    <button class="view-all-btn" onclick="window.location.href='logs.html'">
+                        Barchasini ko'rish
+                    </button>
+                </div>
+
+                <div class="activity-list" id="activityList">
+                    <!-- Activity items will be loaded here -->
+                    <div class="activity-item">
+                        <div class="activity-icon success">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Yangi jamoa ro'yxatdan o'tdi</div>
+                            <div class="activity-desc">"Team Assassins" jamoasi ro'yxatdan o'tdi</div>
+                            <div class="activity-time">5 daqiqa oldin</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon info">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Jamoa ma'lumotlari yangilandi</div>
+                            <div class="activity-desc">"Vamos" jamoasi ma'lumotlari tahrirlandi</div>
+                            <div class="activity-time">1 soat oldin</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Xatolik ani
