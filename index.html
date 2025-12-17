@@ -1,55 +1,46 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Winter Tournament 2026 — Ro'yxatdan o'tish</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter Tournament 2026 – Ro‘yxat</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Real Snow Effect -->
-<canvas id="snow"></canvas>
+<div id="snow"></div>
+
+<header class="header">
+    <img src="assets/images/humo-esport-logo.png" class="logo">
+    <img src="assets/images/winter-tournament-logo.png" class="logo2">
+    <h1>Winter Tournament 2026</h1>
+    <p class="subtitle">Rasmiy ro‘yxatdan o‘tish sahifasi</p>
+</header>
 
 <div class="container">
-    <div class="header">
-        <img src="humo_logo.png" class="logo" />
-        <h1>Winter Tournament 2026</h1>
-        <p class="subtitle">Humo eSport tomonidan tashkil etilgan turnir</p>
-    </div>
+    <form id="registerForm" enctype="multipart/form-data">
 
-    <form id="teamForm">
-        <div class="input-group">
-            <label>Jamoa nomi</label>
-            <input type="text" name="team_name" required placeholder="Masalan: Vamos" />
-        </div>
+        <label>Jamoa nomi</label>
+        <input type="text" name="teamName" required placeholder="Masalan: Vamos">
 
-        <div class="input-group">
-            <label>Sardor Nickname</label>
-            <input type="text" name="captain" required placeholder="Masalan: DarkLegend" />
-        </div>
+        <label>Sardor Nickname</label>
+        <input type="text" name="captainName" required placeholder="Masalan: DarkLegend">
 
-        <div class="input-group">
-            <label>MLBB ID</label>
-            <input type="number" name="mlbb_id" required placeholder="Masalan: 83920394" />
-        </div>
+        <label>Sardor MLBB ID</label>
+        <input type="text" name="mlbbId" required placeholder="83920394">
 
-        <div class="input-group">
-            <label>Telegram manzili</label>
-            <input type="text" name="telegram" required placeholder="@darklegend" />
-        </div>
+        <label>Sardor Telegram manzili</label>
+        <input type="text" name="telegram" required placeholder="@nickname">
 
-        <div class="input-group">
-            <label>Jamoa logosi (majburiy)</label>
-            <input type="file" name="logo" id="logo" accept="image/*" required />
-        </div>
+        <label>Jamoa logosi (majburiy)</label>
+        <input type="file" name="teamLogo" accept="image/*" required>
 
-        <button type="submit" class="btn">Ro'yxatdan o'tish</button>
-        <p id="status"></p>
+        <button type="submit" class="btn">Ro‘yxatdan o‘tish</button>
     </form>
+
+    <p id="status"></p>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
