@@ -24,3 +24,27 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
         document.getElementById("status").innerHTML = "Xato: " + data.error;
     }
 });
+
+// ❄ REALISTIC SNOW EFFECT
+const snowContainer = document.createElement('div');
+snowContainer.className = 'snow-container';
+document.body.appendChild(snowContainer);
+
+function createSnow() {
+    const snow = document.createElement('div');
+    snow.className = 'snow';
+
+    // Random holat
+    snow.style.left = Math.random() * window.innerWidth + 'px';
+    snow.style.opacity = Math.random();
+    snow.style.transform = `scale(${Math.random()})`;
+
+    snowContainer.appendChild(snow);
+
+    // Pastga tushish
+    setTimeout(() => {
+        snow.remove();
+    }, 8000);
+}
+
+setInterval(createSnow, 80);
