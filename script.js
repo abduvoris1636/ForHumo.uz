@@ -1,17 +1,23 @@
-document.getElementById("regForm").addEventListener("submit", async (e) => {
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = {
-        team: e.target.team.value,
-        captain: e.target.captain.value,
-        phone: e.target.phone.value,
-        players: e.target.players.value
-    };
+    const form = document.getElementById("registerForm");
+    const formData = new FormData(form);
 
-    await fetch("/api/save", {
+    document.getElementById("result").innerText = "Yuborilmoqda...";
+
+    // BU YERGA KEYIN TELEGRAM BOT API YOZAMIZ
+    const BOT_URL = "YOUR_API_URL_HERE";
+
+    const res = await fetch(BOT_URL, {
         method: "POST",
-        body: JSON.stringify(formData)
+        body: formData
     });
 
-    window.location.href = "thanks.html";
+    if (res.ok) {
+        document.getElementById("result").innerText = "Jamoa muvaffaqiyatli roʻyhatdan o'tdi!";
+        form.reset();
+    } else {
+        document.getElementById("result").innerText = "Xatolik yuz berdi!";
+    }
 });
