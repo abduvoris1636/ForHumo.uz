@@ -166,4 +166,21 @@ export default function AdminDashboard() {
                     </td>
                     <td className="py-4 px-4">
                       <div className="flex space-x-2">
-                        <button
+                        <button className="p-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30">
+                          <CheckCircle className="w-4 h-4" />
+                        </button>
+                        <button className="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">
+                          <XCircle className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
