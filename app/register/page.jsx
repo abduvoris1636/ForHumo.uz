@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Upload, Users, User, Smartphone, MessageSquare, Trophy, CheckCircle } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
@@ -22,6 +22,16 @@ export default function RegisterPage() {
   const [isChecking, setIsChecking] = useState(false);
   const [isAvailable, setIsAvailable] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState(null);
+
+  useEffect(() => {
+    // Komponent yuklanganda tekshirish
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,35 +48,97 @@ export default function RegisterPage() {
       const response = await fetch(`/api/check-team?name=${encodeURIComponent(name)}`);
       const data = await response.json();
       setIsAvailable(data.available);
+      if (!data.available) {
+        toast.error('Bu jamoa nomi allaqachon band');
+      }
     } catch (error) {
-      console.error('Error checking team name:', error);
+      console.error('Jamoa nomini tekshirishda xatolik:', error);
+      toast.error('Server xatosi. Keyinroq urinib ko\'ring.');
     } finally {
       setIsChecking(false);
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Rasm hajmi 5MB dan oshmasligi kerak');
-        return;
+    if (!file) return;
+
+    // Fayl hajmini tekshirish
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Rasm hajmi 5MB dan oshmasligi kerak');
+      return;
+    }
+
+    // Fayl turini tekshirish
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Faqat rasm fayllari qabul qilinadi (JPG, PNG, WebP, GIF)');
+      return;
+    }
+
+    // Oldindan ko'rish uchun URL yaratish
+    const previewUrl = URL.createObjectURL(file);
+    setPreview(previewUrl);
+    setFormData(prev => ({ ...prev, teamLogo: file }));
+
+    // Cloudinary ga yuklash
+    setIsLoading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadFormData,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setUploadedImage(data.data);
+        toast.success('Rasm muvaffaqiyatli yuklandi');
+      } else {
+        toast.error(data.error || 'Rasm yuklashda xatolik');
+        setPreview(null);
+        setFormData(prev => ({ ...prev, teamLogo: null }));
+        if (fileInputRef.current) fileInputRef.current.value = '';
       }
-      
-      setFormData(prev => ({ ...prev, teamLogo: file }));
-      
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Rasm yuklash xatosi:', error);
+      toast.error('Rasm yuklashda xatolik');
+      setPreview(null);
+      setFormData(prev => ({ ...prev, teamLogo: null }));
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.teamLogo) {
+    // Validatsiya
+    if (!formData.teamName.trim()) {
+      toast.error('Jamoa nomini kiriting');
+      return;
+    }
+    
+    if (!formData.captainName.trim()) {
+      toast.error('Kapiton ismini kiriting');
+      return;
+    }
+    
+    if (!formData.mlbbId.trim()) {
+      toast.error('MLBB ID ni kiriting');
+      return;
+    }
+    
+    if (!formData.telegramUsername.trim()) {
+      toast.error('Telegram username ni kiriting');
+      return;
+    }
+    
+    if (!uploadedImage) {
       toast.error('Jamoa logotipini yuklashingiz kerak');
       return;
     }
@@ -79,30 +151,36 @@ export default function RegisterPage() {
     setIsLoading(true);
     
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('teamName', formData.teamName);
-      formDataToSend.append('captainName', formData.captainName);
-      formDataToSend.append('mlbbId', formData.mlbbId);
-      formDataToSend.append('telegramUsername', formData.telegramUsername);
-      formDataToSend.append('teamLogo', formData.teamLogo);
-
       const response = await fetch('/api/register', {
         method: 'POST',
-        body: formDataToSend,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          teamName: formData.teamName,
+          captainName: formData.captainName,
+          mlbbId: formData.mlbbId,
+          telegramUsername: formData.telegramUsername,
+          teamLogo: uploadedImage.url,
+          cloudinaryPublicId: uploadedImage.publicId
+        }),
       });
 
       const data = await response.json();
 
       if (data.success) {
         setShowSuccessModal(true);
+        toast.success('Jamoa muvaffaqiyatli ro\'yxatdan o\'tdi!');
+        
+        // 3 soniyadan keyin success sahifasiga o'tish
         setTimeout(() => {
-          router.push('/success');
+          router.push(`/success?teamId=${data.data._id}`);
         }, 3000);
       } else {
-        toast.error(data.error || 'Xatolik yuz berdi');
+        toast.error(data.error || 'Ro\'yxatdan o\'tishda xatolik yuz berdi');
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Ro\'yxatdan o\'tish xatosi:', error);
       toast.error('Server xatosi. Iltimos, keyinroq urinib ko\'ring.');
     } finally {
       setIsLoading(false);
@@ -131,11 +209,15 @@ export default function RegisterPage() {
             {/* Team Logo Upload */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-3">
-                Jamoa Logotipi
+                Jamoa Logotipi *
               </label>
               <div 
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-white/30 rounded-2xl p-8 text-center cursor-pointer hover:border-cyan-500 transition-colors"
+                onClick={() => !isLoading && fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
+                  isLoading 
+                    ? 'border-amber-500/50 bg-amber-500/10' 
+                    : 'border-white/30 hover:border-cyan-500 hover:bg-white/5'
+                }`}
               >
                 {preview ? (
                   <div className="relative">
@@ -144,24 +226,27 @@ export default function RegisterPage() {
                       alt="Preview" 
                       className="w-48 h-48 object-cover rounded-xl mx-auto"
                     />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setPreview(null);
-                        setFormData(prev => ({ ...prev, teamLogo: null }));
-                        if (fileInputRef.current) fileInputRef.current.value = '';
-                      }}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full"
-                    >
-                      ✕
-                    </button>
+                    {!isLoading && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPreview(null);
+                          setUploadedImage(null);
+                          setFormData(prev => ({ ...prev, teamLogo: null }));
+                          if (fileInputRef.current) fileInputRef.current.value = '';
+                        }}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
                 ) : (
                   <div>
-                    <Upload className="w-12 h-12 text-white/50 mx-auto mb-4" />
-                    <p className="text-white/70">
-                      Rasmni yuklash uchun bosing (PNG, JPG, max 5MB)
+                    <Upload className={`w-12 h-12 mx-auto mb-4 ${isLoading ? 'text-amber-400' : 'text-white/50'}`} />
+                    <p className={isLoading ? 'text-amber-400' : 'text-white/70'}>
+                      {isLoading ? 'Rasm yuklanmoqda...' : 'Rasmni yuklash uchun bosing (PNG, JPG, WebP, max 5MB)'}
                     </p>
                   </div>
                 )}
@@ -171,9 +256,14 @@ export default function RegisterPage() {
                   accept="image/*"
                   onChange={handleFileChange}
                   className="hidden"
-                  required
+                  disabled={isLoading}
                 />
               </div>
+              {uploadedImage && (
+                <p className="mt-2 text-sm text-green-400">
+                  ✓ Rasm muvaffaqiyatli yuklandi
+                </p>
+              )}
             </div>
 
             {/* Team Name */}
@@ -192,19 +282,28 @@ export default function RegisterPage() {
                 required
                 minLength={3}
                 maxLength={50}
+                disabled={isLoading}
               />
-              {isChecking ? (
-                <p className="mt-2 text-sm text-cyan-400">Tekshirilmoqda...</p>
-              ) : isAvailable === true ? (
-                <p className="mt-2 text-sm text-green-400 flex items-center">
-                  <CheckCircle className="w-4 h-4 mr-1" />
-                  Jamoa nomi mavjud
-                </p>
-              ) : isAvailable === false ? (
-                <p className="mt-2 text-sm text-red-400">
-                  Bu jamoa nomi allaqachon band
-                </p>
-              ) : null}
+              <div className="mt-2">
+                {isChecking ? (
+                  <p className="text-sm text-cyan-400 animate-pulse">
+                    ⌛ Jamoa nomi tekshirilmoqda...
+                  </p>
+                ) : isAvailable === true ? (
+                  <p className="text-sm text-green-400 flex items-center">
+                    <CheckCircle className="w-4 h-4 mr-1" />
+                    ✓ Jamoa nomi mavjud
+                  </p>
+                ) : isAvailable === false ? (
+                  <p className="text-sm text-red-400">
+                    ✗ Bu jamoa nomi allaqachon band
+                  </p>
+                ) : formData.teamName.length > 0 && formData.teamName.length < 3 ? (
+                  <p className="text-sm text-amber-400">
+                    ⚠️ Jamoa nomi kamida 3 ta belgidan iborat bo'lishi kerak
+                  </p>
+                ) : null}
+              </div>
             </div>
 
             {/* Captain Name */}
@@ -223,6 +322,7 @@ export default function RegisterPage() {
                 required
                 minLength={2}
                 maxLength={100}
+                disabled={isLoading}
               />
             </div>
 
@@ -242,6 +342,7 @@ export default function RegisterPage() {
                 required
                 minLength={3}
                 maxLength={50}
+                disabled={isLoading}
               />
             </div>
 
@@ -265,6 +366,7 @@ export default function RegisterPage() {
                   required
                   minLength={3}
                   maxLength={50}
+                  disabled={isLoading}
                 />
               </div>
             </div>
@@ -278,6 +380,7 @@ export default function RegisterPage() {
                 id="terms"
                 required
                 className="mt-1 mr-3"
+                disabled={isLoading}
               />
               <label htmlFor="terms" className="text-sm text-gray-300">
                 Men{' '}
@@ -294,7 +397,7 @@ export default function RegisterPage() {
           <div className="text-center">
             <button
               type="submit"
-              disabled={isLoading || !formData.teamLogo || isAvailable === false}
+              disabled={isLoading || !uploadedImage || isAvailable === false}
               className="btn-primary text-lg px-12 py-4 text-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
@@ -328,7 +431,7 @@ export default function RegisterPage() {
               siz bilan bog'lanamiz. Rahmat!
             </p>
             <div className="animate-pulse text-cyan-400">
-              Sizning so'rovingiz qayta ishlanmoqda...
+              Sizni bosh sahifaga yo'naltirilmoqda...
             </div>
           </div>
         </div>
