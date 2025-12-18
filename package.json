@@ -6,12 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup": "node scripts/setup-admin.js"
   },
   "dependencies": {
     "next": "14.0.0",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "mongoose": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "bcryptjs": "^2.4.3",
