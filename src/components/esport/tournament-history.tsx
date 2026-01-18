@@ -15,11 +15,49 @@ export function TournamentHistory() {
         { name: "Phantom", rank: 5, prize: "0 so'm", logo: "PH" },
     ];
 
+    // Playoff matches with dates
     const playoffMatches = [
-        { id: '1', team1: "Kurayami", score1: 1, team2: "Team Vamos", score2: 2, winner: "Team Vamos", stage: "Semi-final" },
-        { id: '2', team1: "Star Boys", score1: 2, team2: "Assasin's", score2: 0, winner: "Star Boys", stage: "Semi-final" },
-        { id: '3', team1: "Kurayami", score1: 2, team2: "Assasin's", score2: 1, winner: "Kurayami", stage: "3rd Place" },
-        { id: '4', team1: "Star Boys", score1: 3, team2: "Team Vamos", score2: 2, winner: "Star Boys", stage: "Final" },
+        {
+            id: "1",
+            stage: "Semi-final",
+            date: "11/11/2025",
+            team1: "Kurayami",
+            score1: 0,
+            team2: "Team Vamos",
+            score2: 2,
+            winner: "Team Vamos",
+        },
+        {
+            id: "2",
+            stage: "Semi-final",
+            date: "12/11/2025",
+            team1: "Star Boys",
+            score1: 2,
+            team2: "Assasin's",
+            score2: 0,
+            winner: "Star Boys",
+        },
+        {
+            id: "3",
+            stage: "3rd Place",
+            date: "13/11/2025",
+            team1: "Kurayami",
+            score1: 3,
+            team2: "Assasin's",
+            score2: 0,
+            winner: "Kurayami",
+            note: "Assasin's jamoasi o'z xohishi bilan turnirni tark etdi",
+        },
+        {
+            id: "4",
+            stage: "Final",
+            date: "14/11/2025",
+            team1: "Star Boys",
+            score1: 2,
+            team2: "Team Vamos",
+            score2: 0,
+            winner: "Star Boys",
+        },
     ];
 
     return (
