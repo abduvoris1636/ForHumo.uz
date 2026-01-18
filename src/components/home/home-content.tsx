@@ -12,12 +12,14 @@ import {
     Home,
     GraduationCap,
     Mic,
-    Users
+    Users,
+    Newspaper,
+    Building2
 } from "lucide-react";
 import { ProjectCard } from "@/components/ui/project-card";
 
 const iconMap = {
-    Gamepad2, Brain, Tv, BookOpen, Music, Home, GraduationCap, Mic, Users
+    Gamepad2, Brain, Tv, BookOpen, Music, Home, GraduationCap, Mic, Users, Newspaper, Building2
 };
 
 export function HomeContent() {
@@ -86,6 +88,20 @@ export function HomeContent() {
             description: tProjects("social_desc"),
             href: "/coming-soon",
             iconName: "Users",
+            status: "coming-soon" as const,
+        },
+        {
+            title: "Humo News",
+            description: tProjects("news_desc"),
+            href: "/coming-soon",
+            iconName: "Newspaper",
+            status: "coming-soon" as const,
+        },
+        {
+            title: "Humo Bank",
+            description: tProjects("bank_desc"),
+            href: "/coming-soon",
+            iconName: "Building2",
             status: "coming-soon" as const,
         },
     ];

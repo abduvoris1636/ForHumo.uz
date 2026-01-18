@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/app/providers";
 import { BackgroundEffects } from "@/components/background-effects";
+import { AuthBarrier } from "@/components/auth/auth-barrier";
 import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -41,12 +42,14 @@ export default async function LocaleLayout({
             <body className={`${inter.className} min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-primary/20`}>
                 <NextIntlClientProvider messages={messages}>
                     <Providers>
-                        <BackgroundEffects />
-                        <Header />
-                        <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
-                            {children}
-                        </main>
-                        <Footer />
+                        <AuthBarrier>
+                            <BackgroundEffects />
+                            <Header />
+                            <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
+                                {children}
+                            </main>
+                            <Footer />
+                        </AuthBarrier>
                     </Providers>
                 </NextIntlClientProvider>
             </body>

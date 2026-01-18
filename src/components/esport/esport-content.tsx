@@ -51,8 +51,7 @@ export function EsportContent() {
                         className="flex flex-col sm:flex-row gap-4 justify-center"
                     >
                         <Link
-                            href="https://t.me/Humo_eSportBot"
-                            target="_blank"
+                            href="/esport/register"
                             className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-lg font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 active:scale-95 shadow-lg shadow-primary/25"
                         >
                             <Trophy className="w-5 h-5" />
@@ -85,7 +84,7 @@ export function EsportContent() {
                         <div className="absolute bottom-0 left-0 p-8 z-20">
                             <h3 className="text-3xl font-bold text-white mb-2">Mobile Legends: BB</h3>
                             <p className="text-gray-200 mb-4">{t("mlbb_desc")}</p>
-                            <Link href="https://t.me/Humo_eSportBot" target="_blank" className="text-blue-400 hover:text-blue-300 font-bold flex items-center gap-2">
+                            <Link href="/esport/register" className="text-blue-400 hover:text-blue-300 font-bold flex items-center gap-2">
                                 {t("mlbb_action")} <ExternalLink size={16} />
                             </Link>
                         </div>

@@ -20,7 +20,9 @@
         "home_desc": "Smart home integration and lifestyle solutions.",
         "edu_desc": "Educational technology and online learning platform.",
         "studio_desc": "Creative studio for digital art and media production.",
-        "social_desc": "Social network platform for community connection."
+        "social_desc": "Social network platform for community connection.",
+        "news_desc": "The latest news and official announcements of the ecosystem.",
+        "bank_desc": "Secure and modern digital banking services."
     },
     "Esport": {
         "hero_tag": "Humo eSport",

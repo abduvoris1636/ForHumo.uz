@@ -20,7 +20,9 @@
         "home_desc": "Aqlli uy integratsiyasi va turmush tarzi yechimlari.",
         "edu_desc": "Ta'lim texnologiyalari va onlayn o'qitish platformasi.",
         "studio_desc": "Raqamli san'at va media ishlab chiqarish uchun ijodiy studiya.",
-        "social_desc": "Jamiyat bilan bog'lanish uchun ijtimoiy tarmoq platformasi."
+        "social_desc": "Jamiyat bilan bog'lanish uchun ijtimoiy tarmoq platformasi.",
+        "news_desc": "Ekotizimning eng so'nggi yangiliklari va rasmiy xabarlari.",
+        "bank_desc": "Xavfsiz va zamonaviy raqamli bank xizmatlari."
     },
     "Esport": {
         "hero_tag": "Humo eSport",
