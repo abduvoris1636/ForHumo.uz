@@ -20,18 +20,5 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return (
-        <html lang="uz" className="scroll-smooth" suppressHydrationWarning>
-            <body className={`${inter.className} min-h-screen flex flex-col bg-background text-foreground antialiased selection:bg-primary/20`}>
-                <Providers>
-                    <BackgroundEffects />
-                    <Header />
-                    <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
-                        {children}
-                    </main>
-                    <Footer />
-                </Providers>
-            </body>
-        </html>
-    );
+    return children;
 }

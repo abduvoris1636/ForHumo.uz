@@ -1,14 +1,18 @@
-import Link from "next/link";
+"use client";
+
+import { Link } from "@/i18n/routing";
 import { Youtube, Send, Instagram } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function Footer() {
+    const t = useTranslations("Common");
     const currentYear = new Date().getFullYear();
 
     return (
         <footer className="w-full border-t border-border bg-background py-8">
             <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="text-sm text-muted-foreground">
-                    © {currentYear} For Humo. Barcha huquqlar himoyalangan.
+                    {t("copyright", { year: currentYear })}
                 </div>
 
                 <div className="flex items-center gap-6">

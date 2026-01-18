@@ -2,24 +2,30 @@
 > for-humo@0.1.0 build
 > next build
 
-тЦ▓ Next.js 16.1.2 (Turbopack)
+   тЦ▓ Next.js 15.5.9
 
-  Creating an optimized production build ...
-тЬУ Compiled successfully in 2.8s
-  Running TypeScript ...
-  Collecting page data using 11 workers ...
-  Generating static pages using 11 workers (0/5) ...
-  Generating static pages using 11 workers (1/5) 
-  Generating static pages using 11 workers (2/5) 
-  Generating static pages using 11 workers (3/5) 
-тЬУ Generating static pages using 11 workers (5/5) in 438.2ms
-  Finalizing page optimization ...
+   Creating an optimized production build ...
+Failed to compile.
 
-Route (app)
-тФМ тЧЛ /
-тФЬ тЧЛ /_not-found
-тФФ тЧЛ /esport
+./src/components/layout/header.tsx
+Error:   x You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  |
+  |  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  |
+
+   ,-[C:\Users\abduv\For Humo\ForHumo.uz\src\components\layout\header.tsx:3:1]
+ 1 | import { Link } from "@/i18n/routing";
+ 2 | import Image from "next/image";
+ 3 | import { useState } from "react";
+   :          ^^^^^^^^
+ 4 | import { Menu, X } from "lucide-react";
+ 5 | import { useTranslations } from "next-intl";
+ 5 | import { motion, AnimatePresence } from "framer-motion";
+   `----
+
+Import trace for requested module:
+./src/components/layout/header.tsx
+./src/app/[locale]/layout.tsx
 
 
-тЧЛ  (Static)  prerendered as static content
-
+> Build failed because of webpack errors

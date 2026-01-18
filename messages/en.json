@@ -1,0 +1,47 @@
+{
+    "Navigation": {
+        "home": "Home",
+        "ecosystem": "Ecosystem",
+        "esport": "eSport"
+    },
+    "Hero": {
+        "title_prefix": "For Humo",
+        "title_suffix": "",
+        "description": "A single digital ecosystem for growth, entertainment, and education. From eSports to Artificial Intelligence.",
+        "explore": "Explore Ecosystem"
+    },
+    "Projects": {
+        "title": "Our Projects",
+        "esport_desc": "eSports platform organizing MLBB and PUBG tournaments with open registration.",
+        "ai_desc": "Advanced AI solutions and tools.",
+        "tv_desc": "Streaming service for entertainment and educational content.",
+        "book_desc": "Digital library and publishing platform for modern readers.",
+        "music_desc": "Platform for listening to music and discovering new artists.",
+        "home_desc": "Smart home integration and lifestyle solutions.",
+        "edu_desc": "Educational technology and online learning platform.",
+        "studio_desc": "Creative studio for digital art and media production.",
+        "social_desc": "Social network platform for community connection."
+    },
+    "Esport": {
+        "hero_tag": "Humo eSport",
+        "hero_title": "Take your game to the next level",
+        "hero_desc": "Join the best eSports platform. Weekly MLBB and PUBG tournaments with large prize pools.",
+        "register": "Register",
+        "watch": "Watch Live",
+        "mlbb_desc": "5x5 MOBA battle. Weekly tournaments.",
+        "mlbb_action": "Join Tournament",
+        "pubg_desc": "Battle Royale. Form a team and win.",
+        "pubg_action": "Enter Room"
+    },
+    "Status": {
+        "active": "Active",
+        "coming_soon": "Coming Soon"
+    },
+    "Common": {
+        "coming_soon": "Coming Soon",
+        "under_dev": "This section is currently under development. Stay tuned for updates!",
+        "back_home": "Back to Home",
+        "follow_updates": "Follow Updates",
+        "copyright": "© {year} For Humo. All rights reserved."
+    }
+}
