@@ -1,0 +1,46 @@
+import Link from "next/link";
+import { Youtube, Send, Instagram } from "lucide-react";
+
+export function Footer() {
+    const currentYear = new Date().getFullYear();
+
+    return (
+        <footer className="w-full border-t border-border bg-background py-8">
+            <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="text-sm text-muted-foreground">
+                    © {currentYear} For Humo. Barcha huquqlar himoyalangan.
+                </div>
+
+                <div className="flex items-center gap-6">
+                    <Link
+                        href="https://t.me/ForHumo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-[#0088cc] transition-colors"
+                    >
+                        <Send size={20} />
+                        <span className="sr-only">Telegram</span>
+                    </Link>
+                    <Link
+                        href="https://www.youtube.com/@forhumo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-[#ff0000] transition-colors"
+                    >
+                        <Youtube size={20} />
+                        <span className="sr-only">YouTube</span>
+                    </Link>
+                    <Link
+                        href="https://www.instagram.com/forhumo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-[#e4405f] transition-colors"
+                    >
+                        <Instagram size={20} />
+                        <span className="sr-only">Instagram</span>
+                    </Link>
+                </div>
+            </div>
+        </footer>
+    );
+}

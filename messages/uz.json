@@ -1,0 +1,47 @@
+{
+    "Navigation": {
+        "home": "Bosh Sahifa",
+        "ecosystem": "Ekotizim",
+        "esport": "eSport"
+    },
+    "Hero": {
+        "title_prefix": "For Humo",
+        "title_suffix": "",
+        "description": "Rivojlanish, o'yin-kulgi va ta'lim uchun yagona raqamli ekotizim. Kiber sportdan sun'iy intellektgacha.",
+        "explore": "Ekotizimni Keshf Etish"
+    },
+    "Projects": {
+        "title": "Bizning Loyihalar",
+        "esport_desc": "MLBB va PUBG turnirlarini ochiq ro'yxatdan o'tish bilan tashkil etuvchi kiber sport platformasi.",
+        "ai_desc": "Ilg'or sun'iy intellekt yechimlari va vositalari.",
+        "tv_desc": "Ko'ngilochar va ta'limiy kontent uchun striming xizmati.",
+        "book_desc": "Zamonaviy kitobxonlar uchun raqamli kutubxona va nashriyot platformasi.",
+        "music_desc": "Musiqa tinglash va yangi ijodkorlarni kashf etish platformasi.",
+        "home_desc": "Aqlli uy integratsiyasi va turmush tarzi yechimlari.",
+        "edu_desc": "Ta'lim texnologiyalari va onlayn o'qitish platformasi.",
+        "studio_desc": "Raqamli san'at va media ishlab chiqarish uchun ijodiy studiya.",
+        "social_desc": "Jamiyat bilan bog'lanish uchun ijtimoiy tarmoq platformasi."
+    },
+    "Esport": {
+        "hero_tag": "Humo eSport",
+        "hero_title": "O'yiningizni keyingi bosqichga olib chiqing",
+        "hero_desc": "Eng zo'r kibersport platformasiga qo'shiling. Katta mukofot jamg'armasiga ega haftalik MLBB va PUBG turnirlari.",
+        "register": "Ro'yxatdan o'tish",
+        "watch": "Jonli efir",
+        "mlbb_desc": "5x5 MOBA jangi. Haftalik turnirlar.",
+        "mlbb_action": "Turnirga qo'shilish",
+        "pubg_desc": "Battle Royale. Jamoa tuzing va g'alaba qozoning.",
+        "pubg_action": "Xonaga kirish"
+    },
+    "Status": {
+        "active": "Faol",
+        "coming_soon": "Tez kunda"
+    },
+    "Common": {
+        "coming_soon": "Tez Orada",
+        "under_dev": "Ushbu bo'lim hozirda ishlab chiqilmoqda. Yangiliklarni kuzatib boring!",
+        "back_home": "Bosh Sahifaga Qaytish",
+        "follow_updates": "Yangiliklarni Kuzatish",
+        "copyright": "© {year} For Humo. Barcha huquqlar himoyalangan."
+    }
+}

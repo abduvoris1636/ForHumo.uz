@@ -1,0 +1,25 @@
+
+> for-humo@0.1.0 build
+> next build
+
+тЦ▓ Next.js 16.1.2 (Turbopack)
+
+  Creating an optimized production build ...
+тЬУ Compiled successfully in 2.8s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/5) ...
+  Generating static pages using 11 workers (1/5) 
+  Generating static pages using 11 workers (2/5) 
+  Generating static pages using 11 workers (3/5) 
+тЬУ Generating static pages using 11 workers (5/5) in 438.2ms
+  Finalizing page optimization ...
+
+Route (app)
+тФМ тЧЛ /
+тФЬ тЧЛ /_not-found
+тФФ тЧЛ /esport
+
+
+тЧЛ  (Static)  prerendered as static content
+
