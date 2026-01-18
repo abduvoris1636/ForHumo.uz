@@ -1,114 +1,124 @@
 "use client";
 
-import { Link } from "@/i18n/routing";
-import { Gamepad2, Trophy, Play, ExternalLink } from "lucide-react";
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { EsportSidebar } from "./sidebar";
+import { IdCardSection } from "./id-card-section";
+import { TeamSection } from "./team-section";
+import { TournamentDetails } from "./tournament-details";
+import { TournamentHistory } from "./tournament-history";
+import { ActiveTeams } from "./active-teams";
+import { Season, TournamentType, Player, Team } from "./types";
 
 export function EsportContent() {
-    const t = useTranslations("Esport");
+    const [activeSeason, setActiveSeason] = useState<Season>("2025-2026");
+    const [activeTournament, setActiveTournament] = useState<TournamentType>("winter");
+
+    // Local Mock State
+    const [player, setPlayer] = useState<Player | null>(null);
+    const [team, setTeam] = useState<Team | null>(null);
+
+    const handleRegisterPlayer = (data: any) => {
+        const newPlayer: Player = {
+            id: Math.floor(1000 + Math.random() * 9000).toString(),
+            name: data.name,
+            surname: data.surname,
+            telegram: data.telegram,
+            mlbbNickname: data.mlbbNickname,
+            mlbbId: data.mlbbId
+        };
+        setPlayer(newPlayer);
+    };
+
+    const handleCreateTeam = (data: any) => {
+        if (!player) return;
+        const newTeam: Team = {
+            id: Math.floor(100 + Math.random() * 900).toString(),
+            name: data.name,
+            shortName: data.shortName,
+            ownerId: player.id,
+            captainId: player.id,
+            members: [player.id]
+        };
+        setTeam(newTeam);
+    };
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
-            {/* Hero Section */}
-            <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 dark:opacity-20 opacity-5" />
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-background/80 to-background" />
+        <div className="min-h-screen bg-background text-foreground pt-20">
+            <div className="max-w-[1600px] mx-auto px-4 lg:px-8 flex flex-col lg:flex-row gap-8 py-8">
 
-                <div className="container relative z-10 px-4 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, type: "spring" }}
-                        className="inline-flex items-center justify-center p-4 mb-6 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm"
-                    >
-                        <Gamepad2 className="w-8 h-8 text-primary mr-3" />
-                        <span className="text-2xl font-bold text-foreground">{t("hero_tag")}</span>
-                    </motion.div>
+                {/* 1. Sidebar (Left) */}
+                <aside className="lg:sticky lg:top-28 h-fit lg:w-64">
+                    <EsportSidebar
+                        activeSeason={activeSeason}
+                        onSeasonChange={setActiveSeason}
+                        activeTournament={activeTournament}
+                        onTournamentChange={setActiveTournament}
+                    />
+                </aside>
 
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-5xl md:text-7xl font-bold text-foreground mb-6 tracking-tight"
-                    >
-                        {t("hero_title")}
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                        className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
-                    >
-                        {t("hero_desc")}
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-col sm:flex-row gap-4 justify-center"
-                    >
-                        <Link
-                            href="/esport/register"
-                            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-lg font-bold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 active:scale-95 shadow-lg shadow-primary/25"
+                {/* 2. Main Content (Center) */}
+                <main className="flex-1 space-y-12 pb-20">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeTournament + activeSeason}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            className="min-h-[60vh]"
                         >
-                            <Trophy className="w-5 h-5" />
-                            {t("register")}
-                        </Link>
-                        <Link
-                            href="https://www.youtube.com/@ForHumo_eSport"
-                            target="_blank"
-                            className="inline-flex items-center justify-center gap-2 rounded-lg bg-destructive px-8 py-4 text-lg font-bold text-destructive-foreground transition-all hover:bg-destructive/90 hover:scale-105 active:scale-95 shadow-lg shadow-destructive/25"
-                        >
-                            <Play className="w-5 h-5 fill-current" />
-                            {t("watch")}
-                        </Link>
-                    </motion.div>
-                </div>
-            </section>
+                            {activeSeason === '2026-2027' ? (
+                                <div className="h-full flex items-center justify-center p-12 text-center rounded-[40px] bg-muted/30 border border-dashed border-border">
+                                    <div className="max-w-md">
+                                        <h2 className="text-2xl font-bold mb-4">2026-2027 Mavsumi</h2>
+                                        <p className="text-muted-foreground italic">
+                                            Bu mavsum hali boshlanmadi. Autumn Tournament 2026 uchun kutishda davom eting!
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    {activeTournament === 'winter' && <TournamentDetails id="winter" />}
+                                    {activeTournament === 'autumn' && <TournamentHistory />}
+                                    {(activeTournament === 'spring' || activeTournament === 'summer') && (
+                                        <div className="h-[400px] flex items-center justify-center text-center bg-card border border-border rounded-[40px] p-8">
+                                            <div>
+                                                <h3 className="text-2xl font-bold mb-2">Tez kunda!</h3>
+                                                <p className="text-muted-foreground">
+                                                    {activeTournament.charAt(0).toUpperCase() + activeTournament.slice(1)} Tournament
+                                                    navbatdagi bosqichlarda e'lon qilinadi.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
 
-            {/* Features/Games Section */}
-            <section className="py-20 container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="relative group overflow-hidden rounded-2xl border border-border bg-card aspect-video md:aspect-[4/3] lg:aspect-video"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 to-indigo-900 group-hover:scale-105 transition-transform duration-700" />
+                                    {activeTournament === 'winter' && (
+                                        <div className="mt-12">
+                                            <ActiveTeams />
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </motion.div>
+                    </AnimatePresence>
+                </main>
 
-                        <div className="absolute bottom-0 left-0 p-8 z-20">
-                            <h3 className="text-3xl font-bold text-white mb-2">Mobile Legends: BB</h3>
-                            <p className="text-gray-200 mb-4">{t("mlbb_desc")}</p>
-                            <Link href="/esport/register" className="text-blue-400 hover:text-blue-300 font-bold flex items-center gap-2">
-                                {t("mlbb_action")} <ExternalLink size={16} />
-                            </Link>
-                        </div>
-                    </motion.div>
+                {/* 3. Control Panel (Right) */}
+                <aside className="lg:sticky lg:top-28 h-fit lg:w-80 space-y-6">
+                    <IdCardSection
+                        player={player}
+                        onRegister={handleRegisterPlayer}
+                    />
+                    <TeamSection
+                        player={player}
+                        team={team}
+                        onCreateTeam={handleCreateTeam}
+                        onInvite={() => { }}
+                    />
+                </aside>
 
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        className="relative group overflow-hidden rounded-2xl border border-border bg-card aspect-video md:aspect-[4/3] lg:aspect-video"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-900 to-yellow-900 group-hover:scale-105 transition-transform duration-700" />
-
-                        <div className="absolute bottom-0 left-0 p-8 z-20">
-                            <h3 className="text-3xl font-bold text-white mb-2">PUBG Mobile</h3>
-                            <p className="text-gray-200 mb-4">{t("pubg_desc")}</p>
-                            <Link href="https://t.me/Humo_eSportBot" target="_blank" className="text-orange-400 hover:text-orange-300 font-bold flex items-center gap-2">
-                                {t("pubg_action")} <ExternalLink size={16} />
-                            </Link>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
+            </div>
         </div>
     );
 }
