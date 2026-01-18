@@ -14,9 +14,9 @@ export function LanguageSwitcher() {
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const languages = [
-        { code: "uz", name: "O'zbek", flag: "🇺🇿" },
-        { code: "ru", name: "Русский", flag: "🇷🇺" },
-        { code: "en", name: "English", flag: "🇺🇸" },
+        { code: "uz", name: "O'zbek" },
+        { code: "ru", name: "Русский" },
+        { code: "en", name: "English" },
     ];
 
     const currentLang = languages.find((l) => l.code === locale) || languages[0];
@@ -60,7 +60,6 @@ export function LanguageSwitcher() {
                                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
                             )}
                         >
-                            <span className="text-base">{lang.flag}</span>
                             <span>{lang.name}</span>
                         </button>
                     ))}

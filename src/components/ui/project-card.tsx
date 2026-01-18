@@ -25,10 +25,11 @@ export function ProjectCard({ title, description, href, icon: Icon, status, clas
             viewport={{ once: true }}
             whileHover={{ y: -5 }}
             transition={{ duration: 0.5 }}
+            className="h-full"
         >
-            <Link href={href} className={cn("block group relative", className)}>
+            <Link href={href} className={cn("block group relative h-full", className)}>
                 <div
-                    className="h-full overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+                    className="flex flex-col h-full overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-primary/50"
                 >
                     <div className="flex items-start justify-between mb-4">
                         <div className="rounded-lg bg-primary/10 p-3 text-primary group-hover:text-primary/80 transition-colors">
@@ -48,9 +49,14 @@ export function ProjectCard({ title, description, href, icon: Icon, status, clas
                     <h3 className="text-xl font-bold text-card-foreground mb-2 group-hover:text-primary transition-colors">
                         {title}
                     </h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4 flex-grow">
                         {description}
                     </p>
+
+                    <div className="mt-auto flex items-center justify-between text-primary opacity-0 group-hover:opacity-100 transition-all transform translate-x-[-10px] group-hover:translate-x-0">
+                        <span className="text-sm font-medium">Batafsil</span>
+                        <span>→</span>
+                    </div>
                 </div>
             </Link>
         </motion.div>
