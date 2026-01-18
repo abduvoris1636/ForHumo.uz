@@ -2,9 +2,10 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-import { Trophy, Coins, CalendarDays, Timer } from "lucide-react";
+import { Trophy, Coins, CalendarDays, Timer, CheckCircle2 } from "lucide-react";
+import { Team } from "./types";
 
-export function TournamentDetails({ id }: { id: string }) {
+export function TournamentDetails({ id, team, onParticipate }: { id: string; team: Team | null, onParticipate: () => void }) {
     const t = useTranslations("Esport");
 
     const prizeAllocation = [
@@ -12,6 +13,8 @@ export function TournamentDetails({ id }: { id: string }) {
         { rank: t('second_place'), amount: "150,000 so'm", color: "text-slate-400", bg: "bg-slate-400/10" },
         { rank: t('third_place'), amount: "100,000 so'm", color: "text-amber-600", bg: "bg-amber-600/10" },
     ];
+
+    const canParticipate = team && team.members.length >= 5;
 
     return (
         <div className="space-y-12">
@@ -27,10 +30,27 @@ export function TournamentDetails({ id }: { id: string }) {
                         {t('winter_tournament')}
                     </motion.div>
                     <h1 className="text-4xl md:text-5xl font-black mb-4">500,000 SO'M</h1>
-                    <div className="flex items-center gap-6 text-sm font-medium opacity-80">
-                        <div className="flex items-center gap-2"><CalendarDays size={18} /> Dekabr 2025</div>
+                    <div className="flex items-center gap-6 text-sm font-medium opacity-80 mb-6">
+                        <div className="flex items-center gap-2"><CalendarDays size={18} /> Fevral 2026</div>
                         <div className="flex items-center gap-2"><Timer size={18} /> Ro'yxatdan o'tish ochiq</div>
                     </div>
+
+                    {canParticipate && !team.isParticipating && (
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={onParticipate}
+                            className="bg-white text-primary px-8 py-3 rounded-2xl font-black shadow-2xl hover:bg-opacity-90 transition-all flex items-center gap-2"
+                        >
+                            TURNIRDA QATNASHISH
+                        </motion.button>
+                    )}
+
+                    {team?.isParticipating && (
+                        <div className="bg-green-500/20 backdrop-blur-md border border-green-500/30 px-6 py-2 rounded-2xl flex items-center gap-2 text-green-300 font-bold">
+                            <CheckCircle2 size={18} /> TURNIRDA QATNASHYAPSIZ
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -62,7 +82,7 @@ export function TournamentDetails({ id }: { id: string }) {
                     <h2 className="text-2xl font-bold">{t('prize_pool')} taqsimoti</h2>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                    Winter Tournament 2025-2026 mavsumining eng katta turnirlaridan biri hisoblanadi. Turnirda ishtirok etish shartlari: jamoada kamida 5 ta o'yinchi bo'lishi va barcha a'zolar Humo eSport ID Card'iga ega bo'lishi shart. Ro'yxatdan o'tish vaqti tugaguncha istalgancha jamoa qabul qilinadi.
+                    Winter Tournament 2026 mavsumining eng katta turnirlaridan biri hisoblanadi. Turnirda ishtirok etish shartlari: jamoada kamida 5 ta o'yinchi bo'lishi va barcha a'zolar Humo eSport ID Card'iga ega bo'lishi shart. Ro'yxatdan o'tish vaqti tugaguncha istalgancha jamoa qabul qilinadi.
                 </p>
             </div>
         </div>

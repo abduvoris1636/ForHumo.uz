@@ -17,16 +17,20 @@ export interface Player {
     telegram: string;
     mlbbNickname: string;
     mlbbId: string;
+    avatar?: string;
+    role?: string;
 }
 
 export interface Team {
     id: string;
     name: string;
     shortName: string;
-    logo?: string;
+    logo: string; // Made logo mandatory as per request
     ownerId: string;
     captainId: string;
     members: string[]; // Player IDs
+    registeredAt: string;
+    isParticipating?: boolean;
 }
 
 export interface TournamentResult {
