@@ -5,7 +5,7 @@ import { SectionHeader } from '@/components/esport/shared/SectionHeader';
 import { EsportCard } from '@/components/esport/shared/EsportCard';
 import { StatusBadge } from '@/components/esport/shared/StatusBadge';
 import { Trophy, Calendar, Users, Youtube, AlertTriangle, ExternalLink, ShieldAlert, CheckCircle2 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
 import { motion } from 'framer-motion';

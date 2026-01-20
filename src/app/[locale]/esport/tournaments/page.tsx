@@ -8,7 +8,7 @@ import { AnimatedButton } from '@/components/esport/shared/AnimatedButton';
 import { useTranslations } from 'next-intl';
 import { Trophy, Calendar, Users, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
 export default function TournamentsPage() {
