@@ -79,25 +79,48 @@ export const MOCK_TEAMS: Team[] = [
 
 export const MOCK_TOURNAMENTS: Tournament[] = [
     {
-        id: 'tour_001',
-        name: 'Winter Championship 2025',
-        season: '2025-2026 Season',
-        status: 'LIVE',
-        startDate: '2026-01-15',
+        id: 'tour_autumn_2025',
+        name: 'Autumn Tournament',
+        season: '2025-2026',
+        status: 'FINISHED',
+        startDate: '2025-11-10',
+        endDate: '2025-11-14',
         game: 'MLBB',
-        prizePool: '5,000,000 UZS',
+        prizePool: '200,000 UZS',
         maxTeams: 16,
-        registeredTeams: ['team_01', 'team_02']
+        registeredTeams: ['team_01', 'team_02', 'team_03', 'team_04', 'team_05']
     },
     {
-        id: 'tour_002',
-        name: 'Spring Cup 2026',
-        season: '2025-2026 Season',
+        id: 'tour_winter_2025',
+        name: 'Winter Tournament',
+        season: '2025-2026',
+        status: 'LIVE',
+        startDate: '2026-02-10',
+        game: 'MLBB',
+        prizePool: '500,000 UZS',
+        maxTeams: 16,
+        registeredTeams: [] // Currently empty
+    },
+    {
+        id: 'tour_spring_2026',
+        name: 'Spring Tournament',
+        season: '2025-2026',
         status: 'UPCOMING',
-        startDate: '2026-03-01',
-        game: 'PUBG_MOBILE',
-        prizePool: '10,000,000 UZS',
-        maxTeams: 32,
+        startDate: '2026-04-01',
+        game: 'MLBB',
+        prizePool: '—',
+        maxTeams: 16,
+        registeredTeams: []
+    },
+    {
+        id: 'tour_summer_2026',
+        name: 'Summer Tournament',
+        season: '2025-2026',
+        status: 'UPCOMING',
+        startDate: '2026-07-01',
+        game: 'MLBB',
+        prizePool: '—',
+        maxTeams: 16,
         registeredTeams: []
     }
 ];

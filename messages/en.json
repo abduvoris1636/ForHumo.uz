@@ -70,7 +70,18 @@
         "playoffs": "Play-offs",
         "winner": "Winner",
         "history": "Tournament History",
-        "teams_list": "Humo eSport Teams"
+        "teams_list": "Humo eSport Teams",
+        "hero_status": "Season 2025-2026 is Live",
+        "register_btn": "Register for Tournament",
+        "view_teams_btn": "View Teams",
+        "total_players": "Total Players",
+        "registered_teams": "Registered Teams",
+        "tournaments_header": "Tournaments",
+        "active_tournament_title": "Active Tournament",
+        "view_details": "View Tournament Details",
+        "start_date": "Start Date",
+        "team_members_count": "Team Members",
+        "min_players_alert": "Team must have at least 5 players to register."
     },
     "Status": {
         "active": "Active",

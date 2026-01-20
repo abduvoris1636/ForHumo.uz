@@ -7,9 +7,13 @@ import { AnimatedButton } from '@/components/esport/shared/AnimatedButton';
 import { StatusBadge } from '@/components/esport/shared/StatusBadge';
 import { Users, Swords, Trophy, ArrowRight, Gamepad2 } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function EsportHomePage() {
-    const activeTournament = MOCK_TOURNAMENTS.find(t => t.status === 'LIVE') || MOCK_TOURNAMENTS[0];
+    const t = useTranslations('Esport');
+
+    // Get Winter Tournament (Active)
+    const activeTournament = MOCK_TOURNAMENTS.find(t => t.id === 'tour_winter_2025') || MOCK_TOURNAMENTS[0];
 
     return (
         <div className="min-h-screen bg-black text-white pb-20">
@@ -28,27 +32,26 @@ export default function EsportHomePage() {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                         </span>
-                        Season 2025-2026 is Live
+                        {t('hero_status')}
                     </div>
 
                     <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-neutral-500">
-                        HUMO ESPORT
+                        {t('hero_tag')}
                     </h1>
 
                     <p className="text-xl text-neutral-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                        The professional competitive platform for mobile esports.
-                        Rank up, join teams, and compete in premier tournaments.
+                        {t('hero_desc')}
                     </p>
 
                     <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-                        <Link href="/esport/players">
+                        <Link href="/esport/tournaments">
                             <AnimatedButton className="w-full md:w-auto h-12 text-lg">
-                                Register for Tournament <ArrowRight className="w-5 h-5" />
+                                {t('register_btn')} <ArrowRight className="w-5 h-5" />
                             </AnimatedButton>
                         </Link>
                         <Link href="/esport/teams">
                             <AnimatedButton variant="outline" className="w-full md:w-auto h-12 text-lg">
-                                View Teams
+                                {t('view_teams_btn')}
                             </AnimatedButton>
                         </Link>
                     </div>
@@ -58,47 +61,53 @@ export default function EsportHomePage() {
             {/* Quick Overview Stats */}
             <section className="container mx-auto px-4 -mt-20 relative z-20 mb-24">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <EsportCard className="bg-neutral-900/80 backdrop-blur-xl">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-lg bg-blue-500/10 text-blue-500">
-                                <Users className="w-6 h-6" />
+                    <Link href="/esport/players" className="block h-full">
+                        <EsportCard className="bg-neutral-900/80 backdrop-blur-xl h-full flex items-center hover:bg-neutral-800/80 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 rounded-lg bg-blue-500/10 text-blue-500">
+                                    <Users className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-white">{MOCK_PLAYERS.length.toLocaleString()}</div>
+                                    <div className="text-sm text-neutral-400">{t('total_players')}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="text-2xl font-bold text-white">{MOCK_PLAYERS.length.toLocaleString()}</div>
-                                <div className="text-sm text-neutral-400">Total Players</div>
-                            </div>
-                        </div>
-                    </EsportCard>
+                        </EsportCard>
+                    </Link>
 
-                    <EsportCard className="bg-neutral-900/80 backdrop-blur-xl">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-lg bg-purple-500/10 text-purple-500">
-                                <Swords className="w-6 h-6" />
+                    <Link href="/esport/teams" className="block h-full">
+                        <EsportCard className="bg-neutral-900/80 backdrop-blur-xl h-full flex items-center hover:bg-neutral-800/80 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 rounded-lg bg-purple-500/10 text-purple-500">
+                                    <Swords className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-white">{MOCK_TEAMS.length.toLocaleString()}</div>
+                                    <div className="text-sm text-neutral-400">{t('registered_teams')}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="text-2xl font-bold text-white">{MOCK_TEAMS.length.toLocaleString()}</div>
-                                <div className="text-sm text-neutral-400">Registered Teams</div>
-                            </div>
-                        </div>
-                    </EsportCard>
+                        </EsportCard>
+                    </Link>
 
-                    <EsportCard className="bg-neutral-900/80 backdrop-blur-xl">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-lg bg-yellow-500/10 text-yellow-500">
-                                <Trophy className="w-6 h-6" />
+                    <Link href="/esport/tournaments" className="block h-full">
+                        <EsportCard className="bg-neutral-900/80 backdrop-blur-xl h-full flex items-center hover:bg-neutral-800/80 transition-colors">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 rounded-lg bg-yellow-500/10 text-yellow-500">
+                                    <Trophy className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <div className="text-2xl font-bold text-white">4</div>
+                                    <div className="text-sm text-neutral-400">{t('tournaments_header')}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="text-2xl font-bold text-white">50M+</div>
-                                <div className="text-sm text-neutral-400">Prize Pool (UZS)</div>
-                            </div>
-                        </div>
-                    </EsportCard>
+                        </EsportCard>
+                    </Link>
                 </div>
             </section>
 
             {/* Active Tournament */}
             <section className="container mx-auto px-4 mb-24">
-                <SectionHeader title="Active Tournament" subtitle="Happening now in the Arena" />
+                <SectionHeader title={t('active_tournament_title')} subtitle={t('season_2025_2026')} />
 
                 <EsportCard className="group">
                     <div className="flex flex-col md:flex-row gap-8 items-center">
@@ -121,7 +130,7 @@ export default function EsportHomePage() {
                                 </div>
                                 <div>
                                     <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">Prize Pool</div>
-                                    <div className="text-white font-medium">{activeTournament.prizePool || 'TBA'}</div>
+                                    <div className="text-white font-medium text-yellow-500">{activeTournament.prizePool || 'TBA'}</div>
                                 </div>
                                 <div>
                                     <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">Teams</div>
@@ -133,7 +142,9 @@ export default function EsportHomePage() {
                                 </div>
                             </div>
 
-                            <AnimatedButton className="w-full md:w-auto">View Tournament Details</AnimatedButton>
+                            <Link href="/esport/tournaments">
+                                <AnimatedButton className="w-full md:w-auto">{t('view_details')}</AnimatedButton>
+                            </Link>
                         </div>
                     </div>
                 </EsportCard>

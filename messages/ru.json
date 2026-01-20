@@ -70,7 +70,18 @@
         "playoffs": "Плей-офф",
         "winner": "Победитель",
         "history": "История турниров",
-        "teams_list": "Humo eSport Teams"
+        "teams_list": "Humo eSport Teams",
+        "hero_status": "Сезон 2025-2026 В эфире",
+        "register_btn": "Регистрация на турнир",
+        "view_teams_btn": "Посмотреть команды",
+        "total_players": "Всего игроков",
+        "registered_teams": "Зарегистрированные команды",
+        "tournaments_header": "Турниры",
+        "active_tournament_title": "Активный Турнир",
+        "view_details": "Подробнее о турнире",
+        "start_date": "Дата начала",
+        "team_members_count": "Члены команды",
+        "min_players_alert": "В команде должно быть не менее 5 игроков для регистрации."
     },
     "Status": {
         "active": "Активен",

@@ -70,7 +70,18 @@
         "playoffs": "Play-off o'yinlari",
         "winner": "G'olib",
         "history": "Turnir Tarixi",
-        "teams_list": "Humo eSport Teams"
+        "teams_list": "Humo eSport Teams",
+        "hero_status": "Mavsum 2025-2026 Jonli",
+        "register_btn": "Turnirga ro'yxatdan o'tish",
+        "view_teams_btn": "Jamoalarni ko'rish",
+        "total_players": "Jami o'yinchilar",
+        "registered_teams": "Ro'yxatdan o'tgan jamoalar",
+        "tournaments_header": "Turnirlar",
+        "active_tournament_title": "Faol Turnir",
+        "view_details": "Batafsil ko'rish",
+        "start_date": "Boshlanish sanasi",
+        "team_members_count": "Jamoa a'zolari",
+        "min_players_alert": "Jamoa a'zolari kam, turnirda qatnashish uchun kamida 5 ta jamoa a'zosi bo'lishi kerak"
     },
     "Status": {
         "active": "Faol",
