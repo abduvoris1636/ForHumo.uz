@@ -7,7 +7,7 @@ import { StatusBadge } from '@/components/esport/shared/StatusBadge';
 import { Trophy, Calendar, Users, Youtube, AlertTriangle, ExternalLink, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { animated, useSpring } from '@react-spring/web'; // Using frame-motion usually, but sticking to project conventions if needed. Reverting to framer-motion as used previously.
+
 import { motion } from 'framer-motion';
 
 export default function Autumn2025Page() {
