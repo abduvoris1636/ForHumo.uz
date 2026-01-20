@@ -3,7 +3,7 @@ export const AUTUMN_2025_DATA = {
         name: "Autumn Tournament",
         season: "2025–2026",
         game: "Mobile Legends: Bang Bang",
-        organizer: "Humo eSport",
+        organizer: "For Humo & Humo eSport",
         startDate: "2025-11-10",
         endDate: "2025-11-14",
         prizePool: "200,000 UZS",

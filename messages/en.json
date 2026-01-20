@@ -38,6 +38,7 @@
         "tournaments": "Tournaments",
         "season_2025_2026": "Season 2025-2026",
         "season_2026_2027": "Season 2026-2027",
+        "season_generic": "Season {year}",
         "season_not_started": "Season not started yet",
         "autumn_tournament": "Autumn Tournament",
         "winter_tournament": "Winter Tournament",

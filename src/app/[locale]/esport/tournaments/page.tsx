@@ -14,13 +14,12 @@ import { cn } from '@/lib/utils';
 export default function TournamentsPage() {
     const t = useTranslations('Esport');
 
-    // Group tournaments by season (Mock logic, currently only one season)
     const seasons = [
         { name: t('season_2025_2026'), tournaments: MOCK_TOURNAMENTS },
         { name: t('season_2026_2027'), tournaments: [] },
-        { name: 'Season 2027-2028', tournaments: [] },
-        { name: 'Season 2028-2029', tournaments: [] },
-        { name: 'Season 2029-2030', tournaments: [] },
+        { name: t('season_generic', { year: '2027-2028' }), tournaments: [] },
+        { name: t('season_generic', { year: '2028-2029' }), tournaments: [] },
+        { name: t('season_generic', { year: '2029-2030' }), tournaments: [] },
     ];
 
     return (
