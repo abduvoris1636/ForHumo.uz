@@ -97,7 +97,21 @@
         "stage_group": "Group Stage",
         "stage_semifinals": "Semifinals",
         "stage_third_place": "Third Place",
-        "stage_grand_final": "Grand Final"
+        "stage_third_place": "Third Place",
+        "stage_grand_final": "Grand Final",
+        "game_label": "Game",
+        "organizer_label": "Organizer",
+        "dates_label": "Dates",
+        "watch_btn": "Watch",
+        "table_place": "Place",
+        "table_team": "Team",
+        "table_prize": "Prize",
+        "table_proof": "Proof",
+        "teams_subtitle": "Professional and amateur teams competing for glory",
+        "players_subtitle": "The best competitive players in the league",
+        "search_placeholder": "Search by nickname...",
+        "official_statement_quote": "“Humo eSport confirms that all prize payments were completed and verified. Organizational mistakes during the tournament were acknowledged publicly. Fair competition and transparency remain core principles of Humo eSport.”",
+        "official_archive_footer": "Official Archive • Verified Record"
     },
     "Status": {
         "active": "Active",

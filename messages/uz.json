@@ -97,7 +97,21 @@
         "stage_group": "Guruh bosqichi",
         "stage_semifinals": "Yarim Final",
         "stage_third_place": "3-o'rin",
-        "stage_grand_final": "Grand Final"
+        "stage_third_place": "3-o'rin",
+        "stage_grand_final": "Grand Final",
+        "game_label": "O'yin",
+        "organizer_label": "Tashkilotchi",
+        "dates_label": "Sanalar",
+        "watch_btn": "Ko'rish",
+        "table_place": "O'rin",
+        "table_team": "Jamoa",
+        "table_prize": "Yutuq",
+        "table_proof": "Isbot",
+        "teams_subtitle": "Shon-sharaf uchun kurashayotgan professional va havaskor jamoalar",
+        "players_subtitle": "Ligadagi eng yaxshi raqobatbardosh o'yinchilar",
+        "search_placeholder": "Nickname bo'yicha qidirish...",
+        "official_statement_quote": "“Humo eSport barcha yutuq to'lovlari amalga oshirilganligini va tasdiqlanganligini ma'lum qiladi. Turnir davomida yo'l qo'yilgan tashkiliy xatolar ochiq tan olindi. Halol raqobat va shaffoflik Humo eSportning asosiy tamoyillari bo'lib qoladi.”",
+        "official_archive_footer": "Rasmiy Arxiv • Tasdiqlangan Yozuv"
     },
     "Status": {
         "active": "Faol",

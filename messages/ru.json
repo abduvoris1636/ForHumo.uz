@@ -97,7 +97,21 @@
         "stage_group": "Групповой этап",
         "stage_semifinals": "Полуфинал",
         "stage_third_place": "3-е место",
-        "stage_grand_final": "Гранд Финал"
+        "stage_third_place": "3-е место",
+        "stage_grand_final": "Гранд Финал",
+        "game_label": "Игра",
+        "organizer_label": "Организатор",
+        "dates_label": "Даты",
+        "watch_btn": "Смотреть",
+        "table_place": "Место",
+        "table_team": "Команда",
+        "table_prize": "Приз",
+        "table_proof": "Док-во",
+        "teams_subtitle": "Профессиональные и любительские команды, сражающиеся за славу",
+        "players_subtitle": "Лучшие соревновательные игроки лиги",
+        "search_placeholder": "Поиск по никнейму...",
+        "official_statement_quote": "“Humo eSport подтверждает, что все призовые выплаты были завершены и проверены. Организационные ошибки во время турнира были публично признаны. Честная конкуренция и прозрачность остаются основными принципами Humo eSport.”",
+        "official_archive_footer": "Официальный Архив • Проверенная Запись"
     },
     "Status": {
         "active": "Активен",

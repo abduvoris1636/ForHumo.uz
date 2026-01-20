@@ -135,11 +135,11 @@ export default function EsportHomePage() {
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                                 <div>
-                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">Game</div>
+                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('game_label')}</div>
                                     <div className="text-neutral-900 dark:text-white font-medium">{activeTournament.game}</div>
                                 </div>
                                 <div>
-                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">Prize Pool</div>
+                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('prize_pool')}</div>
                                     <div className="text-yellow-600 dark:text-yellow-500 font-medium">{activeTournament.prizePool || 'TBA'}</div>
                                 </div>
                                 <div>
@@ -147,7 +147,7 @@ export default function EsportHomePage() {
                                     <div className="text-neutral-900 dark:text-white font-medium">{activeTournament.registeredTeams.length}/{activeTournament.maxTeams}</div>
                                 </div>
                                 <div>
-                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">Start Date</div>
+                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('start_date')}</div>
                                     <div className="text-neutral-900 dark:text-white font-medium">{new Date(activeTournament.startDate).toLocaleDateString()}</div>
                                 </div>
                             </div>

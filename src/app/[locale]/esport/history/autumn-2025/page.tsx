@@ -48,15 +48,15 @@ export default function Autumn2025Page() {
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12 pt-8 border-t border-white/5">
                             <div>
-                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">Game</div>
+                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">{t('game_label')}</div>
                                 <div className="font-medium">{meta.game}</div>
                             </div>
                             <div>
-                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">Organizer</div>
+                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">{t('organizer_label')}</div>
                                 <div className="font-medium">{meta.organizer}</div>
                             </div>
                             <div>
-                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">Dates</div>
+                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">{t('dates_label')}</div>
                                 <div className="font-medium">{new Date(meta.startDate).toLocaleDateString()} — {new Date(meta.endDate).toLocaleDateString()}</div>
                             </div>
                             <div className="md:hidden">
@@ -170,7 +170,7 @@ export default function Autumn2025Page() {
                                                 className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded transition-colors group"
                                             >
                                                 <Youtube className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                                                Watch
+                                                {t('watch_btn')}
                                             </a>
                                         </div>
                                     )}
@@ -191,10 +191,10 @@ export default function Autumn2025Page() {
                             <table className="w-full text-left text-sm">
                                 <thead className="bg-white/5 uppercase text-neutral-500 font-bold text-xs">
                                     <tr>
-                                        <th className="p-4 w-24">Place</th>
-                                        <th className="p-4">Team</th>
-                                        <th className="p-4">Prize</th>
-                                        <th className="p-4 text-right">Proof</th>
+                                        <th className="p-4 w-24">{t('table_place')}</th>
+                                        <th className="p-4">{t('table_team')}</th>
+                                        <th className="p-4">{t('table_prize')}</th>
+                                        <th className="p-4 text-right">{t('table_proof')}</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
@@ -236,12 +236,10 @@ export default function Autumn2025Page() {
                 <section className="p-6 md:p-8 rounded-xl bg-gradient-to-br from-neutral-900 to-black border border-white/10 text-center">
                     <div className="w-16 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent mx-auto mb-6" />
                     <p className="text-neutral-400 italic leading-relaxed max-w-2xl mx-auto mb-6">
-                        “Humo eSport confirms that all prize payments were completed and verified.
-                        Organizational mistakes during the tournament were acknowledged publicly.
-                        Fair competition and transparency remain core principles of Humo eSport.”
+                        {t('official_statement_quote')}
                     </p>
                     <div className="text-xs font-bold uppercase tracking-widest text-neutral-600">
-                        Official Archive • Verified Record
+                        {t('official_archive_footer')}
                     </div>
                 </section>
 
