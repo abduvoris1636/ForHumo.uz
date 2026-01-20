@@ -7,11 +7,13 @@ import { StatusBadge } from '@/components/esport/shared/StatusBadge';
 import { Trophy, Calendar, Users, Youtube, AlertTriangle, ExternalLink, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
-
+import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 
 export default function Autumn2025Page() {
     const { meta, teams, matches, standings } = AUTUMN_2025_DATA;
+    const t = useTranslations('Esport');
+    const tStatus = useTranslations('Status');
 
     return (
         <div className="min-h-screen bg-black text-white p-4 md:p-8 pb-20 font-sans">
@@ -21,7 +23,7 @@ export default function Autumn2025Page() {
                 <div className="mb-6 text-sm text-neutral-500">
                     <Link href="/esport" className="hover:text-white transition-colors">Esport</Link>
                     <span className="mx-2">/</span>
-                    <span className="text-white">History</span>
+                    <span className="text-white">{t('history')}</span>
                     <span className="mx-2">/</span>
                     <span className="text-blue-400">Autumn 2025</span>
                 </div>
@@ -33,14 +35,14 @@ export default function Autumn2025Page() {
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                             <div>
                                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-bold uppercase tracking-wider mb-4">
-                                    <CheckCircle2 className="w-3 h-3" /> {meta.status}
+                                    <CheckCircle2 className="w-3 h-3" /> {t('finished')}
                                 </div>
                                 <h1 className="text-4xl md:text-5xl font-black mb-2 text-white">{meta.name}</h1>
                                 <p className="text-xl text-neutral-400">{meta.season}</p>
                             </div>
                             <div className="text-right hidden md:block">
                                 <div className="text-3xl font-bold text-yellow-500">{meta.prizePool}</div>
-                                <div className="text-sm text-neutral-500 uppercase tracking-wider">Total Prize Pool</div>
+                                <div className="text-sm text-neutral-500 uppercase tracking-wider">{t('prize_pool')}</div>
                             </div>
                         </div>
 
@@ -58,7 +60,7 @@ export default function Autumn2025Page() {
                                 <div className="font-medium">{new Date(meta.startDate).toLocaleDateString()} — {new Date(meta.endDate).toLocaleDateString()}</div>
                             </div>
                             <div className="md:hidden">
-                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">Prize Pool</div>
+                                <div className="text-xs text-neutral-500 uppercase font-bold mb-1">{t('prize_pool')}</div>
                                 <div className="font-medium text-yellow-500">{meta.prizePool}</div>
                             </div>
                         </div>
@@ -68,7 +70,7 @@ export default function Autumn2025Page() {
                 {/* Participating Teams */}
                 <section className="mb-16">
                     <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                        <Users className="w-5 h-5 text-blue-500" /> Participating Teams
+                        <Users className="w-5 h-5 text-blue-500" /> {t('participating_teams')}
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                         {teams.map((team, idx) => (
@@ -81,10 +83,7 @@ export default function Autumn2025Page() {
                                 </div>
                                 <div className="font-bold text-sm">{team.name}</div>
                                 {team.status === 'Withdrawn' && (
-                                    <span className="text-[10px] uppercase font-bold bg-red-500/10 text-red-500 px-2 py-0.5 rounded">Withdrawn</span>
-                                )}
-                                {team.note && (
-                                    <p className="text-[10px] text-neutral-500 leading-tight">{team.note}</p>
+                                    <span className="text-[10px] uppercase font-bold bg-red-500/10 text-red-500 px-2 py-0.5 rounded">{t('withdrawn')}</span>
                                 )}
                             </div>
                         ))}
@@ -94,7 +93,7 @@ export default function Autumn2025Page() {
                 {/* Match History */}
                 <section className="mb-16">
                     <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                        <Calendar className="w-5 h-5 text-purple-500" /> Match History
+                        <Calendar className="w-5 h-5 text-purple-500" /> {t('match_history')}
                     </h2>
 
                     <div className="space-y-4">
@@ -109,7 +108,11 @@ export default function Autumn2025Page() {
                                         <div className="text-sm font-bold text-white">{match.date}</div>
                                         {match.time && <div className="text-xs text-neutral-400">{match.time}</div>}
                                         <div className="mt-2 text-[10px] uppercase tracking-wider font-bold text-neutral-600 bg-black/30 px-2 py-0.5 rounded">
-                                            {match.stage}
+                                            {/* Localization logic for stages */}
+                                            {match.stage === 'Group' ? t('stage_group') :
+                                                match.stage === 'Semifinals' ? t('stage_semifinals') :
+                                                    match.stage === 'Third Place' ? t('stage_third_place') :
+                                                        match.stage === 'Grand Final' ? t('stage_grand_final') : match.stage}
                                         </div>
                                     </div>
 
@@ -136,12 +139,12 @@ export default function Autumn2025Page() {
                                         {match.status === 'INCIDENT' && (
                                             <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
                                                 <div className="flex items-center gap-2 text-red-500 font-bold mb-1 text-sm">
-                                                    <AlertTriangle className="w-4 h-4" /> Incident Report
+                                                    <AlertTriangle className="w-4 h-4" /> {t('incident_report')}
                                                 </div>
-                                                <p className="text-xs text-red-200/80 mb-2">{match.reason}</p>
-                                                <div className="text-xs font-bold text-red-400 uppercase">Verdict: {match.verdict}</div>
+                                                <p className="text-xs text-red-200/80 mb-2">{t('reason_incident')}</p>
+                                                <div className="text-xs font-bold text-red-400 uppercase">{t('verdict')}: {match.verdict}</div>
                                                 <div className="mt-2 text-[10px] text-neutral-500 border-t border-red-500/10 pt-2">
-                                                    Humo eSport organizers officially take responsibility for this incident.
+                                                    {t('organizer_responsibility')}
                                                 </div>
                                             </div>
                                         )}
@@ -150,9 +153,9 @@ export default function Autumn2025Page() {
                                         {match.status === 'TECHNICAL' && (
                                             <div className="mt-4 p-3 bg-neutral-800 rounded-lg">
                                                 <div className="flex items-center gap-2 text-neutral-400 font-bold mb-1 text-sm">
-                                                    <ShieldAlert className="w-4 h-4" /> Technical Result
+                                                    <ShieldAlert className="w-4 h-4" /> {t('technical_result')}
                                                 </div>
-                                                <p className="text-xs text-neutral-500">{match.reason}</p>
+                                                <p className="text-xs text-neutral-500">{t('reason_assasin_withdraw')}</p>
                                             </div>
                                         )}
                                     </div>
@@ -180,7 +183,7 @@ export default function Autumn2025Page() {
                 {/* Final Standings */}
                 <section className="mb-16">
                     <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
-                        <Trophy className="w-5 h-5 text-yellow-500" /> Final Standings & Prizes
+                        <Trophy className="w-5 h-5 text-yellow-500" /> {t('winner')}
                     </h2>
 
                     <div className="rounded-xl border border-white/10 bg-neutral-900/50 overflow-hidden">
@@ -202,7 +205,7 @@ export default function Autumn2025Page() {
                                             </td>
                                             <td className="p-4 font-medium text-white">
                                                 {row.team}
-                                                {row.note && <span className="ml-2 text-xs text-red-400 uppercase bg-red-500/10 px-1.5 py-0.5 rounded">{row.note}</span>}
+                                                {row.note && <span className="ml-2 text-xs text-red-400 uppercase bg-red-500/10 px-1.5 py-0.5 rounded">{t('withdrawn')}</span>}
                                             </td>
                                             <td className="p-4 text-neutral-300 font-mono">
                                                 {row.prize}

@@ -1,4 +1,7 @@
+'use client';
+
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 type Status = 'LIVE' | 'UPCOMING' | 'FINISHED' | 'SCHEDULED';
 
@@ -8,6 +11,16 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
+    const t = useTranslations('Status');
+
+    // Map status code to translation key
+    const statusKeyMap = {
+        'LIVE': 'live',
+        'UPCOMING': 'upcoming',
+        'FINISHED': 'finished',
+        'SCHEDULED': 'upcoming' // fall back
+    };
+
     const getColors = (s: Status) => {
         switch (s) {
             case 'LIVE':
@@ -34,7 +47,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                 </span>
             )}
-            {status}
+            {/* @ts-ignore - Dynamic key usage */}
+            {t(statusKeyMap[status] || 'active')}
         </div>
     );
 }

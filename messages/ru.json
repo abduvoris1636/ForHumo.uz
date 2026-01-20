@@ -81,11 +81,31 @@
         "view_details": "Подробнее о турнире",
         "start_date": "Дата начала",
         "team_members_count": "Члены команды",
-        "min_players_alert": "В команде должно быть не менее 5 игроков для регистрации."
+        "min_players_alert": "В команде должно быть не менее 5 игроков для регистрации.",
+        "participating_teams": "Участвующие команды",
+        "match_history": "История матчей",
+        "semifinals": "Полуфинал",
+        "grand_final": "Гранд Финал",
+        "third_place_match": "Матч за 3-е место",
+        "technical_result": "Технический результат",
+        "incident_report": "Отчет об инциденте",
+        "verdict": "Вердикт",
+        "organizer_responsibility": "Организаторы Humo eSport официально берут на себя ответственность за этот инцидент.",
+        "withdrawn": "Выбыл",
+        "reason_assasin_withdraw": "Assasin’s добровольно снялись. Присуждена техническая победа.",
+        "reason_incident": "Ошибка организатора. Неавторизованный участник вошел в игру. Матч сорван. Assasin’s сдались.",
+        "stage_group": "Групповой этап",
+        "stage_semifinals": "Полуфинал",
+        "stage_third_place": "3-е место",
+        "stage_grand_final": "Гранд Финал"
     },
     "Status": {
         "active": "Активен",
-        "coming_soon": "Скоро"
+        "coming_soon": "Скоро",
+        "live": "Live",
+        "upcoming": "Предстоит",
+        "finished": "Завершен",
+        "withdrawn": "Выбыл"
     },
     "Common": {
         "coming_soon": "Скоро",

@@ -81,11 +81,31 @@
         "view_details": "Batafsil ko'rish",
         "start_date": "Boshlanish sanasi",
         "team_members_count": "Jamoa a'zolari",
-        "min_players_alert": "Jamoa a'zolari kam, turnirda qatnashish uchun kamida 5 ta jamoa a'zosi bo'lishi kerak"
+        "min_players_alert": "Jamoa a'zolari kam, turnirda qatnashish uchun kamida 5 ta jamoa a'zosi bo'lishi kerak",
+        "participating_teams": "Qatnashayotgan Jamoalar",
+        "match_history": "Uchrashuvlar Tarixi",
+        "semifinals": "Yarim Final",
+        "grand_final": "Grand Final",
+        "third_place_match": "3-o'rin uchun o'yin",
+        "technical_result": "Texnik Natija",
+        "incident_report": "Hodisa Hisoboti",
+        "verdict": "Xulosa",
+        "organizer_responsibility": "Humo eSport tashkilotchilari ushbu hodisa uchun rasman javobgarlikni o'z zimmalariga oladilar.",
+        "withdrawn": "Chiqib ketgan",
+        "reason_assasin_withdraw": "Assasin's o'z xohishi bilan turnirni tark etdi. Texnik g'alaba berildi.",
+        "reason_incident": "Tashkilotchi xatosi. Ruxsat etilmagan ishtirokchi o'yinga kirdi. Uchrashuv buzildi. Assasin's taslim bo'ldi.",
+        "stage_group": "Guruh bosqichi",
+        "stage_semifinals": "Yarim Final",
+        "stage_third_place": "3-o'rin",
+        "stage_grand_final": "Grand Final"
     },
     "Status": {
         "active": "Faol",
-        "coming_soon": "Tez kunda"
+        "coming_soon": "Tez kunda",
+        "live": "Jonli",
+        "upcoming": "Tez orada",
+        "finished": "Tugagan",
+        "withdrawn": "Chiqib ketgan"
     },
     "Common": {
         "coming_soon": "Tez Orada",

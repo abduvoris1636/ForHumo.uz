@@ -108,7 +108,7 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         status: 'UPCOMING',
         startDate: '2026-04-01',
         game: 'MLBB',
-        prizePool: '—',
+        prizePool: '500,000 UZS',
         maxTeams: 16,
         registeredTeams: []
     },
@@ -119,7 +119,7 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         status: 'UPCOMING',
         startDate: '2026-07-01',
         game: 'MLBB',
-        prizePool: '—',
+        prizePool: '500,000 UZS',
         maxTeams: 16,
         registeredTeams: []
     }

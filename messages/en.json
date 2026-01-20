@@ -81,11 +81,31 @@
         "view_details": "View Tournament Details",
         "start_date": "Start Date",
         "team_members_count": "Team Members",
-        "min_players_alert": "Team must have at least 5 players to register."
+        "min_players_alert": "Team must have at least 5 players to register.",
+        "participating_teams": "Participating Teams",
+        "match_history": "Match History",
+        "semifinals": "Semifinals",
+        "grand_final": "Grand Final",
+        "third_place_match": "Third Place Match",
+        "technical_result": "Technical Result",
+        "incident_report": "Incident Report",
+        "verdict": "Verdict",
+        "organizer_responsibility": "Humo eSport organizers officially take responsibility for this incident.",
+        "withdrawn": "Withdrawn",
+        "reason_assasin_withdraw": "Assasin’s voluntarily withdrew. Technical victory awarded.",
+        "reason_incident": "Tournament organizer error. Unauthorized participant joined. Match disrupted. Assasin’s surrendered.",
+        "stage_group": "Group Stage",
+        "stage_semifinals": "Semifinals",
+        "stage_third_place": "Third Place",
+        "stage_grand_final": "Grand Final"
     },
     "Status": {
         "active": "Active",
-        "coming_soon": "Coming Soon"
+        "coming_soon": "Coming Soon",
+        "live": "Live",
+        "upcoming": "Upcoming",
+        "finished": "Finished",
+        "withdrawn": "Withdrawn"
     },
     "Common": {
         "coming_soon": "Coming Soon",
