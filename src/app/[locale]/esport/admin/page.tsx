@@ -9,7 +9,7 @@ import { AuditLogViewer } from '@/components/esport/admin/AuditLogViewer';
 import { SectionHeader } from '@/components/esport/shared/SectionHeader';
 import { EsportCard } from '@/components/esport/shared/EsportCard';
 import { AnimatedButton } from '@/components/esport/shared/AnimatedButton';
-import { Lock, Save, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Lock, Save, AlertTriangle, CheckCircle, Shield } from 'lucide-react';
 
 export default function AdminDashboardPage() {
     const [currentRole, setCurrentRole] = useState<Role>('ORGANIZER');
