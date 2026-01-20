@@ -16,6 +16,7 @@ export interface Player {
         gameId?: string; // Private, never shown
     }[];
     joinedAt: string;
+    role?: 'CAPTAIN' | 'MEMBER' | 'SUB';
 }
 
 export interface Team {

@@ -11,7 +11,8 @@ export const MOCK_PLAYERS: Player[] = [
         gameProfiles: [
             { game: 'MLBB', inGameNickname: 'ShadowML' }
         ],
-        joinedAt: '2025-01-01'
+        joinedAt: '2025-01-01',
+        role: 'CAPTAIN'
     },
     {
         id: '100002',
@@ -23,7 +24,8 @@ export const MOCK_PLAYERS: Player[] = [
         gameProfiles: [
             { game: 'PUBG_MOBILE', inGameNickname: 'ViperPUBG' }
         ],
-        joinedAt: '2025-01-02'
+        joinedAt: '2025-01-02',
+        role: 'MEMBER'
     },
     {
         id: '100003',
@@ -34,7 +36,8 @@ export const MOCK_PLAYERS: Player[] = [
         gameProfiles: [
             { game: 'MLBB', inGameNickname: 'PG99' }
         ],
-        joinedAt: '2025-01-05'
+        joinedAt: '2025-01-05',
+        role: 'MEMBER'
     },
     {
         id: '100004',
@@ -46,7 +49,8 @@ export const MOCK_PLAYERS: Player[] = [
         gameProfiles: [
             { game: 'MLBB', inGameNickname: 'Mystic' }
         ],
-        joinedAt: '2024-12-15'
+        joinedAt: '2024-12-15',
+        role: 'CAPTAIN'
     }
 ];
 
