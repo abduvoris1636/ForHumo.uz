@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-interface AnimatedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface AnimatedButtonProps extends HTMLMotionProps<"button"> {
     variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
     isLoading?: boolean;
     children: ReactNode;
