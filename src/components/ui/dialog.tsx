@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, HTMLMotionProps } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +32,7 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
     );
 }
 
-export function DialogContent({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+export function DialogContent({ className, children, ...props }: HTMLMotionProps<"div">) {
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
