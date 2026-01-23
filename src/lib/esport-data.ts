@@ -4,12 +4,16 @@ export const MOCK_PLAYERS: Player[] = [
     {
         id: '100001',
         nickname: 'ShadowSlayer',
+        firstName: 'Aziz',
+        lastName: 'Rahimov',
+        telegram: 'shadow_real',
         avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=ShadowSlayer',
         level: 15,
         gamesPlayed: 124,
         teamId: 'team_01',
+        isActive: true,
         gameProfiles: [
-            { game: 'MLBB', inGameNickname: 'ShadowML' }
+            { game: 'MLBB', inGameNickname: 'ShadowML', gameId: '12345678' }
         ],
         joinedAt: '2025-01-01',
         role: 'CAPTAIN'
@@ -17,12 +21,16 @@ export const MOCK_PLAYERS: Player[] = [
     {
         id: '100002',
         nickname: 'ViperStrike',
+        firstName: 'Bobur',
+        lastName: 'Aliyev',
+        telegram: 'viper_uz',
         avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=ViperStrike',
         level: 12,
         gamesPlayed: 98,
         teamId: 'team_01',
+        isActive: true,
         gameProfiles: [
-            { game: 'PUBG_MOBILE', inGameNickname: 'ViperPUBG' }
+            { game: 'PUBG_MOBILE', inGameNickname: 'ViperPUBG', gameId: '87654321' }
         ],
         joinedAt: '2025-01-02',
         role: 'MEMBER'
@@ -30,27 +38,47 @@ export const MOCK_PLAYERS: Player[] = [
     {
         id: '100003',
         nickname: 'ProGamer99',
+        firstName: 'Javohir',
+        lastName: 'Eshonqulov',
+        telegram: 'pro_javoh',
         avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=ProGamer99',
         level: 5,
         gamesPlayed: 20,
+        isActive: true, // No team, but active
         gameProfiles: [
-            { game: 'MLBB', inGameNickname: 'PG99' }
+            { game: 'MLBB', inGameNickname: 'PG99', gameId: '11223344' }
         ],
         joinedAt: '2025-01-05',
-        role: 'MEMBER'
     },
     {
         id: '100004',
         nickname: 'MysticMage',
+        firstName: 'Sarvar',
+        lastName: 'Qodirov',
+        telegram: 'mystic_mage',
         avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=MysticMage',
         level: 25,
         gamesPlayed: 300,
         teamId: 'team_02',
+        isActive: true,
         gameProfiles: [
-            { game: 'MLBB', inGameNickname: 'Mystic' }
+            { game: 'MLBB', inGameNickname: 'Mystic', gameId: '99887766' }
         ],
         joinedAt: '2024-12-15',
         role: 'CAPTAIN'
+    },
+    {
+        id: '999999', // Simulate CURRENT USER
+        nickname: 'HumoGladiator',
+        firstName: 'Abduvoris',
+        lastName: 'X',
+        telegram: 'abduvoris_x',
+        avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=HumoGladiator',
+        level: 1,
+        gamesPlayed: 0,
+        isActive: false, // Inactive validation test
+        gameProfiles: [],
+        joinedAt: '2026-01-20',
     }
 ];
 
@@ -64,6 +92,7 @@ export const MOCK_TEAMS: Team[] = [
         captainId: '100001',
         level: 18,
         members: ['100001', '100002'],
+        pendingRequests: ['100003'],
         createdAt: '2025-01-10',
         stats: { wins: 15, losses: 5, tournamentsPlayed: 2 }
     },
@@ -76,6 +105,7 @@ export const MOCK_TEAMS: Team[] = [
         captainId: '100004',
         level: 25,
         members: ['100004'],
+        pendingRequests: [],
         createdAt: '2024-12-20',
         stats: { wins: 40, losses: 12, tournamentsPlayed: 5 }
     }

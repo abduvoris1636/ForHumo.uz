@@ -2,18 +2,19 @@ export type GameType = 'MLBB' | 'PUBG_MOBILE';
 
 export interface Player {
     id: string; // 6-digit immutable ID
-    nickname: string; // Unique global nickname
+    nickname: string; // Unique global nickname, case-insensitive logic
     avatar?: string;
-    firstName?: string; // Private
-    lastName?: string; // Private
-    telegram?: string; // Private
+    firstName: string; // Required for profile
+    lastName: string; // Required for profile
+    telegram: string; // Required for profile
     level: number;
     gamesPlayed: number;
     teamId?: string;
+    isActive: boolean; // True if profile is complete and valid
     gameProfiles: {
         game: GameType;
         inGameNickname: string;
-        gameId?: string; // Private, never shown
+        gameId?: string; // Private, never shown publicly
     }[];
     joinedAt: string;
     role?: 'CAPTAIN' | 'MEMBER' | 'SUB';
@@ -28,6 +29,8 @@ export interface Team {
     captainId: string;
     level: number;
     members: string[]; // List of Player IDs
+    pendingRequests: string[]; // List of Player IDs requesting to join
+    joinCode?: string; // Ephemeral 5-char code for quick join
     createdAt: string;
     stats: {
         wins: number;

@@ -2,89 +2,118 @@
 
 import { useState } from 'react';
 import { MOCK_PLAYERS } from '@/lib/esport-data';
-import { SectionHeader } from '@/components/esport/shared/SectionHeader';
-import { PlayerGridItem } from '@/components/esport/player/PlayerGridItem';
-import { AnimatedButton } from '@/components/esport/shared/AnimatedButton';
-import { Search, PlusCircle, UserCircle } from 'lucide-react';
+import { PlayerCard } from '@/components/esport/PlayerCard';
+import { Search, PlusCircle, UserCircle, ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function PlayersPage() {
     const t = useTranslations('Esport');
     const [searchTerm, setSearchTerm] = useState('');
 
-    // MOCK USER STATE
-    // In real app, check session/DB
-    const mockUser = {
-        hasProfile: true, // Set to false to see CTA
-        playerId: 'player1' // Matches "Faker_Uz" in mock data
-    };
+    // MOCK USER STATE -> Simulates a user logged in with ID 999999
+    const CURRENT_USER_ID = '999999';
+    const currentUserProfile = MOCK_PLAYERS.find(p => p.id === CURRENT_USER_ID);
 
     const filteredPlayers = MOCK_PLAYERS.filter(p =>
-        p.nickname.toLowerCase().includes(searchTerm.toLowerCase())
+        p.nickname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.id.includes(searchTerm)
     ).sort((a, b) => {
-        // ALWAYS put the current user first if they match the filter
-        if (a.id === mockUser.playerId) return -1;
-        if (b.id === mockUser.playerId) return 1;
+        // ALWAYS put the current user first
+        if (a.id === CURRENT_USER_ID) return -1;
+        if (b.id === CURRENT_USER_ID) return 1;
         // Then sort by Level
         return b.level - a.level;
     });
 
     return (
-        <div className="min-h-screen bg-black text-white p-4 md:p-8 pb-20">
-            <div className="container mx-auto">
-                <SectionHeader title={t('total_players')} subtitle={t('players_subtitle')}>
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                        <input
-                            type="text"
-                            placeholder={t('search_placeholder')}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="bg-neutral-900 border border-white/10 rounded-full pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-white/30 w-full md:w-64 transition-colors"
-                        />
-                    </div>
-                </SectionHeader>
+        <div className="min-h-screen bg-[#020617] text-white pt-24 pb-20 px-4">
+            <div className="container mx-auto max-w-7xl">
 
-                {/* Create Profile CTA (If user has no profile) */}
-                {!mockUser.hasProfile && !searchTerm && (
-                    <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-green-900/20 to-blue-900/20 border border-green-500/30 flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-green-500/20 rounded-full text-green-500">
-                                <UserCircle className="w-8 h-8" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-white mb-1">{t('id_card_title')}</h3>
-                                <p className="text-neutral-400">{t('id_card_desc')}</p>
-                            </div>
-                        </div>
-                        <Link href="/esport/register">
-                            <AnimatedButton className="whitespace-nowrap">
-                                <PlusCircle className="w-5 h-5 mr-2" /> {t('register')}
-                            </AnimatedButton>
-                        </Link>
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+                    <div>
+                        <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-white/50 mb-2">
+                            {t('total_players')}
+                        </h1>
+                        <p className="text-neutral-400 font-medium max-w-lg leading-relaxed">
+                            {t('players_subtitle')}
+                        </p>
                     </div>
+
+                    {/* Search & Actions */}
+                    <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                        <div className="relative w-full md:w-80">
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+                            <input
+                                type="text"
+                                placeholder={t('search_placeholder')} // "Search by nickname or ID..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all"
+                            />
+                        </div>
+
+                        {!currentUserProfile && (
+                            <Link href="/esport/register" className="group">
+                                <button className="w-full md:w-auto px-6 py-3.5 rounded-2xl bg-primary text-primary-foreground font-bold flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all">
+                                    <PlusCircle size={20} />
+                                    <span>{t('register')}</span>
+                                </button>
+                            </Link>
+                        )}
+                    </div>
+                </div>
+
+                {/* ID Card Alert (If User has profile but inactive) */}
+                {currentUserProfile && !currentUserProfile.isActive && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-10 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-start gap-4"
+                    >
+                        <ShieldAlert className="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" />
+                        <div>
+                            <h3 className="font-bold text-red-400 text-lg mb-1">Action Required: Complete Your ID Profile</h3>
+                            <p className="text-neutral-400 text-sm leading-relaxed max-w-3xl">
+                                Your Humo eSport ID is currently inactive. Please check your game profiles and ensure you have linked at least one active game account (MLBB or PUBG Mobile) to participate in tournaments.
+                            </p>
+                        </div>
+                    </motion.div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredPlayers.map(player => {
-                        const isMe = player.id === mockUser.playerId;
-                        return (
-                            <div key={player.id} className={isMe ? 'ring-2 ring-blue-500 rounded-xl relative' : ''}>
-                                {isMe && (
-                                    <div className="absolute -top-3 left-4 bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full z-10 shadow-lg">
-                                        YOU
-                                    </div>
-                                )}
-                                <PlayerGridItem player={player} />
-                            </div>
-                        );
-                    })}
+                {/* Players Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 gap-y-10">
+                    <AnimatePresence mode='popLayout'>
+                        {filteredPlayers.map((player, index) => (
+                            <motion.div
+                                key={player.id}
+                                layout
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.3, delay: index * 0.05 }}
+                            >
+                                <PlayerCard
+                                    player={player}
+                                    isCurrentUser={player.id === CURRENT_USER_ID}
+                                    rank={index + 1}
+                                    showRank={!searchTerm} // Only show rank if not searching
+                                />
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </div>
 
                 {filteredPlayers.length === 0 && (
-                    <div className="text-center py-20 text-neutral-500">
-                        No players found matching "{searchTerm}"
+                    <div className="flex flex-col items-center justify-center py-32 text-center">
+                        <UserCircle className="w-20 h-20 text-white/10 mb-6" />
+                        <h3 className="text-2xl font-bold text-white mb-2">No players found</h3>
+                        <p className="text-neutral-500">
+                            We couldn't find anyone matching "{searchTerm}". Try a different keyword.
+                        </p>
                     </div>
                 )}
             </div>
