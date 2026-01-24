@@ -81,14 +81,25 @@ export function TeamsGrid() {
 
     // --- PHASE 2B: JOIN REQUEST LOGIC (Player Side) ---
 
-    const getPendingRequestsCount = (playerId: string) => {
-        let count = 0;
-        teamsState.forEach(t => {
-            if (t.requests.some(r => r.playerId === playerId && r.status === 'PENDING')) {
-                count++;
-            }
-        });
-        return count;
+    // --- PHASE 5: STRICT RATE LIMIT (24H) ---
+    const REQUEST_HISTORY_KEY = 'humo_esport_request_history_v1';
+
+    const getRequestCountLast24h = () => {
+        try {
+            const history = JSON.parse(localStorage.getItem(REQUEST_HISTORY_KEY) || '[]');
+            const now = Date.now();
+            // Filter timestamps within last 24h
+            const valid = history.filter((ts: number) => now - ts < 24 * 60 * 60 * 1000);
+            return valid;
+        } catch {
+            return [];
+        }
+    };
+
+    const addRequestTimestamp = () => {
+        const history = getRequestCountLast24h();
+        history.push(Date.now());
+        localStorage.setItem(REQUEST_HISTORY_KEY, JSON.stringify(history));
     };
 
     const hasPendingRequestForTeam = (teamId: string, playerId: string) => {
@@ -99,14 +110,17 @@ export function TeamsGrid() {
     const handleSendRequest = (teamId: string) => {
         if (myTeam) return;
 
-        const currentPending = getPendingRequestsCount(CURRENT_USER_ID);
-        if (currentPending >= 5) {
-            alert('You have reached the maximum of 5 pending requests.');
+        // 1. Strict 24h Limit Check
+        const recentRequests = getRequestCountLast24h();
+        if (recentRequests.length >= 5) {
+            alert(`Rate Limit Reached: You can only send 5 join requests every 24 hours. Please try again later.`);
             return;
         }
 
+        // 2. Duplicate Check
         if (hasPendingRequestForTeam(teamId, CURRENT_USER_ID)) return;
 
+        // 3. Procced
         const updatedTeams = teamsState.map(t => {
             if (t.id === teamId) {
                 const newRequest: JoinRequest = {
@@ -120,10 +134,11 @@ export function TeamsGrid() {
         });
 
         updateTeamsState(updatedTeams);
+        addRequestTimestamp(); // Log this action
     };
 
     // --- PHASE 2C: JOIN BY CODE (Player Side) ---
-
+    // ... (rest unchanged) ...
     const handleJoinByCode = async (code: string) => {
         await new Promise(resolve => setTimeout(resolve, 800));
 
@@ -190,29 +205,32 @@ export function TeamsGrid() {
         <div className="space-y-8">
             {/* Controls */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="relative w-full md:w-96">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                    <input
-                        type="text"
-                        placeholder="Search teams by name or tag..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full bg-zinc-900 border border-zinc-800 focus:border-green-500/50 rounded-full pl-10 pr-4 py-2 outline-none transition-all text-sm"
-                    />
+                {/* Search & Code Wrapper */}
+                <div className="flex items-center gap-2 w-full md:w-auto flex-1">
+                    <div className="relative flex-1 md:max-w-sm">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input
+                            type="text"
+                            placeholder="Search teams by name or tag..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full bg-zinc-900 border border-zinc-800 focus:border-green-500/50 rounded-full pl-10 pr-4 py-2 outline-none transition-all text-sm"
+                        />
+                    </div>
+
+                    {/* JOIN BY CODE BUTTON (Moved Next to Search) */}
+                    {!myTeam && (
+                        <button
+                            onClick={() => setIsJoinCodeModalOpen(true)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-bold transition-all border border-zinc-700 hover:border-zinc-500 whitespace-nowrap"
+                        >
+                            <KeyRound className="w-4 h-4 text-blue-400" />
+                            <span className="hidden sm:inline">Join by Code</span>
+                        </button>
+                    )}
                 </div>
 
-                {/* JOIN BY CODE BUTTON */}
-                {!myTeam && (
-                    <button
-                        onClick={() => setIsJoinCodeModalOpen(true)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-bold transition-all border border-zinc-700 hover:border-zinc-500"
-                    >
-                        <KeyRound className="w-4 h-4 text-blue-400" />
-                        Join by Code
-                    </button>
-                )}
-
-                <div className="text-sm text-zinc-500">
+                <div className="text-sm text-zinc-500 whitespace-nowrap">
                     Showing <span className="text-white font-bold">
                         {filteredTeams.length + (displayMyTeam ? 1 : 0)}
                     </span> teams
