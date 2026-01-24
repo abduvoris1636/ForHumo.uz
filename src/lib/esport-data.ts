@@ -18,7 +18,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2024-11-15'
     },
     {
-        id: 'K4$pQ8vR',
+        id: 'X2$rL8*v',
         nickname: 'ShadowSlayer',
         firstName: 'Bekzod',
         lastName: 'Aliyev',
@@ -33,7 +33,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2025-01-10'
     },
     {
-        id: 'M2@nB5zW',
+        id: 'Q9@kM4!z',
         nickname: 'MysticMage',
         firstName: 'Diyor',
         lastName: 'Tursunov',
@@ -48,7 +48,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2025-01-11'
     },
     {
-        id: 'J9&dL3kP',
+        id: 'W5&tP7#y',
         nickname: 'NoobMaster',
         firstName: 'Sanjar',
         lastName: 'Karimov',
@@ -63,7 +63,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2025-01-20'
     },
     {
-        id: 'R5#hT1xY', // Team 2 Owner
+        id: 'H3*bN6$m', // Team 2 Owner
         nickname: 'LegionCommander',
         firstName: 'Otabek',
         lastName: 'Juraev',
@@ -85,15 +85,15 @@ export const MOCK_TEAMS: Team[] = [
         name: 'Shadows Gaming',
         tag: 'SHDW',
         logo: 'https://api.dicebear.com/9.x/identicon/svg?seed=Shadows&backgroundColor=000000',
-        ownerId: 'K4$pQ8vR', // ShadowSlayer
-        captainId: 'K4$pQ8vR',
+        ownerId: 'X2$rL8*v', // ShadowSlayer
+        captainId: 'X2$rL8*v',
         level: 18,
         members: [
-            { playerId: 'K4$pQ8vR', role: 'OWNER', joinedAt: '2025-01-10' },
-            { playerId: 'M2@nB5zW', role: 'MEMBER', joinedAt: '2025-01-11' }
+            { playerId: 'X2$rL8*v', role: 'OWNER', joinedAt: '2025-01-10' },
+            { playerId: 'Q9@kM4!z', role: 'MEMBER', joinedAt: '2025-01-11' }
         ],
         requests: [
-            { playerId: 'J9&dL3kP', requestedAt: '2025-01-15', status: 'PENDING' }
+            { playerId: 'W5&tP7#y', requestedAt: '2025-01-15', status: 'PENDING' }
         ],
         invites: [],
         createdAt: '2025-01-10',

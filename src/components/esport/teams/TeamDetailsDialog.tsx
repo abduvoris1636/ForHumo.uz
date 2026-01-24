@@ -2,7 +2,7 @@
 
 import { MOCK_TEAMS, MOCK_PLAYERS } from '@/lib/esport-data';
 import Image from 'next/image';
-import { Shield, Users, Trophy, Award, Calendar, X } from 'lucide-react';
+import { Shield, Users, Trophy, Award, Calendar, X, Check, ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -10,9 +10,12 @@ interface TeamDetailsDialogProps {
     teamId: string | null;
     isOpen: boolean;
     onClose: () => void;
+    currentUserId?: string;
+    onJoinRequest?: (teamId: string) => void;
+    userHasTeam?: boolean;
 }
 
-export function TeamDetailsDialog({ teamId, isOpen, onClose }: TeamDetailsDialogProps) {
+export function TeamDetailsDialog({ teamId, isOpen, onClose, currentUserId, onJoinRequest, userHasTeam }: TeamDetailsDialogProps) {
     const t = useTranslations('Esport');
 
     if (!isOpen) return null;
@@ -23,6 +26,11 @@ export function TeamDetailsDialog({ teamId, isOpen, onClose }: TeamDetailsDialog
     // Mock leader (owner) - usually strictly defined in DB
     const leader = team ? (MOCK_PLAYERS.find(p => p.teamId === team.id && p.role === 'CAPTAIN') || MOCK_PLAYERS.find(p => p.teamId === team.id)) : null;
     const members = team ? MOCK_PLAYERS.filter(p => p.teamId === team.id) : [];
+
+    // Check Status
+    const isPending = team?.requests.some(r => r.playerId === currentUserId && r.status === 'PENDING');
+    const isMember = team?.members.some(m => m.playerId === currentUserId);
+    const isOwner = team?.ownerId === currentUserId;
 
     return (
         <AnimatePresence>
@@ -55,7 +63,24 @@ export function TeamDetailsDialog({ teamId, isOpen, onClose }: TeamDetailsDialog
                                     )}
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-white">{team.name}</h2>
+                                    <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                                        {team.name}
+                                        {!isOwner && !userHasTeam && !isMember && (
+                                            isPending ? (
+                                                <span className="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold border border-yellow-500/20">
+                                                    Request Pending
+                                                </span>
+                                            ) : (
+                                                <button
+                                                    onClick={() => onJoinRequest?.(team.id)}
+                                                    className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 transition-all"
+                                                >
+                                                    Join Request <ArrowRight className="w-3 h-3" />
+                                                </button>
+                                            )
+                                        )}
+                                        {isOwner && <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded border border-green-500/30">Your Team</span>}
+                                    </h2>
                                     <div className="text-sm font-mono text-neutral-400">[{team.tag}]</div>
                                 </div>
                             </div>

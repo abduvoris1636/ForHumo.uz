@@ -10,8 +10,8 @@ import { JoinByCodeModal } from './JoinByCodeModal';
 import { Search, PlusCircle, Users, KeyRound, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const MY_TEAM_STORAGE_KEY = 'humo_esport_my_team_v1';
-const TEAMS_STATE_STORAGE_KEY = 'humo_esport_teams_state_v1';
+const MY_TEAM_STORAGE_KEY = 'humo_esport_my_team_v2';
+const TEAMS_STATE_STORAGE_KEY = 'humo_esport_teams_state_v2';
 const CURRENT_USER_ID = 'U7#m9$Kp'; // Updated mock ID (Aziz - Secure)
 
 export function TeamsGrid() {

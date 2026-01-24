@@ -5,16 +5,19 @@ import { Player } from '@/lib/esport-types';
 import { MOCK_PLAYERS, MOCK_TEAMS } from '@/lib/esport-data';
 import { PlayerCard } from './PlayerCard';
 import { EditProfileModal } from './EditProfileModal';
+import { TeamDetailsDialog } from '../teams/TeamDetailsDialog';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const CURRENT_USER_ID = 'U7#m9$Kp';
-const STORAGE_KEY = 'humo_esport_user_v1';
+const STORAGE_KEY = 'humo_esport_user_v2'; // Bumped version to force ID update
+const REQUEST_HISTORY_KEY = 'humo_esport_request_history_v1';
 
 export function PlayersGrid() {
     const [currentUser, setCurrentUser] = useState<Player | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null); // For Team Dialog
     const [isMounted, setIsMounted] = useState(false);
 
     // Initial Load
@@ -76,6 +79,28 @@ export function PlayersGrid() {
         return MOCK_TEAMS.find(t => t.id === teamId);
     };
 
+    // Handle Join Request (Mock Logic - Visual Only for Players Page as we don't sync with TeamsGrid state fully here yet)
+    // NOTE: In a real app, this should mutate the same global state/store as TeamsGrid.
+    const handleJoinRequest = (teamId: string) => {
+        // 1. Check Rate Limit
+        const storedHistory = localStorage.getItem(REQUEST_HISTORY_KEY);
+        let history: number[] = storedHistory ? JSON.parse(storedHistory) : [];
+        const now = Date.now();
+        history = history.filter(ts => now - ts < 24 * 60 * 60 * 1000); // Clean old
+
+        if (history.length >= 5) {
+            alert('Rate Limit Reached: You can only send 5 join requests every 24 hours.');
+            return;
+        }
+
+        // 2. Add to history
+        history.push(now);
+        localStorage.setItem(REQUEST_HISTORY_KEY, JSON.stringify(history));
+
+        alert(`Request sent to team! (Mock Action)\n\nIn a full implementation, this would update the team's request list.`);
+        setSelectedTeamId(null);
+    };
+
     return (
         <div className="space-y-8">
             {/* Controls */}
@@ -106,6 +131,7 @@ export function PlayersGrid() {
                         team={getTeam(currentUser.teamId)}
                         isOwner={true}
                         onEdit={() => setIsEditModalOpen(true)}
+                        onTeamClick={setSelectedTeamId}
                     />
                 </motion.div>
 
@@ -118,10 +144,21 @@ export function PlayersGrid() {
                         <PlayerCard
                             player={player}
                             team={getTeam(player.teamId)}
+                            onTeamClick={setSelectedTeamId}
                         />
                     </motion.div>
                 ))}
             </div>
+
+            {/* Team Details & Join Dialog */}
+            <TeamDetailsDialog
+                isOpen={!!selectedTeamId}
+                onClose={() => setSelectedTeamId(null)}
+                teamId={selectedTeamId}
+                currentUserId={CURRENT_USER_ID}
+                userHasTeam={!!currentUser.teamId}
+                onJoinRequest={handleJoinRequest}
+            />
 
             {/* Edit Modal */}
             <EditProfileModal

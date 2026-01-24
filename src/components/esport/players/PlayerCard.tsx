@@ -10,9 +10,10 @@ interface PlayerCardProps {
     team?: Team;
     isOwner?: boolean;
     onEdit?: () => void;
+    onTeamClick?: (teamId: string) => void;
 }
 
-export function PlayerCard({ player, team, isOwner = false, onEdit }: PlayerCardProps) {
+export function PlayerCard({ player, team, isOwner = false, onEdit, onTeamClick }: PlayerCardProps) {
     // Active Logic: Must be active boolean AND have at least one game
     const hasGames = player.gameProfiles && player.gameProfiles.length > 0;
     const isActive = player.isActive && hasGames;
@@ -48,8 +49,14 @@ export function PlayerCard({ player, team, isOwner = false, onEdit }: PlayerCard
 
             {/* TEAM BADGE (Top Left) */}
             {team && (
-                <div className="absolute top-4 left-4 z-10">
-                    <div className="flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-blue-900/20 border border-blue-500/30 rounded-full pl-1 pr-3 py-1 shadow-lg backdrop-blur-md hover:bg-blue-600/30 transition-colors cursor-help group/team">
+                <div
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (onTeamClick) onTeamClick(team.id);
+                    }}
+                    className="absolute top-4 left-4 z-10 cursor-pointer"
+                >
+                    <div className="flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-blue-900/20 border border-blue-500/30 rounded-full pl-1 pr-3 py-1 shadow-lg backdrop-blur-md hover:bg-blue-600/30 transition-colors group/team">
                         <div className="w-5 h-5 rounded-full overflow-hidden bg-zinc-900 border border-blue-400/50 shrink-0">
                             <img
                                 src={team.logo || `https://api.dicebear.com/9.x/identicon/svg?seed=${team.name}`}
@@ -62,7 +69,7 @@ export function PlayerCard({ player, team, isOwner = false, onEdit }: PlayerCard
                         </span>
 
                         {/* Tooltip for full Team Name */}
-                        <div className="absolute left-0 -bottom-8 opacity-0 group-hover/team:opacity-100 transition-opacity bg-zinc-900 text-white text-[10px] font-bold px-2 py-1 rounded border border-zinc-700 whitespace-nowrap pointer-events-none">
+                        <div className="absolute left-0 -bottom-8 opacity-0 group-hover/team:opacity-100 transition-opacity bg-zinc-900 text-white text-[10px] font-bold px-2 py-1 rounded border border-zinc-700 whitespace-nowrap pointer-events-none z-20">
                             {team.name}
                         </div>
                     </div>
