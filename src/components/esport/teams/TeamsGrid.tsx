@@ -7,6 +7,7 @@ import { TeamCard } from '@/components/esport/TeamCard';
 import { CreateTeamModal } from './CreateTeamModal';
 import { TeamManagementModal } from './TeamManagementModal';
 import { JoinByCodeModal } from './JoinByCodeModal';
+import { TeamDetailsDialog } from './TeamDetailsDialog';
 import { Search, PlusCircle, Users, KeyRound, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -22,6 +23,7 @@ export function TeamsGrid() {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isManagementOpen, setIsManagementOpen] = useState(false); // New Unified Owner Modal
     const [isJoinCodeModalOpen, setIsJoinCodeModalOpen] = useState(false); // For Player
+    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null); // For Team Dialog
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isMounted, setIsMounted] = useState(false);
@@ -58,83 +60,79 @@ export function TeamsGrid() {
     const handleCreateTeam = (newTeam: Team) => {
         setMyTeam(newTeam);
         localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(newTeam));
+        const updatedState = [...teamsState, newTeam];
+        setTeamsState(updatedState); // Add to local list too for immediate view? Actually usually my team is separate.
+        setIsCreateModalOpen(false);
     };
 
-    const handleUpdateMyTeam = (updatedTeam: Team) => {
+    const handleUpdateTeam = (updatedTeam: Team) => {
         setMyTeam(updatedTeam);
         localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(updatedTeam));
 
-        // Also sync to global state
-        const updatedTeams = teamsState.map(t => t.id === updatedTeam.id ? updatedTeam : t);
-        updateTeamsState(updatedTeams);
+        // Also update in teamsState if present
+        const updatedState = teamsState.map(t => t.id === updatedTeam.id ? updatedTeam : t);
+        setTeamsState(updatedState);
+        localStorage.setItem(TEAMS_STATE_STORAGE_KEY, JSON.stringify(updatedState));
     };
 
     const handleDeleteTeam = (teamId: string) => {
-        // 1. Clear Local User State
         setMyTeam(null);
         localStorage.removeItem(MY_TEAM_STORAGE_KEY);
 
-        // 2. Remove from Global State
-        const updatedTeams = teamsState.filter(t => t.id !== teamId);
-        updateTeamsState(updatedTeams);
+        // Note: In real app, we'd delete from server. Here just local state update if needed.
+        // If the team was in MOCK_TEAMS/teamsState, we might want to hide it, but for "My Team" logic it's mostly separate.
+        alert('Team deleted successfully.');
+        setIsManagementOpen(false);
     };
 
     // --- PHASE 2B: JOIN REQUEST LOGIC (Player Side) ---
 
     // --- PHASE 5: STRICT RATE LIMIT (24H) ---
-    const REQUEST_HISTORY_KEY = 'humo_esport_request_history_v1';
-
-    const getRequestCountLast24h = () => {
-        try {
-            const history = JSON.parse(localStorage.getItem(REQUEST_HISTORY_KEY) || '[]');
-            const now = Date.now();
-            // Filter timestamps within last 24h
-            const valid = history.filter((ts: number) => now - ts < 24 * 60 * 60 * 1000);
-            return valid;
-        } catch {
-            return [];
-        }
-    };
-
-    const addRequestTimestamp = () => {
-        const history = getRequestCountLast24h();
-        history.push(Date.now());
-        localStorage.setItem(REQUEST_HISTORY_KEY, JSON.stringify(history));
-    };
-
-    const hasPendingRequestForTeam = (teamId: string, playerId: string) => {
-        const team = teamsState.find(t => t.id === teamId);
-        return team?.requests.some(r => r.playerId === playerId && r.status === 'PENDING');
-    };
-
     const handleSendRequest = (teamId: string) => {
         if (myTeam) return;
 
         // 1. Strict 24h Limit Check
-        const recentRequests = getRequestCountLast24h();
-        if (recentRequests.length >= 5) {
-            alert(`Rate Limit Reached: You can only send 5 join requests every 24 hours. Please try again later.`);
+        const REQUEST_HISTORY_KEY = 'humo_esport_request_limits_v1';
+        const storedHistory = localStorage.getItem(REQUEST_HISTORY_KEY);
+        let history: number[] = storedHistory ? JSON.parse(storedHistory) : [];
+        const now = Date.now();
+        // Clean old requests (>24h)
+        history = history.filter(ts => now - ts < 24 * 60 * 60 * 1000);
+
+        if (history.length >= 5) {
+            alert('Rate Limit Reached: You can only send 5 join requests every 24 hours. Please try again later.');
             return;
         }
 
         // 2. Duplicate Check
-        if (hasPendingRequestForTeam(teamId, CURRENT_USER_ID)) return;
+        const targetTeam = teamsState.find(t => t.id === teamId);
+        if (!targetTeam) return;
+        if (targetTeam.requests.some(r => r.playerId === CURRENT_USER_ID && r.status === 'PENDING')) {
+            alert('You already have a pending request for this team.');
+            return;
+        }
 
         // 3. Procced
-        const updatedTeams = teamsState.map(t => {
-            if (t.id === teamId) {
-                const newRequest: JoinRequest = {
-                    playerId: CURRENT_USER_ID,
-                    requestedAt: new Date().toISOString(),
-                    status: 'PENDING'
-                };
-                return { ...t, requests: [...t.requests, newRequest] };
-            }
-            return t;
-        });
+        const newRequest: JoinRequest = {
+            playerId: CURRENT_USER_ID,
+            requestedAt: new Date().toISOString(),
+            status: 'PENDING'
+        };
 
-        updateTeamsState(updatedTeams);
-        addRequestTimestamp(); // Log this action
+        const updatedTeam = {
+            ...targetTeam,
+            requests: [...targetTeam.requests, newRequest]
+        };
+
+        const updatedState = teamsState.map(t => t.id === teamId ? updatedTeam : t);
+        updateTeamsState(updatedState);
+
+        // Update Limits
+        history.push(now);
+        localStorage.setItem(REQUEST_HISTORY_KEY, JSON.stringify(history));
+
+        alert(`Request sent to ${targetTeam.name}!`);
+        setSelectedTeamId(null); // Close dialog if open
     };
 
     // --- PHASE 2C: JOIN BY CODE (Player Side) ---
@@ -261,6 +259,7 @@ export function TeamsGrid() {
                                     hasRequests={myTeam.requests.length > 0}
                                     pendingCount={myTeam.requests.filter(r => r.status === 'PENDING').length}
                                     onViewRequests={() => setIsManagementOpen(true)}
+                                    onClick={() => setSelectedTeamId(myTeam.id)}
                                 />
                             </motion.div>
                         )
@@ -304,11 +303,22 @@ export function TeamsGrid() {
                                 hasRequests={isOwner && team.requests.length > 0}
                                 pendingCount={isOwner ? team.requests.filter(r => r.status === 'PENDING').length : 0}
                                 onViewRequests={() => setIsManagementOpen(true)}
+                                onClick={() => setSelectedTeamId(team.id)}
                             />
                         </motion.div>
                     );
                 })}
             </div>
+
+            {/* Team Details Dialog (New Integration) */}
+            <TeamDetailsDialog
+                isOpen={!!selectedTeamId}
+                onClose={() => setSelectedTeamId(null)}
+                teamId={selectedTeamId}
+                currentUserId={CURRENT_USER_ID}
+                userHasTeam={!!myTeam}
+                onJoinRequest={handleSendRequest}
+            />
 
             {/* Modals */}
             <CreateTeamModal
@@ -318,13 +328,12 @@ export function TeamsGrid() {
                 onSave={handleCreateTeam}
             />
 
-            {/* UNIFIED MANAGEMENT MODAL */}
             {myTeam && (
                 <TeamManagementModal
                     isOpen={isManagementOpen}
                     onClose={() => setIsManagementOpen(false)}
                     team={myTeam}
-                    onUpdateTeam={handleUpdateMyTeam}
+                    onUpdateTeam={handleUpdateTeam}
                     onDeleteTeam={handleDeleteTeam}
                 />
             )}
@@ -332,7 +341,19 @@ export function TeamsGrid() {
             <JoinByCodeModal
                 isOpen={isJoinCodeModalOpen}
                 onClose={() => setIsJoinCodeModalOpen(false)}
-                onJoin={handleJoinByCode}
+                onJoin={async (code) => {
+                    // Mock Logic for Join By Code
+                    // In real app, verify code on server -> get Team -> setMyTeam
+                    console.log('Joining with code:', code);
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    // Mock Success finding a team (e.g., Team 1)
+                    const team = MOCK_TEAMS[0];
+                    // Add user to team logic would go here
+                    setMyTeam(team);
+                    alert(`Joined ${team.name} successfully!`);
+                }}
             />
         </div>
     );
