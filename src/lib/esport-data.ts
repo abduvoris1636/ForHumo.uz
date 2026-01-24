@@ -122,7 +122,7 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         id: 'tour_autumn_2025',
         name: 'Autumn Tournament',
         season: '2025-2026',
-        status: 'FINISHED',
+        status: 'CANCELLED',
         startDate: '2025-11-10',
         endDate: '2025-11-14',
         game: 'MLBB',
@@ -134,12 +134,12 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         id: 'tour_winter_2025',
         name: 'Winter Tournament',
         season: '2025-2026',
-        status: 'LIVE',
+        status: 'UPCOMING',
         startDate: '2026-02-10',
         game: 'MLBB',
         prizePool: '500,000 UZS',
         maxTeams: 16,
-        registeredTeams: [] // Currently empty
+        registeredTeams: []
     },
     {
         id: 'tour_spring_2026',
@@ -159,6 +159,52 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         status: 'UPCOMING',
         startDate: '2026-07-01',
         game: 'MLBB',
+        prizePool: '500,000 UZS',
+        maxTeams: 16,
+        registeredTeams: []
+    },
+    // PUBG Tournaments
+    {
+        id: 'tour_autumn_2025_pubg',
+        name: 'Autumn Tournament',
+        season: '2025-2026',
+        status: 'CANCELLED',
+        startDate: '2025-11-15',
+        endDate: '2025-11-19',
+        game: 'PUBG_MOBILE',
+        prizePool: '200,000 UZS',
+        maxTeams: 16,
+        registeredTeams: []
+    },
+    {
+        id: 'tour_winter_2025_pubg',
+        name: 'Winter Tournament',
+        season: '2025-2026',
+        status: 'UPCOMING',
+        startDate: '2026-02-15',
+        game: 'PUBG_MOBILE',
+        prizePool: '500,000 UZS',
+        maxTeams: 16,
+        registeredTeams: []
+    },
+    {
+        id: 'tour_spring_2026_pubg',
+        name: 'Spring Tournament',
+        season: '2025-2026',
+        status: 'UPCOMING',
+        startDate: '2026-04-05',
+        game: 'PUBG_MOBILE',
+        prizePool: '500,000 UZS',
+        maxTeams: 16,
+        registeredTeams: []
+    },
+    {
+        id: 'tour_summer_2026_pubg',
+        name: 'Summer Tournament',
+        season: '2025-2026',
+        status: 'UPCOMING',
+        startDate: '2026-07-05',
+        game: 'PUBG_MOBILE',
         prizePool: '500,000 UZS',
         maxTeams: 16,
         registeredTeams: []

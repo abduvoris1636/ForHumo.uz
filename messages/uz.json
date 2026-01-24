@@ -24,6 +24,25 @@
         "news_desc": "Ekotizimning eng so'nggi yangiliklari va rasmiy xabarlari.",
         "bank_desc": "Xavfsiz va zamonaviy raqamli bank xizmatlari."
     },
+    "Status": {
+        "active": "Faol",
+        "coming_soon": "Tez kunda",
+        "live": "Jonli",
+        "upcoming": "Hali boshlanmadi",
+        "finished": "Tugagan",
+        "withdrawn": "Chiqib ketgan",
+        "cancelled": "Bo'lib o'tmadi"
+    },
+    "Common": {
+        "coming_soon": "Tez Orada",
+        "under_dev": "Ushbu bo'lim hozirda ishlab chiqilmoqda. Yangiliklarni kuzatib boring!",
+        "back_home": "Bosh Sahifaga Qaytish",
+        "follow_updates": "Yangiliklarni Kuzatish",
+        "copyright": "© {year} For Humo. Barcha huquqlar himoyalangan.",
+        "edit": "Tahrirlash",
+        "save": "Saqlash",
+        "optional": "ixtiyoriy"
+    },
     "Esport": {
         "hero_tag": "Humo eSport",
         "hero_title": "O'yiningizni keyingi bosqichga olib chiqing",
@@ -98,7 +117,6 @@
         "stage_group": "Guruh bosqichi",
         "stage_semifinals": "Yarim Final",
         "stage_third_place": "3-o'rin",
-        "stage_third_place": "3-o'rin",
         "stage_grand_final": "Grand Final",
         "game_label": "O'yin",
         "organizer_label": "Tashkilotchi",
@@ -112,21 +130,11 @@
         "players_subtitle": "Ligadagi eng yaxshi raqobatbardosh o'yinchilar",
         "search_placeholder": "Nickname bo'yicha qidirish...",
         "official_statement_quote": "“Humo eSport barcha yutuq to'lovlari amalga oshirilganligini va tasdiqlanganligini ma'lum qiladi. Turnir davomida yo'l qo'yilgan tashkiliy xatolar ochiq tan olindi. Halol raqobat va shaffoflik Humo eSportning asosiy tamoyillari bo'lib qoladi.”",
-        "official_archive_footer": "Rasmiy Arxiv • Tasdiqlangan Yozuv"
-    },
-    "Status": {
-        "active": "Faol",
-        "coming_soon": "Tez kunda",
-        "live": "Jonli",
-        "upcoming": "Tez orada",
-        "finished": "Tugagan",
-        "withdrawn": "Chiqib ketgan"
-    },
-    "Common": {
-        "coming_soon": "Tez Orada",
-        "under_dev": "Ushbu bo'lim hozirda ishlab chiqilmoqda. Yangiliklarni kuzatib boring!",
-        "back_home": "Bosh Sahifaga Qaytish",
-        "follow_updates": "Yangiliklarni Kuzatish",
-        "copyright": "© {year} For Humo. Barcha huquqlar himoyalangan."
+        "official_archive_footer": "Rasmiy Arxiv • Tasdiqlangan Yozuv",
+        "participants_count": "{count} ta jamoa ishtirokida",
+        "technical_win": "Texnik g'alaba",
+        "voluntarily_withdrawn": "{team} o'z xohishi bilan turnirni tark etdi",
+        "teams_label": "Jamoalar",
+        "tba": "Tez kunda"
     }
 }

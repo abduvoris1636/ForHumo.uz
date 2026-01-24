@@ -24,6 +24,25 @@
         "news_desc": "Последние новости и официальные сообщения экосистемы.",
         "bank_desc": "Безопасные и современные цифровые банковские услуги."
     },
+    "Status": {
+        "active": "Активен",
+        "coming_soon": "Скоро",
+        "live": "Live",
+        "upcoming": "Еще не начался",
+        "finished": "Завершен",
+        "withdrawn": "Выбыл",
+        "cancelled": "Отменен"
+    },
+    "Common": {
+        "coming_soon": "Скоро",
+        "under_dev": "Этот раздел находится в разработке. Следите за обновлениями!",
+        "back_home": "Вернуться на Главную",
+        "follow_updates": "Следить за обновлениями",
+        "copyright": "© {year} For Humo. Все права защищены.",
+        "edit": "Редактировать",
+        "save": "Сохранить",
+        "optional": "необязательно"
+    },
     "Esport": {
         "hero_tag": "Humo eSport",
         "hero_title": "Выведите свою игру на новый уровень",
@@ -98,7 +117,6 @@
         "stage_group": "Групповой этап",
         "stage_semifinals": "Полуфинал",
         "stage_third_place": "3-е место",
-        "stage_third_place": "3-е место",
         "stage_grand_final": "Гранд Финал",
         "game_label": "Игра",
         "organizer_label": "Организатор",
@@ -112,21 +130,11 @@
         "players_subtitle": "Лучшие соревновательные игроки лиги",
         "search_placeholder": "Поиск по никнейму...",
         "official_statement_quote": "“Humo eSport подтверждает, что все призовые выплаты были завершены и проверены. Организационные ошибки во время турнира были публично признаны. Честная конкуренция и прозрачность остаются основными принципами Humo eSport.”",
-        "official_archive_footer": "Официальный Архив • Проверенная Запись"
-    },
-    "Status": {
-        "active": "Активен",
-        "coming_soon": "Скоро",
-        "live": "Live",
-        "upcoming": "Предстоит",
-        "finished": "Завершен",
-        "withdrawn": "Выбыл"
-    },
-    "Common": {
-        "coming_soon": "Скоро",
-        "under_dev": "Этот раздел находится в разработке. Следите за обновлениями!",
-        "back_home": "Вернуться на Главную",
-        "follow_updates": "Следить за обновлениями",
-        "copyright": "© {year} For Humo. Все права защищены."
+        "official_archive_footer": "Официальный Архив • Проверенная Запись",
+        "participants_count": "{count} команд участвуют",
+        "technical_win": "Техническая победа",
+        "voluntarily_withdrawn": "{team} добровольно покинула турнир",
+        "teams_label": "Команды",
+        "tba": "TBA"
     }
 }

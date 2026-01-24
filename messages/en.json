@@ -24,6 +24,25 @@
         "news_desc": "The latest news and official announcements of the ecosystem.",
         "bank_desc": "Secure and modern digital banking services."
     },
+    "Status": {
+        "active": "Active",
+        "coming_soon": "Coming Soon",
+        "live": "Live",
+        "upcoming": "Not started yet",
+        "finished": "Finished",
+        "withdrawn": "Withdrawn",
+        "cancelled": "Cancelled"
+    },
+    "Common": {
+        "coming_soon": "Coming Soon",
+        "under_dev": "This section is currently under development. Stay tuned for updates!",
+        "back_home": "Back to Home",
+        "follow_updates": "Follow Updates",
+        "copyright": "© {year} For Humo. All rights reserved.",
+        "edit": "Edit",
+        "save": "Save",
+        "optional": "optional"
+    },
     "Esport": {
         "hero_tag": "Humo eSport",
         "hero_title": "Take your game to the next level",
@@ -98,7 +117,6 @@
         "stage_group": "Group Stage",
         "stage_semifinals": "Semifinals",
         "stage_third_place": "Third Place",
-        "stage_third_place": "Third Place",
         "stage_grand_final": "Grand Final",
         "game_label": "Game",
         "organizer_label": "Organizer",
@@ -112,21 +130,11 @@
         "players_subtitle": "The best competitive players in the league",
         "search_placeholder": "Search by nickname...",
         "official_statement_quote": "“Humo eSport confirms that all prize payments were completed and verified. Organizational mistakes during the tournament were acknowledged publicly. Fair competition and transparency remain core principles of Humo eSport.”",
-        "official_archive_footer": "Official Archive • Verified Record"
-    },
-    "Status": {
-        "active": "Active",
-        "coming_soon": "Coming Soon",
-        "live": "Live",
-        "upcoming": "Upcoming",
-        "finished": "Finished",
-        "withdrawn": "Withdrawn"
-    },
-    "Common": {
-        "coming_soon": "Coming Soon",
-        "under_dev": "This section is currently under development. Stay tuned for updates!",
-        "back_home": "Back to Home",
-        "follow_updates": "Follow Updates",
-        "copyright": "© {year} For Humo. All rights reserved."
+        "official_archive_footer": "Official Archive • Verified Record",
+        "participants_count": "{count} teams participating",
+        "technical_win": "Technical Win",
+        "voluntarily_withdrawn": "{team} voluntarily withdrew from the tournament",
+        "teams_label": "Teams",
+        "tba": "TBA"
     }
 }

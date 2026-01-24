@@ -76,11 +76,13 @@ export interface Team {
     pendingRequests?: never;
 }
 
+export type TournamentStatus = 'UPCOMING' | 'LIVE' | 'FINISHED' | 'CANCELLED';
+
 export interface Tournament {
     id: string;
     name: string;
     season: string; // e.g., "2025-2026 Season"
-    status: 'UPCOMING' | 'LIVE' | 'FINISHED';
+    status: TournamentStatus;
     startDate: string;
     endDate?: string;
     game: GameType;

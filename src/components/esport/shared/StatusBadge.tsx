@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
-type Status = 'LIVE' | 'UPCOMING' | 'FINISHED' | 'SCHEDULED';
+type Status = 'LIVE' | 'UPCOMING' | 'FINISHED' | 'SCHEDULED' | 'CANCELLED';
 
 interface StatusBadgeProps {
     status: Status;
@@ -18,7 +18,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
         'LIVE': 'live',
         'UPCOMING': 'upcoming',
         'FINISHED': 'finished',
-        'SCHEDULED': 'upcoming' // fall back
+        'SCHEDULED': 'upcoming', // fall back
+        'CANCELLED': 'cancelled'
     };
 
     const getColors = (s: Status) => {
@@ -30,6 +31,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
                 return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
             case 'FINISHED':
                 return 'bg-neutral-500/10 text-neutral-400 border-neutral-500/20';
+            case 'CANCELLED':
+                return 'bg-red-900/10 text-red-700 border-red-900/20 dark:text-red-400';
             default:
                 return 'bg-neutral-500/10 text-neutral-400 border-neutral-500/20';
         }

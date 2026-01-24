@@ -46,7 +46,7 @@ export function TournamentHistory() {
             team2: "Assasin's",
             score2: 0,
             winner: "Kurayami",
-            note: "Assasin's jamoasi o'z xohishi bilan turnirni tark etdi",
+            note: t('voluntarily_withdrawn', { team: "Assasin's" }),
         },
         {
             id: "4",
@@ -67,11 +67,11 @@ export function TournamentHistory() {
                     <h2 className="text-3xl font-bold flex items-center gap-3">
                         <History className="text-primary" /> Autumn Tournament
                     </h2>
-                    <p className="text-muted-foreground mt-2">10/11/2025 • 5 ta jamoa ishtirokida</p>
+                    <p className="text-muted-foreground mt-2">10/11/2025 • {t('participants_count', { count: 5 })}</p>
                 </div>
                 <div className="bg-primary/10 border border-primary/20 px-4 py-2 rounded-2xl flex items-center gap-2">
                     <Trophy className="text-primary" size={20} />
-                    <span className="font-bold text-primary">G'olib: Star Boys</span>
+                    <span className="font-bold text-primary">{t('winner')}: Star Boys</span>
                 </div>
             </div>
 

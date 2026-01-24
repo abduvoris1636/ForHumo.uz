@@ -7,10 +7,11 @@ import { AnimatedButton } from '@/components/esport/shared/AnimatedButton';
 import { StatusBadge } from '@/components/esport/shared/StatusBadge';
 import { Users, Swords, Trophy, ArrowRight, Gamepad2 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 export default function EsportHomePage() {
     const t = useTranslations('Esport');
+    const locale = useLocale();
 
     // Get Winter Tournament (Active)
     const activeTournament = MOCK_TOURNAMENTS.find(t => t.id === 'tour_winter_2025') || MOCK_TOURNAMENTS[0];
@@ -140,15 +141,15 @@ export default function EsportHomePage() {
                                 </div>
                                 <div>
                                     <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('prize_pool')}</div>
-                                    <div className="text-yellow-600 dark:text-yellow-500 font-medium">{activeTournament.prizePool || 'TBA'}</div>
+                                    <div className="text-yellow-600 dark:text-yellow-500 font-medium">{activeTournament.prizePool || t('tba')}</div>
                                 </div>
                                 <div>
-                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">Teams</div>
+                                    <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('teams_label')}</div>
                                     <div className="text-neutral-900 dark:text-white font-medium">{activeTournament.registeredTeams.length}/{activeTournament.maxTeams}</div>
                                 </div>
                                 <div>
                                     <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('start_date')}</div>
-                                    <div className="text-neutral-900 dark:text-white font-medium">{new Date(activeTournament.startDate).toLocaleDateString()}</div>
+                                    <div className="text-neutral-900 dark:text-white font-medium">{new Date(activeTournament.startDate).toLocaleDateString(locale)}</div>
                                 </div>
                             </div>
 

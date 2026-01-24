@@ -49,7 +49,7 @@ export function IdCardSection({ player, onRegister, onUpdate }: IdCardSectionPro
                 className="bg-card border border-border p-6 rounded-3xl shadow-xl space-y-4"
             >
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold">{isEditing ? "Tahrirlash" : t('register')}</h3>
+                    <h3 className="text-xl font-bold">{isEditing ? t('edit') : t('register')}</h3>
                     <button onClick={() => { setIsRegistering(false); setIsEditing(false); }} className="text-muted-foreground hover:text-foreground">
                         <X size={20} />
                     </button>
@@ -71,11 +71,11 @@ export function IdCardSection({ player, onRegister, onUpdate }: IdCardSectionPro
                     <input name="telegram" required defaultValue={player?.telegram} placeholder={t('telegram')} className="w-full h-12 bg-muted/50 border border-border rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
                     <input name="mlbbNickname" required defaultValue={player?.mlbbNickname} placeholder={t('mlbb_nickname')} className="w-full h-12 bg-muted/50 border border-border rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
                     <input name="mlbbId" required defaultValue={player?.mlbbId} placeholder={t('mlbb_id')} className="w-full h-12 bg-muted/50 border border-border rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
-                    <input name="avatar" defaultValue={player?.avatar} placeholder="Avatar URL (ixtiyoriy)" className="w-full h-12 bg-muted/50 border border-border rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
+                    <input name="avatar" defaultValue={player?.avatar} placeholder={`Avatar URL (${t('optional')})`} className="w-full h-12 bg-muted/50 border border-border rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm" />
 
                     <div className="flex gap-2 pt-2">
                         <button type="submit" className="w-full h-12 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-primary/90 transition-all text-sm">
-                            Saqlash
+                            {t('save')}
                         </button>
                     </div>
                 </form>
