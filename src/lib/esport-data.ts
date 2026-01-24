@@ -3,7 +3,7 @@ import { Player, Team, Tournament, Match } from './esport-types';
 // High-Security IDs: 8 chars, mixed case, numbers, symbols
 export const MOCK_PLAYERS: Player[] = [
     {
-        id: 'A7x#9Lm2', // Current User (Owner)
+        id: 'U7#m9$Kp', // Current User (Owner) - High Security
         nickname: 'Phoenix_99',
         firstName: 'Aziz',
         lastName: 'Rakhimov',

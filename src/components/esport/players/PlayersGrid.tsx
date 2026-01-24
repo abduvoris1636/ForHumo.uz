@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { Player } from '@/lib/esport-types';
-import { MOCK_PLAYERS } from '@/lib/esport-data';
+import { MOCK_PLAYERS, MOCK_TEAMS } from '@/lib/esport-data';
 import { PlayerCard } from './PlayerCard';
 import { EditProfileModal } from './EditProfileModal';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const CURRENT_USER_ID = '999999';
+const CURRENT_USER_ID = 'U7#m9$Kp';
 const STORAGE_KEY = 'humo_esport_user_v1';
 
 export function PlayersGrid() {
@@ -70,6 +70,12 @@ export function PlayersGrid() {
         return <div className="min-h-[50vh] flex items-center justify-center text-zinc-500">Loading IDs...</div>;
     }
 
+    // Helper: Find Team
+    const getTeam = (teamId?: string) => {
+        if (!teamId) return undefined;
+        return MOCK_TEAMS.find(t => t.id === teamId);
+    };
+
     return (
         <div className="space-y-8">
             {/* Controls */}
@@ -97,6 +103,7 @@ export function PlayersGrid() {
                     <div className="mb-2 text-xs font-bold uppercase tracking-widest text-green-400">Your ID Card</div>
                     <PlayerCard
                         player={currentUser}
+                        team={getTeam(currentUser.teamId)}
                         isOwner={true}
                         onEdit={() => setIsEditModalOpen(true)}
                     />
@@ -108,7 +115,10 @@ export function PlayersGrid() {
                         <div className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-600 opacity-0 group-hover:opacity-100 transition-opacity">
                             Player
                         </div>
-                        <PlayerCard player={player} />
+                        <PlayerCard
+                            player={player}
+                            team={getTeam(player.teamId)}
+                        />
                     </motion.div>
                 ))}
             </div>

@@ -1,17 +1,18 @@
 'use client';
 
-import { Player } from '@/lib/esport-types';
+import { Player, Team } from '@/lib/esport-types';
 import { motion } from 'framer-motion';
-import { Edit, Gamepad2, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Edit, Gamepad2, ShieldAlert, ShieldCheck, Shield } from 'lucide-react';
 import Image from 'next/image';
 
 interface PlayerCardProps {
     player: Player;
+    team?: Team;
     isOwner?: boolean;
     onEdit?: () => void;
 }
 
-export function PlayerCard({ player, isOwner = false, onEdit }: PlayerCardProps) {
+export function PlayerCard({ player, team, isOwner = false, onEdit }: PlayerCardProps) {
     // Active Logic: Must be active boolean AND have at least one game
     const hasGames = player.gameProfiles && player.gameProfiles.length > 0;
     const isActive = player.isActive && hasGames;
@@ -45,7 +46,30 @@ export function PlayerCard({ player, isOwner = false, onEdit }: PlayerCardProps)
                 )}
             </div>
 
-            <div className="flex flex-col items-center text-center">
+            {/* TEAM BADGE (Top Left) */}
+            {team && (
+                <div className="absolute top-4 left-4 z-10">
+                    <div className="flex items-center gap-2 bg-gradient-to-r from-blue-600/20 to-blue-900/20 border border-blue-500/30 rounded-full pl-1 pr-3 py-1 shadow-lg backdrop-blur-md hover:bg-blue-600/30 transition-colors cursor-help group/team">
+                        <div className="w-5 h-5 rounded-full overflow-hidden bg-zinc-900 border border-blue-400/50 shrink-0">
+                            <img
+                                src={team.logo || `https://api.dicebear.com/9.x/identicon/svg?seed=${team.name}`}
+                                alt={team.tag}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <span className="text-[10px] font-bold text-blue-300 tracking-wider">
+                            [{team.tag}]
+                        </span>
+
+                        {/* Tooltip for full Team Name */}
+                        <div className="absolute left-0 -bottom-8 opacity-0 group-hover/team:opacity-100 transition-opacity bg-zinc-900 text-white text-[10px] font-bold px-2 py-1 rounded border border-zinc-700 whitespace-nowrap pointer-events-none">
+                            {team.name}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <div className="flex flex-col items-center text-center mt-6">
                 {/* Avatar */}
                 <div className="relative mb-4">
                     <div className={`w-24 h-24 rounded-full border-4 overflow-hidden 
@@ -64,6 +88,7 @@ export function PlayerCard({ player, isOwner = false, onEdit }: PlayerCardProps)
                         Lvl {player.level}
                     </div>
                 </div>
+
 
                 {/* Identity */}
                 <h3 className="text-xl font-black text-white mb-1 flex items-center gap-2">

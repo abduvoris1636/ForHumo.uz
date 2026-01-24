@@ -130,23 +130,40 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
 
                     {/* Logo URL */}
                     <div className="space-y-2">
-                        <label className="text-xs uppercase font-bold text-zinc-500">Logo URL</label>
+                        <label className="text-xs uppercase font-bold text-zinc-500">Team Logo</label>
                         <div className="flex gap-2">
-                            <input
-                                value={logo}
-                                onChange={(e) => setLogo(e.target.value)}
-                                placeholder="https://..."
-                                className="w-full bg-black/50 border border-zinc-700 rounded p-2 focus:border-green-500 outline-none transition-colors text-sm"
-                            />
-                            {logo && (
-                                <div className="w-10 h-10 rounded border border-zinc-700 overflow-hidden flex-shrink-0">
+                            <div className="w-16 h-16 rounded border border-zinc-700 bg-zinc-900 overflow-hidden shrink-0">
+                                {logo ? (
                                     <img src={logo} alt="Preview" className="w-full h-full object-cover" />
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-zinc-600">
+                                        <Shield className="w-6 h-6" />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex-1 space-y-2">
+                                <input
+                                    value={logo}
+                                    onChange={(e) => setLogo(e.target.value)}
+                                    placeholder="Logo URL or Upload..."
+                                    className="w-full bg-black/50 border border-zinc-700 rounded p-2 text-sm focus:border-green-500 outline-none transition-colors"
+                                />
+                                <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded text-xs font-bold cursor-pointer transition-colors border border-zinc-700">
+                                    <Upload className="w-3 h-3" />
+                                    {isUploading ? 'Processing...' : 'Upload from Device'}
+                                    <input
+                                        type="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        disabled={isUploading}
+                                    />
+                                </label>
+                            </div>
                         </div>
                         {errors.logo && <span className="text-xs text-red-500">{errors.logo}</span>}
                         <div className="text-[10px] text-zinc-600">
-                            Paste an image URL from Discord, Imgur, or Dicebear.
+                            You can paste an image URL or upload directly from your device.
                         </div>
                     </div>
 

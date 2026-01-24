@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const MY_TEAM_STORAGE_KEY = 'humo_esport_my_team_v1';
 const TEAMS_STATE_STORAGE_KEY = 'humo_esport_teams_state_v1';
-const CURRENT_USER_ID = 'A7x#9Lm2'; // Updated mock ID (Aziz - Secure)
+const CURRENT_USER_ID = 'U7#m9$Kp'; // Updated mock ID (Aziz - Secure)
 
 export function TeamsGrid() {
     const [myTeam, setMyTeam] = useState<Team | null>(null);
@@ -298,6 +298,7 @@ export function TeamsGrid() {
                                 team={team}
                                 rank={idx + 1}
                                 isPending={isPending}
+                                userHasTeam={!!myTeam}
                                 onRequestJoin={() => handleSendRequest(team.id)}
                                 isMyTeam={isOwner}
                                 hasRequests={isOwner && team.requests.length > 0}

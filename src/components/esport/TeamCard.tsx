@@ -12,13 +12,25 @@ interface TeamCardProps {
     isPending?: boolean;
     hasRequests?: boolean;
     pendingCount?: number;
+    userHasTeam?: boolean;
     onRequestJoin?: () => void;
     onViewRequests?: () => void;
     onClick?: () => void;
 }
 
-export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, hasRequests, pendingCount, onRequestJoin, onViewRequests }: TeamCardProps) {
-    // Animation variants
+export function TeamCard({
+    team,
+    isMyTeam = false,
+    rank,
+    onClick,
+    isPending,
+    hasRequests,
+    pendingCount,
+    userHasTeam = false,
+    onRequestJoin,
+    onViewRequests
+}: TeamCardProps) {
+    // ... (variants unchanged)
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 }
@@ -39,15 +51,13 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, has
                     : "border-white/5 hover:border-white/20 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)]"
             )}
         >
-            {/* Background Pattern */}
+            {/* ... (backgrounds unchanged) */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
 
-            {/* My Team Glow */}
             {isMyTeam && (
                 <div className="absolute inset-0 bg-gradient-to-t from-green-500/10 via-transparent to-transparent opacity-50" />
             )}
 
-            {/* Card Content */}
             <div className="relative h-full flex flex-col p-6">
 
                 {/* Header: Rank/Status */}
@@ -64,7 +74,6 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, has
                             <span className="text-[10px] font-bold uppercase tracking-wide">My Team</span>
                         </div>
                     ) : (
-                        // JOIN REQUEST BUTTON OR BADGE
                         isPending ? (
                             <div className="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-[10px] font-bold uppercase tracking-wide">
                                 Request Sent
@@ -114,8 +123,8 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, has
                         </div>
                     </div>
 
-                    {/* CENTER ACTION: JOIN */}
-                    {!isMyTeam && (
+                    {/* CENTER ACTION: JOIN - Only if NOT my team AND user has NO team */}
+                    {!isMyTeam && !userHasTeam && (
                         <div className="flex items-center justify-center">
                             {isPending ? (
                                 <button disabled className="px-4 py-1.5 rounded-full bg-white/5 text-zinc-500 text-xs font-bold cursor-not-allowed">
@@ -131,6 +140,8 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, has
                             )}
                         </div>
                     )}
+                    {/* Placeholder if user HAS team (keeps layout) */}
+                    {(!isMyTeam && userHasTeam) && <div />}
 
                     {isMyTeam && (
                         <div className="flex flex-col items-center justify-center text-center border-l border-white/5">
