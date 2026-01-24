@@ -9,10 +9,14 @@ interface TeamCardProps {
     team: Team;
     isMyTeam?: boolean;
     rank?: number;
-    onClick?: () => void;
+    isPending?: boolean;
+    hasRequests?: boolean;
+    pendingCount?: number;
+    onRequestJoin?: () => void;
+    onViewRequests?: () => void;
 }
 
-export function TeamCard({ team, isMyTeam = false, rank, onClick }: TeamCardProps) {
+export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, hasRequests, pendingCount, onRequestJoin, onViewRequests }: TeamCardProps) {
     // Animation variants
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -53,17 +57,35 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick }: TeamCardProp
                         </div>
                     ) : <div></div>}
 
-                    {isMyTeam && (
+                    {isMyTeam ? (
                         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">
                             <Star size={12} fill="currentColor" />
                             <span className="text-[10px] font-bold uppercase tracking-wide">My Team</span>
                         </div>
+                    ) : (
+                        // JOIN REQUEST BUTTON OR BADGE
+                        isPending ? (
+                            <div className="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-[10px] font-bold uppercase tracking-wide">
+                                Request Sent
+                            </div>
+                        ) : null
                     )}
                 </div>
 
+                {/* OWNER BADGE: Incoming Requests */}
+                {isMyTeam && hasRequests && pendingCount ? (
+                    <div
+                        onClick={(e) => { e.stopPropagation(); onViewRequests?.(); }}
+                        className="absolute top-4 right-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer shadow-lg animate-pulse"
+                    >
+                        <Users size={14} className="text-white" />
+                        <span className="text-xs font-bold text-white">{pendingCount} Requests</span>
+                    </div>
+                ) : null}
+
                 {/* Team Info */}
                 <div className="flex-1 flex flex-col items-center justify-center -mt-2">
-                    <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl p-0.5 mb-4 transition-transform duration-500 group-hover:scale-110 bg-gradient-to-br from-white/10 to-transparent">
+                    <div className="relative w-24 h-24 rounded-2xl p-0.5 mb-4 transition-transform duration-500 group-hover:scale-110 bg-gradient-to-br from-white/10 to-transparent">
                         <div className="w-full h-full rounded-xl overflow-hidden bg-[#1a1f2e]">
                             <img
                                 src={team.logo || `https://api.dicebear.com/9.x/identicon/svg?seed=${team.name}`}
@@ -81,7 +103,7 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick }: TeamCardProp
                     </div>
                 </div>
 
-                {/* Stats Footer */}
+                {/* Footer / Actions */}
                 <div className="grid grid-cols-3 gap-2 mt-auto pt-4 border-t border-white/5">
                     <div className="flex flex-col items-center justify-center text-center">
                         <span className="text-[10px] text-muted-foreground uppercase font-bold mb-0.5">Level</span>
@@ -90,20 +112,44 @@ export function TeamCard({ team, isMyTeam = false, rank, onClick }: TeamCardProp
                             <span className="font-bold text-sm">{team.level}</span>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-center border-l border-white/5">
-                        <span className="text-[10px] text-muted-foreground uppercase font-bold mb-0.5">Members</span>
-                        <div className="flex items-center gap-1 text-blue-400">
-                            <Users size={14} />
-                            <span className="font-bold text-sm">{team.members.length}</span>
+
+                    {/* CENTER ACTION: JOIN */}
+                    {!isMyTeam && (
+                        <div className="flex items-center justify-center">
+                            {isPending ? (
+                                <button disabled className="px-4 py-1.5 rounded-full bg-white/5 text-zinc-500 text-xs font-bold cursor-not-allowed">
+                                    Pending
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); onRequestJoin?.(); }}
+                                    className="px-4 py-1.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg transition-all active:scale-95"
+                                >
+                                    Join Team
+                                </button>
+                            )}
                         </div>
-                    </div>
-                    <div className="flex flex-col items-center justify-center text-center border-l border-white/5">
-                        <span className="text-[10px] text-muted-foreground uppercase font-bold mb-0.5">Wins</span>
-                        <div className="flex items-center gap-1 text-green-400">
-                            <Shield size={14} />
-                            <span className="font-bold text-sm">{team.stats.wins}</span>
+                    )}
+
+                    {isMyTeam && (
+                        <div className="flex flex-col items-center justify-center text-center border-l border-white/5">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold mb-0.5">Members</span>
+                            <div className="flex items-center gap-1 text-blue-400">
+                                <Users size={14} />
+                                <span className="font-bold text-sm">{team.members.length}</span>
+                            </div>
                         </div>
-                    </div>
+                    )}
+
+                    {!isMyTeam && (
+                        <div className="flex flex-col items-center justify-center text-center border-l border-white/5">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold mb-0.5">Wins</span>
+                            <div className="flex items-center gap-1 text-green-400">
+                                <Shield size={14} />
+                                <span className="font-bold text-sm">{team.stats.wins}</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </motion.div>

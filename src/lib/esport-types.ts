@@ -20,23 +20,59 @@ export interface Player {
     role?: 'CAPTAIN' | 'MEMBER' | 'SUB';
 }
 
+export type TeamRole = 'OWNER' | 'CAPTAIN' | 'MEMBER';
+export type RequestStatus = 'PENDING' | 'REJECTED' | 'EXPIRED';
+
+export interface TeamMember {
+    playerId: string;
+    role: TeamRole;
+    joinedAt: string;
+}
+
+export interface JoinRequest {
+    playerId: string;
+    requestedAt: string;
+    status: RequestStatus;
+}
+
+export interface TeamInvite {
+    playerId: string;
+    invitedBy: string; // Captain/Owner ID
+    sentAt: string;
+    expiresAt: string;
+}
+
 export interface Team {
     id: string;
     name: string;
     tag: string; // 2-4 uppercase letters
     logo?: string;
-    ownerId: string;
-    captainId: string;
+
+    // Core Logic (Refactored)
+    ownerId: string; // Redundant but good for quick lookups
+    captainId: string; // Redundant but good for quick lookups
+
+    members: TeamMember[]; // Detailed list
+
+    // Joining Logic
+    requests: JoinRequest[]; // Detailed requests
+    invites: TeamInvite[]; // Outgoing invites
+    joinCode?: {
+        code: string;
+        createdAt: string;
+        expiresAt: string;
+    };
+
     level: number;
-    members: string[]; // List of Player IDs
-    pendingRequests: string[]; // List of Player IDs requesting to join
-    joinCode?: string; // Ephemeral 5-char code for quick join
     createdAt: string;
     stats: {
         wins: number;
         losses: number;
         tournamentsPlayed: number;
     };
+
+    // Legacy support (optional, can remove if we fully migrate)
+    pendingRequests?: never;
 }
 
 export interface Tournament {

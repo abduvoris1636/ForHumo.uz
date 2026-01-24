@@ -91,8 +91,14 @@ export const MOCK_TEAMS: Team[] = [
         ownerId: '100001',
         captainId: '100001',
         level: 18,
-        members: ['100001', '100002'],
-        pendingRequests: ['100003'],
+        members: [
+            { playerId: '100001', role: 'OWNER', joinedAt: '2025-01-10' },
+            { playerId: '100002', role: 'MEMBER', joinedAt: '2025-01-11' }
+        ],
+        requests: [
+            { playerId: '100003', requestedAt: '2025-01-15', status: 'PENDING' }
+        ],
+        invites: [],
         createdAt: '2025-01-10',
         stats: { wins: 15, losses: 5, tournamentsPlayed: 2 }
     },
@@ -104,8 +110,11 @@ export const MOCK_TEAMS: Team[] = [
         ownerId: '100004',
         captainId: '100004',
         level: 25,
-        members: ['100004'],
-        pendingRequests: [],
+        members: [
+            { playerId: '100004', role: 'OWNER', joinedAt: '2024-12-20' }
+        ],
+        requests: [],
+        invites: [],
         createdAt: '2024-12-20',
         stats: { wins: 40, losses: 12, tournamentsPlayed: 5 }
     }
