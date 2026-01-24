@@ -14,6 +14,7 @@ interface TeamCardProps {
     pendingCount?: number;
     onRequestJoin?: () => void;
     onViewRequests?: () => void;
+    onClick?: () => void;
 }
 
 export function TeamCard({ team, isMyTeam = false, rank, onClick, isPending, hasRequests, pendingCount, onRequestJoin, onViewRequests }: TeamCardProps) {
