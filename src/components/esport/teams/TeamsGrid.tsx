@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const MY_TEAM_STORAGE_KEY = 'humo_esport_my_team_v1';
 const TEAMS_STATE_STORAGE_KEY = 'humo_esport_teams_state_v1';
-const CURRENT_USER_ID = '98273641'; // Updated mock ID (Aziz)
+const CURRENT_USER_ID = 'A7x#9Lm2'; // Updated mock ID (Aziz - Secure)
 
 export function TeamsGrid() {
     const [myTeam, setMyTeam] = useState<Team | null>(null);
@@ -66,6 +66,16 @@ export function TeamsGrid() {
 
         // Also sync to global state
         const updatedTeams = teamsState.map(t => t.id === updatedTeam.id ? updatedTeam : t);
+        updateTeamsState(updatedTeams);
+    };
+
+    const handleDeleteTeam = (teamId: string) => {
+        // 1. Clear Local User State
+        setMyTeam(null);
+        localStorage.removeItem(MY_TEAM_STORAGE_KEY);
+
+        // 2. Remove from Global State
+        const updatedTeams = teamsState.filter(t => t.id !== teamId);
         updateTeamsState(updatedTeams);
     };
 
@@ -296,6 +306,7 @@ export function TeamsGrid() {
                     onClose={() => setIsManagementOpen(false)}
                     team={myTeam}
                     onUpdateTeam={handleUpdateMyTeam}
+                    onDeleteTeam={handleDeleteTeam}
                 />
             )}
 

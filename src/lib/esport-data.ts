@@ -1,8 +1,9 @@
 import { Player, Team, Tournament, Match } from './esport-types';
 
+// High-Security IDs: 8 chars, mixed case, numbers, symbols
 export const MOCK_PLAYERS: Player[] = [
     {
-        id: '98273641', // Current User
+        id: 'A7x#9Lm2', // Current User (Owner)
         nickname: 'Phoenix_99',
         firstName: 'Aziz',
         lastName: 'Rakhimov',
@@ -17,7 +18,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2024-11-15'
     },
     {
-        id: '19283746',
+        id: 'K4$pQ8vR',
         nickname: 'ShadowSlayer',
         firstName: 'Bekzod',
         lastName: 'Aliyev',
@@ -32,7 +33,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2025-01-10'
     },
     {
-        id: '56473829',
+        id: 'M2@nB5zW',
         nickname: 'MysticMage',
         firstName: 'Diyor',
         lastName: 'Tursunov',
@@ -47,7 +48,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2025-01-11'
     },
     {
-        id: '37482910',
+        id: 'J9&dL3kP',
         nickname: 'NoobMaster',
         firstName: 'Sanjar',
         lastName: 'Karimov',
@@ -62,7 +63,7 @@ export const MOCK_PLAYERS: Player[] = [
         joinedAt: '2025-01-20'
     },
     {
-        id: '28374650', // Team 2 Owner
+        id: 'R5#hT1xY', // Team 2 Owner
         nickname: 'LegionCommander',
         firstName: 'Otabek',
         lastName: 'Juraev',
@@ -84,15 +85,15 @@ export const MOCK_TEAMS: Team[] = [
         name: 'Shadows Gaming',
         tag: 'SHDW',
         logo: 'https://api.dicebear.com/9.x/identicon/svg?seed=Shadows&backgroundColor=000000',
-        ownerId: '19283746', // ShadowSlayer
-        captainId: '19283746',
+        ownerId: 'K4$pQ8vR', // ShadowSlayer
+        captainId: 'K4$pQ8vR',
         level: 18,
         members: [
-            { playerId: '19283746', role: 'OWNER', joinedAt: '2025-01-10' },
-            { playerId: '56473829', role: 'MEMBER', joinedAt: '2025-01-11' }
+            { playerId: 'K4$pQ8vR', role: 'OWNER', joinedAt: '2025-01-10' },
+            { playerId: 'M2@nB5zW', role: 'MEMBER', joinedAt: '2025-01-11' }
         ],
         requests: [
-            { playerId: '37482910', requestedAt: '2025-01-15', status: 'PENDING' }
+            { playerId: 'J9&dL3kP', requestedAt: '2025-01-15', status: 'PENDING' }
         ],
         invites: [],
         createdAt: '2025-01-10',
@@ -103,11 +104,11 @@ export const MOCK_TEAMS: Team[] = [
         name: 'Mystic Legion',
         tag: 'MYST',
         logo: 'https://api.dicebear.com/9.x/identicon/svg?seed=Mystic&backgroundColor=000000',
-        ownerId: '28374650', // LegionCommander
-        captainId: '28374650',
+        ownerId: 'R5#hT1xY', // LegionCommander
+        captainId: 'R5#hT1xY',
         level: 25,
         members: [
-            { playerId: '28374650', role: 'OWNER', joinedAt: '2024-12-20' }
+            { playerId: 'R5#hT1xY', role: 'OWNER', joinedAt: '2024-12-20' }
         ],
         requests: [],
         invites: [],

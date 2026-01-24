@@ -6,21 +6,56 @@ import { Player, Team, JoinRequest, TeamInvite, TeamMember } from '@/lib/esport-
 import { MOCK_PLAYERS } from '@/lib/esport-data';
 import { formatDistanceToNow } from 'date-fns';
 import {
-    Users, QrCode, Send, ArrowRight, X, Check, Timer, Copy, CheckCircle, RefreshCw, Trophy, Gamepad2, Search
+    Users, QrCode, Send, ArrowRight, X, Check, Timer, Copy, CheckCircle, RefreshCw, Trophy, Gamepad2, Search, Settings, Trash2, Upload, Shield
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { compressImage } from '@/lib/image-utils';
 
 interface TeamManagementModalProps {
     isOpen: boolean;
     onClose: () => void;
     team: Team;
     onUpdateTeam: (updatedTeam: Team) => void;
+    onDeleteTeam?: (teamId: string) => void;
 }
 
-type Tab = 'CODE' | 'INCOMING' | 'OUTGOING';
+type Tab = 'CODE' | 'INCOMING' | 'OUTGOING' | 'SETTINGS';
 
-export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: TeamManagementModalProps) {
+export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam, onDeleteTeam }: TeamManagementModalProps) {
     const [activeTab, setActiveTab] = useState<Tab>('CODE');
+
+    // --- SETTINGS STATE ---
+    const [editName, setEditName] = useState(team.name);
+    const [editTag, setEditTag] = useState(team.tag);
+    const [editLogo, setEditLogo] = useState(team.logo);
+    const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+
+    // Sync state when opening
+    useEffect(() => {
+        if (isOpen) {
+            setEditName(team.name);
+            setEditTag(team.tag);
+            setEditLogo(team.logo);
+            setIsDeleteConfirmOpen(false);
+        }
+    }, [isOpen, team]);
+
+    const handleSaveChanges = () => {
+        onUpdateTeam({
+            ...team,
+            name: editName,
+            tag: editTag,
+            logo: editLogo
+        });
+        alert('Team settings updated successfully!');
+    };
+
+    const handleDeleteTeam = () => {
+        if (onDeleteTeam) {
+            onDeleteTeam(team.id);
+            onClose();
+        }
+    };
 
     // --- CODE TAB LOGIC ---
     const [timeLeft, setTimeLeft] = useState<number>(0);
@@ -69,7 +104,6 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
     };
 
     // --- INCOMING REQUESTS LOGIC ---
-    // Filter expired requests (Client-side display logic)
     const validRequests = team.requests.filter(r => {
         const expires = new Date(new Date(r.requestedAt).getTime() + 24 * 60 * 60 * 1000); // 24h
         return new Date() < expires;
@@ -95,23 +129,16 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
 
     // --- OUTGOING INVITES LOGIC ---
     const [searchQuery, setSearchQuery] = useState('');
-
-    // Valid Invites filter (Showing All History as requested: Pending/Rejected)
-    // We assume "active" logic or "history" logic. Let's show recent history.
     const sortedInvites = [...team.invites].sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
 
     const handleSendInvite = (playerId: string) => {
-        // Prevent dupes
         if (team.invites.some(i => i.playerId === playerId && i.status === 'PENDING')) return;
-
-        // Check 24h limit logic? For prototype, unlimited invites to different people.
-        // Limit 1 invite per player per 24h (Implicit by filtering pending)
 
         const newInvite: TeamInvite = {
             playerId,
             invitedBy: team.ownerId,
             sentAt: new Date().toISOString(),
-            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24h
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
             status: 'PENDING'
         };
 
@@ -119,15 +146,13 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
             ...team,
             invites: [...team.invites, newInvite]
         });
-        setSearchQuery(''); // Clear search
+        setSearchQuery('');
     };
 
-    // Search for invitable players (Not in a team, not me)
     const filteredPlayers = searchQuery.length > 2 ? MOCK_PLAYERS.filter(p => {
-        const isMe = p.id === team.ownerId; // Or current user
+        const isMe = p.id === team.ownerId;
         const inThisTeam = team.members.some(m => m.playerId === p.id);
         const hasPendingInvite = team.invites.some(i => i.playerId === p.id && i.status === 'PENDING');
-        // Ideally check global teamId but for mock we can rely on p.teamId if consistent
         const alreadyInAnyTeam = p.teamId !== undefined;
 
         if (isMe || inThisTeam || hasPendingInvite || alreadyInAnyTeam) return false;
@@ -138,8 +163,6 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
         );
     }) : [];
 
-
-    // --- HELPERS to enrich data ---
     const getPlayer = (id: string) => MOCK_PLAYERS.find(p => p.id === id);
 
 
@@ -185,6 +208,15 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
                         >
                             <Send className="w-4 h-4" />
                             Sent Invites
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('SETTINGS')}
+                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold transition-all mt-auto border-t border-zinc-800 pt-3
+                                ${activeTab === 'SETTINGS' ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'}
+                            `}
+                        >
+                            <Settings className="w-4 h-4" />
+                            Settings
                         </button>
                     </div>
 
@@ -264,7 +296,6 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
                                                         </div>
                                                         <div className="text-[10px] text-zinc-500 flex items-center gap-2 mt-0.5">
                                                             <span>Expires in {hoursLeft}h</span>
-                                                            {/* Show main game for context */}
                                                             {p.gameProfiles[0] && (
                                                                 <span className="flex items-center gap-1 text-zinc-400">
                                                                     <Gamepad2 className="w-3 h-3" /> {p.gameProfiles[0].game}
@@ -355,8 +386,6 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
                                                             Sent {formatDistanceToNow(new Date(inv.sentAt))} ago
                                                         </div>
                                                     </div>
-
-                                                    {/* STATUS BADGE */}
                                                     {isPending && <span className="text-[10px] font-bold text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded border border-yellow-500/20">Pending</span>}
                                                     {isRejected && <span className="text-[10px] font-bold text-red-500 bg-red-500/10 px-2 py-1 rounded border border-red-500/20">Rejected</span>}
                                                     {isAccepted && <span className="text-[10px] font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded border border-green-500/20">Accepted</span>}
@@ -364,6 +393,111 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam }: Tea
                                                 </div>
                                             );
                                         })
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 4. SETTINGS TAB */}
+                        {activeTab === 'SETTINGS' && (
+                            <div className="h-full flex flex-col overflow-y-auto pr-2">
+                                <h3 className="text-sm font-bold text-zinc-400 uppercase mb-4">Edit Team Identity</h3>
+
+                                <div className="space-y-4 mb-8">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase">Team Name</label>
+                                        <input
+                                            value={editName}
+                                            onChange={(e) => setEditName(e.target.value)}
+                                            className="w-full bg-black/30 border border-zinc-800 rounded p-2.5 text-sm focus:border-blue-500 outline-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase">Tag (2-4 Chars)</label>
+                                        <input
+                                            value={editTag}
+                                            onChange={(e) => setEditTag(e.target.value.toUpperCase().slice(0, 4))}
+                                            className="w-full bg-black/30 border border-zinc-800 rounded p-2.5 text-sm font-mono focus:border-blue-500 outline-none"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-zinc-500 uppercase">Team Logo</label>
+                                        <div className="flex gap-4">
+                                            <div className="w-16 h-16 rounded border border-zinc-700 bg-zinc-900 overflow-hidden shrink-0">
+                                                <img src={editLogo} className="w-full h-full object-cover" />
+                                            </div>
+                                            <div className="flex-1 space-y-2">
+                                                <input
+                                                    value={editLogo}
+                                                    onChange={(e) => setEditLogo(e.target.value)}
+                                                    className="w-full bg-black/30 border border-zinc-800 rounded p-2 text-xs focus:border-blue-500 outline-none"
+                                                    placeholder="Logo URL..."
+                                                />
+                                                <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded text-xs font-bold cursor-pointer transition-colors border border-zinc-700">
+                                                    <Upload className="w-3 h-3" /> Upload from Device
+                                                    <input
+                                                        type="file"
+                                                        className="hidden"
+                                                        accept="image/*"
+                                                        onChange={async (e) => {
+                                                            if (e.target.files?.[0]) {
+                                                                try {
+                                                                    const b64 = await compressImage(e.target.files[0]);
+                                                                    setEditLogo(b64);
+                                                                } catch (err) {
+                                                                    console.error(err);
+                                                                }
+                                                            }
+                                                        }}
+                                                    />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={handleSaveChanges}
+                                        className="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow-lg transition-all"
+                                    >
+                                        Save Changes
+                                    </button>
+                                </div>
+
+                                {/* DANGER ZONE */}
+                                <div className="mt-auto pt-6 border-t border-red-500/20">
+                                    <h3 className="text-sm font-bold text-red-500 uppercase mb-2 flex items-center gap-2">
+                                        <Trash2 className="w-4 h-4" /> Danger Zone
+                                    </h3>
+
+                                    {!isDeleteConfirmOpen ? (
+                                        <button
+                                            onClick={() => setIsDeleteConfirmOpen(true)}
+                                            className="w-full py-2 border border-red-500/30 text-red-500 hover:bg-red-500/10 font-bold rounded-lg transition-colors text-sm"
+                                        >
+                                            Delete Team
+                                        </button>
+                                    ) : (
+                                        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center animate-in fade-in zoom-in">
+                                            <p className="text-xs text-red-400 mb-3 font-bold">
+                                                Are you sure? This action cannot be undone.
+                                            </p>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => setIsDeleteConfirmOpen(false)}
+                                                    className="flex-1 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold rounded"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <button
+                                                    onClick={handleDeleteTeam}
+                                                    className="flex-1 py-1.5 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded shadow-lg"
+                                                >
+                                                    Confirm
+                                                </button>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                             </div>
