@@ -1,19 +1,26 @@
 "use client";
 
+import { useState } from 'react';
 import { motion } from "framer-motion";
-import { ShieldCheck, ShieldAlert, User, Gamepad2, Trophy, Clock } from "lucide-react";
+import { ShieldCheck, ShieldAlert, User, Gamepad2, Trophy, Clock, Eye, EyeOff, Copy, Check, Edit, Trash2 } from "lucide-react";
 import { Player } from "@/lib/esport-types";
 import { cn } from "@/lib/utils";
 
 interface PlayerCardProps {
     player: Player;
     isCurrentUser?: boolean;
+    isAdmin?: boolean;
     rank?: number;
     showRank?: boolean;
+    onEdit?: (player: Player) => void;
+    onDelete?: (playerId: string) => void;
 }
 
-export function PlayerCard({ player, isCurrentUser = false, rank, showRank = false }: PlayerCardProps) {
+export function PlayerCard({ player, isCurrentUser = false, isAdmin = false, rank, showRank = false, onEdit, onDelete }: PlayerCardProps) {
     const isActive = player.isActive;
+    const canSeeId = isCurrentUser || isAdmin;
+    const [showId, setShowId] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     // Status config
     const statusColor = isActive ? "text-green-500" : "text-red-500";
@@ -55,8 +62,17 @@ export function PlayerCard({ player, isCurrentUser = false, rank, showRank = fal
                 {/* Header: ID + Status */}
                 <div className="flex justify-between items-start mb-4">
                     <div className="flex flex-col">
-                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Player ID</span>
-                        <span className="font-mono text-lg font-bold text-white tracking-widest">{player.id}</span>
+                        {canSeeId && (
+                            <div className="flex items-center gap-2">
+                                <span className="font-mono text-lg font-bold text-white tracking-widest">{showId ? player.id : '********'}</span>
+                                <button onClick={e => { e.stopPropagation(); setShowId(!showId); }} className="p-1 rounded hover:bg-white/10">
+                                    {showId ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </button>
+                                <button onClick={e => { e.stopPropagation(); navigator.clipboard.writeText(player.id); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="p-1 rounded hover:bg-white/10">
+                                    {copied ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/5", statusColor)}>
                         <StatusIcon size={14} className={isActive ? "animate-pulse" : ""} />
@@ -94,12 +110,21 @@ export function PlayerCard({ player, isCurrentUser = false, rank, showRank = fal
                     {/* Team Badge if exists */}
                     {player.teamId ? (
                         <div className="mt-3 px-3 py-1 rounded-lg bg-white/5 border border-white/10 flex items-center gap-2">
-                            {/* In real app, we would look up team details. Use placeholder for now or pass team name */}
                             <span className="text-xs font-bold text-gray-300">Team Member</span>
                         </div>
                     ) : (
                         <div className="mt-3 px-3 py-1 rounded-lg border border-dashed border-white/10 text-xs text-muted-foreground">
                             No Team
+                        </div>
+                    )}
+                    {/* Game Badges */}
+                    {player.gameProfiles && player.gameProfiles.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                            {player.gameProfiles.map((gp, idx) => (
+                                <span key={idx} className="px-2 py-1 rounded bg-white/10 border border-white/10 text-xs text-muted-foreground font-bold uppercase">
+                                    {(isCurrentUser || isAdmin) ? `${gp.game}: ${gp.inGameNickname}` : gp.game}
+                                </span>
+                            ))}
                         </div>
                     )}
                 </div>
@@ -126,6 +151,17 @@ export function PlayerCard({ player, isCurrentUser = false, rank, showRank = fal
                 {showRank && rank && (
                     <div className="absolute top-2 left-2 w-8 h-8 flex items-center justify-center font-black text-xl italic text-white/10 select-none">
                         #{rank}
+                    </div>
+                )}
+                {/* Edit / Delete Buttons */}
+                {(isCurrentUser || isAdmin) && (
+                    <div className="absolute top-2 right-2 flex gap-2">
+                        <button onClick={e => { e.stopPropagation(); onEdit?.(player); }} className="p-1 rounded bg-white/10 hover:bg-white/20">
+                            <Edit size={16} className="text-primary-foreground" />
+                        </button>
+                        <button onClick={e => { e.stopPropagation(); onDelete?.(player.id); }} className="p-1 rounded bg-red-500/10 hover:bg-red-500/20">
+                            <Trash2 size={16} className="text-red-500" />
+                        </button>
                     </div>
                 )}
             </div>
