@@ -5,15 +5,14 @@ import { Team, JoinRequest, TeamMember } from '@/lib/esport-types';
 import { MOCK_TEAMS } from '@/lib/esport-data';
 import { TeamCard } from '@/components/esport/TeamCard';
 import { CreateTeamModal } from './CreateTeamModal';
-import { JoinRequestsModal } from './JoinRequestsModal';
-import { InviteCodeModal } from './InviteCodeModal';
+import { TeamManagementModal } from './TeamManagementModal';
 import { JoinByCodeModal } from './JoinByCodeModal';
-import { Search, PlusCircle, Users, KeyRound } from 'lucide-react';
+import { Search, PlusCircle, Users, KeyRound, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const MY_TEAM_STORAGE_KEY = 'humo_esport_my_team_v1';
 const TEAMS_STATE_STORAGE_KEY = 'humo_esport_teams_state_v1';
-const CURRENT_USER_ID = '999999'; // Simulating logged in user
+const CURRENT_USER_ID = '98273641'; // Updated mock ID (Aziz)
 
 export function TeamsGrid() {
     const [myTeam, setMyTeam] = useState<Team | null>(null);
@@ -21,8 +20,7 @@ export function TeamsGrid() {
 
     // Modals State
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [requestsModalTeamId, setRequestsModalTeamId] = useState<string | null>(null);
-    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false); // For Owner
+    const [isManagementOpen, setIsManagementOpen] = useState(false); // New Unified Owner Modal
     const [isJoinCodeModalOpen, setIsJoinCodeModalOpen] = useState(false); // For Player
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -62,7 +60,16 @@ export function TeamsGrid() {
         localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(newTeam));
     };
 
-    // --- PHASE 2B: JOIN REQUEST LOGIC ---
+    const handleUpdateMyTeam = (updatedTeam: Team) => {
+        setMyTeam(updatedTeam);
+        localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(updatedTeam));
+
+        // Also sync to global state
+        const updatedTeams = teamsState.map(t => t.id === updatedTeam.id ? updatedTeam : t);
+        updateTeamsState(updatedTeams);
+    };
+
+    // --- PHASE 2B: JOIN REQUEST LOGIC (Player Side) ---
 
     const getPendingRequestsCount = (playerId: string) => {
         let count = 0;
@@ -105,66 +112,9 @@ export function TeamsGrid() {
         updateTeamsState(updatedTeams);
     };
 
-    const handleAcceptRequest = (teamId: string, playerId: string) => {
-        const updatedTeams = teamsState.map(t => {
-            if (t.id === teamId) {
-                const newMember: TeamMember = {
-                    playerId: playerId,
-                    role: 'MEMBER',
-                    joinedAt: new Date().toISOString()
-                };
-                const updatedRequests = t.requests.filter(r => r.playerId !== playerId);
-                return { ...t, members: [...t.members, newMember], requests: updatedRequests };
-            }
-            if (t.requests.some(r => r.playerId === playerId)) {
-                return { ...t, requests: t.requests.filter(r => r.playerId !== playerId) };
-            }
-            return t;
-        });
-
-        updateTeamsState(updatedTeams);
-        if (playerId === CURRENT_USER_ID) {
-            const acceptedTeam = updatedTeams.find(t => t.id === teamId);
-            if (acceptedTeam) handleCreateTeam(acceptedTeam);
-        }
-    };
-
-    const handleRejectRequest = (teamId: string, playerId: string) => {
-        const updatedTeams = teamsState.map(t => {
-            if (t.id === teamId) {
-                return { ...t, requests: t.requests.filter(r => r.playerId !== playerId) };
-            }
-            return t;
-        });
-        updateTeamsState(updatedTeams);
-    };
-
-    // --- PHASE 2C: INVITE CODE LOGIC ---
-
-    const generateInviteCode = () => {
-        if (!myTeam) return;
-
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let code = '';
-        for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-
-        const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); // 5 mins
-
-        const updatedMyTeam = {
-            ...myTeam,
-            joinCode: { code, expiresAt, createdAt: new Date().toISOString() }
-        };
-
-        setMyTeam(updatedMyTeam);
-        localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(updatedMyTeam));
-
-        // Also update global state for this team
-        const updatedTeams = teamsState.map(t => t.id === myTeam.id ? updatedMyTeam : t);
-        updateTeamsState(updatedTeams);
-    };
+    // --- PHASE 2C: JOIN BY CODE (Player Side) ---
 
     const handleJoinByCode = async (code: string) => {
-        // Validation Delay
         await new Promise(resolve => setTimeout(resolve, 800));
 
         const targetTeam = teamsState.find(t => t.joinCode?.code === code);
@@ -224,8 +174,6 @@ export function TeamsGrid() {
         myTeam.tag.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const activeRequestsTeam = requestsModalTeamId ? teamsState.find(t => t.id === requestsModalTeamId) : null;
-
     if (!isMounted) return <div className="min-h-[50vh] flex items-center justify-center text-zinc-500">Loading Teams...</div>;
 
     return (
@@ -271,12 +219,12 @@ export function TeamsGrid() {
                             <motion.div layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
                                 <div className="mb-2 flex items-center justify-between">
                                     <span className="text-xs font-bold uppercase tracking-widest text-green-400">Your Team</span>
-                                    {/* OWNER ACTION: INVITE */}
+                                    {/* OWNER ACTION: MANAGE (Replaces Invite) */}
                                     <button
-                                        onClick={() => setIsInviteModalOpen(true)}
-                                        className="text-[10px] font-bold text-zinc-400 hover:text-white flex items-center gap-1 transition-colors"
+                                        onClick={() => setIsManagementOpen(true)}
+                                        className="text-[10px] font-bold text-zinc-400 hover:text-white flex items-center gap-1 transition-colors bg-zinc-800/50 px-2 py-1 rounded"
                                     >
-                                        <PlusCircle className="w-3 h-3" /> Invite
+                                        <Settings className="w-3 h-3" /> Manage
                                     </button>
                                 </div>
                                 <TeamCard
@@ -284,7 +232,7 @@ export function TeamsGrid() {
                                     isMyTeam={true}
                                     hasRequests={myTeam.requests.length > 0}
                                     pendingCount={myTeam.requests.filter(r => r.status === 'PENDING').length}
-                                    onViewRequests={() => setRequestsModalTeamId(myTeam.id)}
+                                    onViewRequests={() => setIsManagementOpen(true)}
                                 />
                             </motion.div>
                         )
@@ -326,7 +274,7 @@ export function TeamsGrid() {
                                 isMyTeam={isOwner}
                                 hasRequests={isOwner && team.requests.length > 0}
                                 pendingCount={isOwner ? team.requests.filter(r => r.status === 'PENDING').length : 0}
-                                onViewRequests={() => setRequestsModalTeamId(team.id)}
+                                onViewRequests={() => setIsManagementOpen(true)}
                             />
                         </motion.div>
                     );
@@ -341,22 +289,15 @@ export function TeamsGrid() {
                 onSave={handleCreateTeam}
             />
 
-            {activeRequestsTeam && (
-                <JoinRequestsModal
-                    isOpen={!!activeRequestsTeam}
-                    onClose={() => setRequestsModalTeamId(null)}
-                    requests={activeRequestsTeam.requests}
-                    onAccept={(pid) => handleAcceptRequest(activeRequestsTeam.id, pid)}
-                    onReject={(pid) => handleRejectRequest(activeRequestsTeam.id, pid)}
+            {/* UNIFIED MANAGEMENT MODAL */}
+            {myTeam && (
+                <TeamManagementModal
+                    isOpen={isManagementOpen}
+                    onClose={() => setIsManagementOpen(false)}
+                    team={myTeam}
+                    onUpdateTeam={handleUpdateMyTeam}
                 />
             )}
-
-            <InviteCodeModal
-                isOpen={isInviteModalOpen}
-                onClose={() => setIsInviteModalOpen(false)}
-                joinCode={myTeam?.joinCode}
-                onGenerateCode={generateInviteCode}
-            />
 
             <JoinByCodeModal
                 isOpen={isJoinCodeModalOpen}

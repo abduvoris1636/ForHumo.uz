@@ -82,13 +82,23 @@ export function PlayerCard({ player, isOwner = false, onEdit }: PlayerCardProps)
                 </p>
 
                 {/* ID Display */}
-                <div className="w-full bg-black/20 rounded-lg p-3 mb-4 border border-white/5">
+                <div className="w-full bg-black/20 rounded-lg p-3 mb-4 border border-white/5 relative group/id">
                     <div className="flex justify-between items-center text-xs text-zinc-500 mb-1">
-                        <span>Humo ID</span>
-                        <span className="font-mono text-zinc-300">{player.id}</span>
+                        <span className="font-bold text-zinc-400">Humo eSport ID</span>
+                        <span className="font-mono text-zinc-300 font-bold text-sm tracking-widest">
+                            {isOwner ? player.id : '••••••••'}
+                        </span>
                     </div>
+
+                    {/* Security Warning only for Owner */}
+                    {isOwner && (
+                        <div className="mt-2 pt-2 border-t border-white/5 text-[10px] leading-tight text-red-400 opacity-60 group-hover/id:opacity-100 transition-opacity">
+                            <span className="font-bold">SECURITY WARNING:</span> Humo eSport organization will never ask for your ID. Do not share it with anyone.
+                        </div>
+                    )}
+
                     {player.telegram && (
-                        <div className="flex justify-between items-center text-xs text-zinc-500">
+                        <div className="mt-2 flex justify-between items-center text-xs text-zinc-500 pt-1">
                             <span>Telegram</span>
                             <a
                                 href={`https://t.me/${player.telegram.replace('@', '')}`}

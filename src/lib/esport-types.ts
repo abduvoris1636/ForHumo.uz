@@ -40,6 +40,7 @@ export interface TeamInvite {
     invitedBy: string; // Captain/Owner ID
     sentAt: string;
     expiresAt: string;
+    status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
 }
 
 export interface Team {

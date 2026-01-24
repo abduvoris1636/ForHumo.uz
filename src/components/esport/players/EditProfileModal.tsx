@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Player, GameType } from '@/lib/esport-types';
 import { MOCK_PLAYERS } from '@/lib/esport-data';
+import { compressImage } from '@/lib/image-utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, X } from 'lucide-react';
+import { Plus, Trash2, X, Upload } from 'lucide-react';
 
 interface EditProfileModalProps {
     isOpen: boolean;
@@ -17,6 +18,7 @@ interface EditProfileModalProps {
 export function EditProfileModal({ isOpen, onClose, currentUser, onSave }: EditProfileModalProps) {
     const [formData, setFormData] = useState<Player>(currentUser);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
@@ -30,6 +32,22 @@ export function EditProfileModal({ isOpen, onClose, currentUser, onSave }: EditP
         setFormData(prev => ({ ...prev, [name]: value }));
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const base64 = await compressImage(file);
+            setFormData(prev => ({ ...prev, avatar: base64 }));
+        } catch (err) {
+            console.error(err);
+            // Optional: set a global error or alert
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -153,15 +171,41 @@ export function EditProfileModal({ isOpen, onClose, currentUser, onSave }: EditP
                             {errors.telegram && <span className="text-xs text-red-500">{errors.telegram}</span>}
                         </div>
                         <div className="col-span-1 md:col-span-2 space-y-2">
-                            <label className="text-xs uppercase font-bold text-zinc-500">Avatar URL</label>
-                            <input
-                                name="avatar"
-                                value={formData.avatar}
-                                onChange={handleBasicChange}
-                                placeholder="https://..."
-                                className="w-full bg-black/50 border border-zinc-700 rounded p-2 focus:border-green-500 outline-none transition-colors"
-                            />
-                            <div className="text-[10px] text-zinc-600">Tip: Use Dicebear or Imgur for images</div>
+                            <label className="text-xs uppercase font-bold text-zinc-500">Avatar</label>
+                            <div className="flex gap-4 items-start">
+                                <div className="flex-1 space-y-2">
+                                    <div className="flex gap-2">
+                                        <input
+                                            name="avatar"
+                                            value={formData.avatar || ''}
+                                            onChange={handleBasicChange}
+                                            placeholder="Paste URL or upload..."
+                                            disabled={isUploading}
+                                            className="flex-1 bg-black/50 border border-zinc-700 rounded p-2 focus:border-green-500 outline-none transition-colors"
+                                        />
+                                        <label className="cursor-pointer px-3 py-2 bg-zinc-800 hover:bg-zinc-700 rounded border border-zinc-700 hover:border-zinc-500 flex items-center justify-center transition-colors">
+                                            <Upload className="w-4 h-4 text-zinc-400" />
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={handleFileChange}
+                                                disabled={isUploading}
+                                            />
+                                        </label>
+                                    </div>
+                                    <div className="text-[10px] text-zinc-600">Tip: Upload from device or use URL.</div>
+                                </div>
+                                <div className="w-10 h-10 rounded-full border border-zinc-700 bg-zinc-900 overflow-hidden flex-shrink-0 relative">
+                                    {isUploading ? (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                                            <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+                                        </div>
+                                    ) : formData.avatar ? (
+                                        <img src={formData.avatar} alt="Preview" className="w-full h-full object-cover" />
+                                    ) : null}
+                                </div>
+                            </div>
                         </div>
                     </div>
 

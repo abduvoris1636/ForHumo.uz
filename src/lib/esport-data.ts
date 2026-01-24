@@ -2,83 +2,79 @@ import { Player, Team, Tournament, Match } from './esport-types';
 
 export const MOCK_PLAYERS: Player[] = [
     {
-        id: '100001',
-        nickname: 'ShadowSlayer',
+        id: '98273641', // Current User
+        nickname: 'Phoenix_99',
         firstName: 'Aziz',
-        lastName: 'Rahimov',
-        telegram: 'shadow_real',
-        avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=ShadowSlayer',
-        level: 15,
-        gamesPlayed: 124,
-        teamId: 'team_01',
-        isActive: true,
+        lastName: 'Rakhimov',
+        telegram: '@aziz_phoenix',
+        level: 42,
+        gamesPlayed: 156,
+        isActive: true, // Profile Complete
         gameProfiles: [
-            { game: 'MLBB', inGameNickname: 'ShadowML', gameId: '12345678' }
+            { game: 'PUBG_MOBILE', inGameNickname: 'Phx_Aziz', gameId: '5123456789' },
+            { game: 'MLBB', inGameNickname: 'Phx_Aziz_ML', gameId: '12345678' }
         ],
-        joinedAt: '2025-01-01',
-        role: 'CAPTAIN'
+        joinedAt: '2024-11-15'
     },
     {
-        id: '100002',
-        nickname: 'ViperStrike',
-        firstName: 'Bobur',
+        id: '19283746',
+        nickname: 'ShadowSlayer',
+        firstName: 'Bekzod',
         lastName: 'Aliyev',
-        telegram: 'viper_uz',
-        avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=ViperStrike',
-        level: 12,
-        gamesPlayed: 98,
+        telegram: '@shadow_slayer',
+        level: 38,
+        gamesPlayed: 120,
         teamId: 'team_01',
         isActive: true,
         gameProfiles: [
-            { game: 'PUBG_MOBILE', inGameNickname: 'ViperPUBG', gameId: '87654321' }
+            { game: 'PUBG_MOBILE', inGameNickname: 'Shadow_UZ', gameId: '5987654321' }
         ],
-        joinedAt: '2025-01-02',
-        role: 'MEMBER'
+        joinedAt: '2025-01-10'
     },
     {
-        id: '100003',
-        nickname: 'ProGamer99',
-        firstName: 'Javohir',
-        lastName: 'Eshonqulov',
-        telegram: 'pro_javoh',
-        avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=ProGamer99',
-        level: 5,
-        gamesPlayed: 20,
-        isActive: true, // No team, but active
-        gameProfiles: [
-            { game: 'MLBB', inGameNickname: 'PG99', gameId: '11223344' }
-        ],
-        joinedAt: '2025-01-05',
-    },
-    {
-        id: '100004',
+        id: '56473829',
         nickname: 'MysticMage',
-        firstName: 'Sarvar',
-        lastName: 'Qodirov',
-        telegram: 'mystic_mage',
-        avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=MysticMage',
+        firstName: 'Diyor',
+        lastName: 'Tursunov',
+        telegram: '@diyor_mage',
         level: 25,
-        gamesPlayed: 300,
+        gamesPlayed: 80,
+        teamId: 'team_01',
+        isActive: true,
+        gameProfiles: [
+            { game: 'MLBB', inGameNickname: 'Mystic_M', gameId: '87654321' }
+        ],
+        joinedAt: '2025-01-11'
+    },
+    {
+        id: '37482910',
+        nickname: 'NoobMaster',
+        firstName: 'Sanjar',
+        lastName: 'Karimov',
+        telegram: '@sanjar_k',
+        level: 5,
+        gamesPlayed: 10,
+        teamId: undefined, // Free agent
+        isActive: true,
+        gameProfiles: [
+            { game: 'PUBG_MOBILE', inGameNickname: 'Sanjar_K', gameId: '555555555' }
+        ],
+        joinedAt: '2025-01-20'
+    },
+    {
+        id: '28374650', // Team 2 Owner
+        nickname: 'LegionCommander',
+        firstName: 'Otabek',
+        lastName: 'Juraev',
+        telegram: '@legion_cmd',
+        level: 45,
+        gamesPlayed: 200,
         teamId: 'team_02',
         isActive: true,
         gameProfiles: [
-            { game: 'MLBB', inGameNickname: 'Mystic', gameId: '99887766' }
+            { game: 'MLBB', inGameNickname: 'LC_Otabek', gameId: '999888777' }
         ],
-        joinedAt: '2024-12-15',
-        role: 'CAPTAIN'
-    },
-    {
-        id: '999999', // Simulate CURRENT USER
-        nickname: 'HumoGladiator',
-        firstName: 'Abduvoris',
-        lastName: 'X',
-        telegram: 'abduvoris_x',
-        avatar: 'https://api.dicebear.com/9.x/avataaars/svg?seed=HumoGladiator',
-        level: 1,
-        gamesPlayed: 0,
-        isActive: false, // Inactive validation test
-        gameProfiles: [],
-        joinedAt: '2026-01-20',
+        joinedAt: '2024-12-01'
     }
 ];
 
@@ -88,15 +84,15 @@ export const MOCK_TEAMS: Team[] = [
         name: 'Shadows Gaming',
         tag: 'SHDW',
         logo: 'https://api.dicebear.com/9.x/identicon/svg?seed=Shadows&backgroundColor=000000',
-        ownerId: '100001',
-        captainId: '100001',
+        ownerId: '19283746', // ShadowSlayer
+        captainId: '19283746',
         level: 18,
         members: [
-            { playerId: '100001', role: 'OWNER', joinedAt: '2025-01-10' },
-            { playerId: '100002', role: 'MEMBER', joinedAt: '2025-01-11' }
+            { playerId: '19283746', role: 'OWNER', joinedAt: '2025-01-10' },
+            { playerId: '56473829', role: 'MEMBER', joinedAt: '2025-01-11' }
         ],
         requests: [
-            { playerId: '100003', requestedAt: '2025-01-15', status: 'PENDING' }
+            { playerId: '37482910', requestedAt: '2025-01-15', status: 'PENDING' }
         ],
         invites: [],
         createdAt: '2025-01-10',
@@ -107,11 +103,11 @@ export const MOCK_TEAMS: Team[] = [
         name: 'Mystic Legion',
         tag: 'MYST',
         logo: 'https://api.dicebear.com/9.x/identicon/svg?seed=Mystic&backgroundColor=000000',
-        ownerId: '100004',
-        captainId: '100004',
+        ownerId: '28374650', // LegionCommander
+        captainId: '28374650',
         level: 25,
         members: [
-            { playerId: '100004', role: 'OWNER', joinedAt: '2024-12-20' }
+            { playerId: '28374650', role: 'OWNER', joinedAt: '2024-12-20' }
         ],
         requests: [],
         invites: [],

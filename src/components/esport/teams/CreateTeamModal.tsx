@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Team } from '@/lib/esport-types';
 import { MOCK_TEAMS } from '@/lib/esport-data';
+import { compressImage } from '@/lib/image-utils';
 import { X, Upload, Shield } from 'lucide-react';
 
 interface CreateTeamModalProps {
@@ -17,7 +18,25 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
     const [name, setName] = useState('');
     const [tag, setTag] = useState('');
     const [logo, setLogo] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const base64 = await compressImage(file);
+            setLogo(base64);
+            setErrors(prev => ({ ...prev, logo: '' })); // Clear error
+        } catch (err) {
+            console.error(err);
+            setErrors(prev => ({ ...prev, logo: 'Failed to process image' }));
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const validate = (): boolean => {
         const newErrors: Record<string, string> = {};
