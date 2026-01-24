@@ -72,7 +72,7 @@ function TournamentCard({ tournament, t }: { tournament: any, t: any }) {
         <EsportCard className="h-full flex flex-col">
             <div className="flex justify-between items-start mb-4">
                 <StatusBadge status={tournament.status} />
-                <div className="text-xs font-bold text-neutral-500 uppercase">{tournament.game}</div>
+                <div className="text-xs font-bold text-neutral-500 uppercase">{tournament.game.replace('_', ' ')}</div>
             </div>
 
             <h4 className="text-xl font-bold mb-2 flex-1">{tournament.name}</h4>

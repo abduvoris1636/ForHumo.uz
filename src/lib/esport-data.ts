@@ -122,7 +122,7 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         id: 'tour_autumn_2025',
         name: 'Autumn Tournament',
         season: '2025-2026',
-        status: 'CANCELLED',
+        status: 'FINISHED',
         startDate: '2025-11-10',
         endDate: '2025-11-14',
         game: 'MLBB',
@@ -134,12 +134,12 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         id: 'tour_winter_2025',
         name: 'Winter Tournament',
         season: '2025-2026',
-        status: 'UPCOMING',
+        status: 'LIVE',
         startDate: '2026-02-10',
         game: 'MLBB',
         prizePool: '500,000 UZS',
         maxTeams: 16,
-        registeredTeams: []
+        registeredTeams: [] // Currently empty
     },
     {
         id: 'tour_spring_2026',
