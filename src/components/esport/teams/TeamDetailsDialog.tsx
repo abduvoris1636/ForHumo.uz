@@ -241,215 +241,205 @@ export function TeamDetailsDialog({ teamId, isOpen, onClose, onJoinRequest, user
                                         <div className="text-xs text-neutral-500 uppercase">Level</div>
                                     </div>
                                     <div className="p-4 rounded-lg bg-black/50 border border-white/5 text-center">
-                                        {/* Stats Grid */}
+                                        <Calendar className="w-5 h-5 text-blue-500 mx-auto mb-2" />
+                                        <div className="text-lg font-bold text-white">{new Date(team.createdAt).getFullYear()}</div>
+                                        <div className="text-xs text-neutral-500 uppercase">Est.</div>
                                     </div>
-                                    {/* Stats Grid End */}
                                 </div>
-                                <div className="p-4 rounded-lg bg-black/50 border border-white/5 text-center">
-                                    <Calendar className="w-5 h-5 text-blue-500 mx-auto mb-2" />
-                                    <div className="text-lg font-bold text-white">{new Date(team.createdAt).getFullYear()}</div>
-                                    <div className="text-xs text-neutral-500 uppercase">Est.</div>
-                                </div>
-                            </div>
 
-                            {/* INVITE CODE SECTION (Owner Only) */}
-                            {!isDisbanded && currentUserRole === 'OWNER' && (
-                                <div className="bg-neutral-800/30 rounded-lg p-5 border border-white/5 flex items-center justify-between">
-                                    <div>
-                                        <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1 flex items-center gap-2">
-                                            <KeyRound size={14} /> Invite Code
-                                        </h4>
-                                        <p className="text-[10px] text-neutral-500">Share this code to let players join instantly.</p>
-                                    </div>
-                                    {inviteCode ? (
-                                        <div className="flex items-center gap-2">
-                                            <div className="px-3 py-1 bg-black rounded border border-blue-500/30 font-mono text-blue-400 font-bold tracking-widest text-lg">
-                                                {inviteCode}
-                                            </div>
-                                            <button
-                                                onClick={() => navigator.clipboard.writeText(inviteCode)}
-                                                className="p-2 bg-neutral-700 hover:bg-neutral-600 rounded text-neutral-300"
-                                                title="Copy"
-                                            >
-                                                <Check size={16} />
-                                            </button>
+                                {/* INVITE CODE SECTION (Owner Only) */}
+                                {!isDisbanded && currentUserRole === 'OWNER' && (
+                                    <div className="bg-neutral-800/30 rounded-lg p-5 border border-white/5 flex items-center justify-between">
+                                        <div>
+                                            <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+                                                <KeyRound size={14} /> Invite Code
+                                            </h4>
+                                            <p className="text-[10px] text-neutral-500">Share this code to let players join instantly.</p>
                                         </div>
-                                    ) : (
-                                        <button
-                                            onClick={handleGenerateInvite}
-                                            className="px-4 py-2 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-600/30 rounded text-xs font-bold transition-all"
-                                        >
-                                            Generate Code
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-
-                            {/* PENDING REQUESTS (Owner Only) */}
-                            {!isDisbanded && currentUserRole === 'OWNER' && team.requests.some(r => r.status === 'PENDING') && (
-                                <div className="bg-neutral-800/50 rounded-lg p-4 border border-white/5">
-                                    <h4 className="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                        <Users size={14} /> Pending Requests
-                                    </h4>
-                                    <div className="space-y-2">
-                                        {team.requests.filter(r => r.status === 'PENDING').map(req => {
-                                            const profile = MOCK_PLAYERS.find(p => p.id === req.playerId);
-                                            // Note: In strict DB mode, we would need 'include: { user: true }' in repository.
-                                            // Falling back to ID if name not found.
-                                            return (
-                                                <div key={req.id} className="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center text-xs font-bold">
-                                                            {profile?.nickname?.[0] || '?'}
-                                                        </div>
-                                                        <div className="font-bold text-sm text-white">
-                                                            {profile?.nickname || `User ${req.playerId.substring(0, 5)}...`}
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button
-                                                            onClick={() => handleAcceptRequest(req.id)}
-                                                            className="px-3 py-1 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white border border-green-500/20 rounded text-xs font-bold transition-all"
-                                                        >
-                                                            Accept
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleRejectRequest(req.id)}
-                                                            className="px-3 py-1 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20 rounded text-xs font-bold transition-all"
-                                                        >
-                                                            Reject
-                                                        </button>
-                                                    </div>
+                                        {inviteCode ? (
+                                            <div className="flex items-center gap-2">
+                                                <div className="px-3 py-1 bg-black rounded border border-blue-500/30 font-mono text-blue-400 font-bold tracking-widest text-lg">
+                                                    {inviteCode}
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Members List */}
-                            <div>
-                                <h4 className="text-sm font-bold text-neutral-400 uppercase tracking-wider mb-3">
-                                    Members ({team.members.length})
-                                </h4>
-                                <div className="space-y-2">
-                                    {enrichedMembers.map(member => (
-                                        <div key={member.playerId} className={`relative flex items-center justify-between p-3 rounded-lg bg-black/30 border border-white/5 ${isDisbanded ? 'opacity-50' : 'hover:border-white/10'} transition-colors group`}>
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-400 font-bold border border-white/5 overflow-hidden">
-                                                    {member.avatar ? <Image src={member.avatar} alt={member.nickname || 'User'} width={40} height={40} /> : member.nickname?.substring(0, 1) || '?'}
-                                                </div>
-                                                <div>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="font-bold text-white">{member.nickname || 'Unknown'}</span>
-                                                        {member.role === 'OWNER' && <Crown size={14} className="text-yellow-500" />}
-                                                        {member.role === 'CAPTAIN' && <Shield size={14} className="text-blue-500" />}
-                                                    </div>
-                                                    <span className="text-[10px] text-neutral-500 uppercase tracking-wider">{member.role}</span>
-                                                </div>
+                                                <button
+                                                    onClick={() => navigator.clipboard.writeText(inviteCode)}
+                                                    className="p-2 bg-neutral-700 hover:bg-neutral-600 rounded text-neutral-300"
+                                                    title="Copy"
+                                                >
+                                                    <Check size={16} />
+                                                </button>
                                             </div>
+                                        ) : (
+                                            <button
+                                                onClick={handleGenerateInvite}
+                                                className="px-4 py-2 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-600/30 rounded text-xs font-bold transition-all"
+                                            >
+                                                Generate Code
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
 
-                                            {/* Actions */}
-                                            {!isDisbanded && (currentUserRole === 'OWNER' || (currentUserRole === 'CAPTAIN' && member.role === 'MEMBER')) && member.playerId !== currentUserId && (
-                                                <div className="relative">
-                                                    <button
-                                                        onClick={() => setActionMemberId(actionMemberId === member.playerId ? null : member.playerId)}
-                                                        className="p-2 text-neutral-500 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                                                    >
-                                                        <MoreVertical size={16} />
-                                                    </button>
-
-                                                    {actionMemberId === member.playerId && (
-                                                        <div className="absolute right-0 top-full mt-2 w-48 bg-neutral-900 border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden py-1">
-                                                            {currentUserRole === 'OWNER' && (
-                                                                <>
-                                                                    {member.role !== 'CAPTAIN' ? (
-                                                                        <button onClick={() => handlePromoteCaptain(member.playerId)} className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:bg-white/5 hover:text-white flex items-center gap-2">
-                                                                            <Shield size={14} className="text-blue-500" /> Promote to Captain
-                                                                        </button>
-                                                                    ) : (
-                                                                        <button onClick={() => handleDemoteCaptain(member.playerId)} className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:bg-white/5 hover:text-white flex items-center gap-2">
-                                                                            <UserMinus size={14} /> Demote to Member
-                                                                        </button>
-                                                                    )}
-                                                                    <button onClick={() => handleTransfer(member.playerId, member.nickname || 'User')} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 border-t border-white/5">
-                                                                        <Crown size={14} /> Transfer Ownership
-                                                                    </button>
-                                                                </>
-                                                            )}
-                                                            <button onClick={() => handleKick(member.playerId, member.nickname || 'User')} className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2">
-                                                                <X size={14} /> Kick Member
+                                {/* PENDING REQUESTS (Owner Only) */}
+                                {!isDisbanded && currentUserRole === 'OWNER' && team.requests.some(r => r.status === 'PENDING') && (
+                                    <div className="bg-neutral-800/50 rounded-lg p-4 border border-white/5">
+                                        <h4 className="text-xs font-bold text-yellow-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                            <Users size={14} /> Pending Requests
+                                        </h4>
+                                        <div className="space-y-2">
+                                            {team.requests.filter(r => r.status === 'PENDING').map(req => {
+                                                const profile = MOCK_PLAYERS.find(p => p.id === req.playerId);
+                                                return (
+                                                    <div key={req.id} className="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center text-xs font-bold">
+                                                                {profile?.nickname?.[0] || '?'}
+                                                            </div>
+                                                            <div className="font-bold text-sm text-white">
+                                                                {profile?.nickname || `User ${req.playerId.substring(0, 5)}...`}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button
+                                                                onClick={() => handleAcceptRequest(req.id)}
+                                                                className="px-3 py-1 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white border border-green-500/20 rounded text-xs font-bold transition-all"
+                                                            >
+                                                                Accept
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleRejectRequest(req.id)}
+                                                                className="px-3 py-1 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20 rounded text-xs font-bold transition-all"
+                                                            >
+                                                                Reject
                                                             </button>
                                                         </div>
-                                                    )}
-                                                </div>
-                                            )}
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
+                                    </div>
+                                )}
 
-                            {/* DANGER ZONE - DISBAND */}
-                            {!isDisbanded && currentUserRole === 'OWNER' && (
-                                <div className="pt-6 mt-6 border-t border-white/5">
-                                    <h4 className="text-sm font-bold text-red-500 uppercase tracking-wider mb-2">Danger Zone</h4>
-                                    <div className="p-4 rounded-lg bg-red-950/10 border border-red-500/20 flex items-center justify-between">
-                                        <div>
-                                            <div className="text-red-400 font-bold mb-1">Disband Team</div>
-                                            <div className="text-xs text-red-500/60 max-w-[250px]">
-                                                This action is irreversible. The team will be archived and no longer able to join tournaments.
+                                {/* Members List */}
+                                <div>
+                                    <h4 className="text-sm font-bold text-neutral-400 uppercase tracking-wider mb-3">
+                                        Members ({team.members.length})
+                                    </h4>
+                                    <div className="space-y-2">
+                                        {enrichedMembers.map(member => (
+                                            <div key={member.playerId} className={`relative flex items-center justify-between p-3 rounded-lg bg-black/30 border border-white/5 ${isDisbanded ? 'opacity-50' : 'hover:border-white/10'} transition-colors group`}>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-400 font-bold border border-white/5 overflow-hidden">
+                                                        {member.avatar ? <Image src={member.avatar} alt={member.nickname || 'User'} width={40} height={40} /> : member.nickname?.substring(0, 1) || '?'}
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold text-white">{member.nickname || 'Unknown'}</span>
+                                                            {member.role === 'OWNER' && <Crown size={14} className="text-yellow-500" />}
+                                                            {member.role === 'CAPTAIN' && <Shield size={14} className="text-blue-500" />}
+                                                        </div>
+                                                        <span className="text-[10px] text-neutral-500 uppercase tracking-wider">{member.role}</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Actions */}
+                                                {!isDisbanded && (currentUserRole === 'OWNER' || (currentUserRole === 'CAPTAIN' && member.role === 'MEMBER')) && member.playerId !== currentUserId && (
+                                                    <div className="relative">
+                                                        <button
+                                                            onClick={() => setActionMemberId(actionMemberId === member.playerId ? null : member.playerId)}
+                                                            className="p-2 text-neutral-500 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                                                        >
+                                                            <MoreVertical size={16} />
+                                                        </button>
+
+                                                        {actionMemberId === member.playerId && (
+                                                            <div className="absolute right-0 top-full mt-2 w-48 bg-neutral-900 border border-white/10 rounded-xl shadow-xl z-20 overflow-hidden py-1">
+                                                                {currentUserRole === 'OWNER' && (
+                                                                    <>
+                                                                        {member.role !== 'CAPTAIN' ? (
+                                                                            <button onClick={() => handlePromoteCaptain(member.playerId)} className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:bg-white/5 hover:text-white flex items-center gap-2">
+                                                                                <Shield size={14} className="text-blue-500" /> Promote to Captain
+                                                                            </button>
+                                                                        ) : (
+                                                                            <button onClick={() => handleDemoteCaptain(member.playerId)} className="w-full text-left px-4 py-2 text-sm text-neutral-300 hover:bg-white/5 hover:text-white flex items-center gap-2">
+                                                                                <UserMinus size={14} /> Demote to Member
+                                                                            </button>
+                                                                        )}
+                                                                        <button onClick={() => handleTransfer(member.playerId, member.nickname || 'User')} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 border-t border-white/5">
+                                                                            <Crown size={14} /> Transfer Ownership
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                                <button onClick={() => handleKick(member.playerId, member.nickname || 'User')} className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 flex items-center gap-2">
+                                                                    <X size={14} /> Kick Member
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
-                                        <button
-                                            onClick={handleDisband}
-                                            className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-colors"
-                                        >
-                                            Disband
-                                        </button>
+                                        ))}
                                     </div>
                                 </div>
-                            )}
+
+                                {/* DANGER ZONE - DISBAND */}
+                                {!isDisbanded && currentUserRole === 'OWNER' && (
+                                    <div className="pt-6 mt-6 border-t border-white/5">
+                                        <h4 className="text-sm font-bold text-red-500 uppercase tracking-wider mb-2">Danger Zone</h4>
+                                        <div className="p-4 rounded-lg bg-red-950/10 border border-red-500/20 flex items-center justify-between">
+                                            <div>
+                                                <div className="text-red-400 font-bold mb-1">Disband Team</div>
+                                                <div className="text-xs text-red-500/60 max-w-[250px]">
+                                                    This action is irreversible. The team will be archived and no longer able to join tournaments.
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={handleDisband}
+                                                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition-colors"
+                                            >
+                                                Disband
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                </div>
                     </motion.div>
 
-                    {/* Confirmation Modal */ }
-    {
-        confirmAction && (
-            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                <motion.div
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="bg-neutral-900 border border-white/10 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl"
-                >
-                    <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mx-auto">
-                        <AlertTriangle size={24} />
-                    </div>
-                    <div className="text-center space-y-2">
-                        <h3 className="text-lg font-bold text-white">
-                            {confirmAction.type === 'TRANSFER' ? 'Transfer Ownership?' :
-                                confirmAction.type === 'KICK' ? 'Kick Member?' :
-                                    confirmAction.type === 'DISBAND' ? 'Disband Team?' :
-                                        'Leave Team?'}
-                        </h3>
-                        <p className="text-sm text-neutral-400">
-                            {confirmAction.type === 'TRANSFER' && `Are you sure you want to transfer ownership to ${confirmAction.name}? You will become a member.`}
-                            {confirmAction.type === 'KICK' && `Are you sure you want to remove ${confirmAction.name} from the team?`}
-                            {confirmAction.type === 'LEAVE' && `Are you sure you want to leave this team?`}
-                            {confirmAction.type === 'DISBAND' && `Are you sure you want to disband this team? Usage history will be preserved, but all members will be kicked and invitations revoked.`}
-                        </p>
-                    </div>
-                    <div className="flex gap-3 pt-2">
-                        <button onClick={() => setConfirmAction(null)} className="flex-1 py-2.5 rounded-xl bg-neutral-800 text-neutral-300 font-bold text-sm hover:bg-neutral-700">Cancel</button>
-                        <button onClick={confirm} className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-bold text-sm hover:bg-red-500">Confirm</button>
-                    </div>
-                </motion.div>
-            </div>
-        )
-    }
-                </div >
-            )
-}
-        </AnimatePresence >
+                    {/* Confirmation Modal */}
+                    {confirmAction && (
+                        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="bg-neutral-900 border border-white/10 p-6 rounded-2xl max-w-sm w-full space-y-4 shadow-2xl"
+                            >
+                                <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 mx-auto">
+                                    <AlertTriangle size={24} />
+                                </div>
+                                <div className="text-center space-y-2">
+                                    <h3 className="text-lg font-bold text-white">
+                                        {confirmAction.type === 'TRANSFER' ? 'Transfer Ownership?' :
+                                            confirmAction.type === 'KICK' ? 'Kick Member?' :
+                                                confirmAction.type === 'DISBAND' ? 'Disband Team?' :
+                                                    'Leave Team?'}
+                                    </h3>
+                                    <p className="text-sm text-neutral-400">
+                                        {confirmAction.type === 'TRANSFER' && `Are you sure you want to transfer ownership to ${confirmAction.name}? You will become a member.`}
+                                        {confirmAction.type === 'KICK' && `Are you sure you want to remove ${confirmAction.name} from the team?`}
+                                        {confirmAction.type === 'LEAVE' && `Are you sure you want to leave this team?`}
+                                        {confirmAction.type === 'DISBAND' && `Are you sure you want to disband this team? Usage history will be preserved, but all members will be kicked and invitations revoked.`}
+                                    </p>
+                                </div>
+                                <div className="flex gap-3 pt-2">
+                                    <button onClick={() => setConfirmAction(null)} className="flex-1 py-2.5 rounded-xl bg-neutral-800 text-neutral-300 font-bold text-sm hover:bg-neutral-700">Cancel</button>
+                                    <button onClick={confirm} className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-bold text-sm hover:bg-red-500">Confirm</button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
+            )}
+        </AnimatePresence>
     );
 }
