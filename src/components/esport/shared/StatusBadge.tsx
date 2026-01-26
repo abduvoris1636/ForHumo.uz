@@ -48,7 +48,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
             getColors(status),
             className
         )}>
-        )}>
+
             {(status === 'LIVE' || status === 'ONGOING') && (
                 <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
