@@ -174,6 +174,7 @@ export interface CurrentUser {
     nickname: string;
     avatar: string;
     telegram?: string;
+    teamId?: string;
     isAdmin?: boolean; // For Role Based Access Control simulation
     role?: 'PLAYER' | 'ADMIN'; // explicit role field
     games: {
