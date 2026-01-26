@@ -145,7 +145,7 @@ export default function EsportHomePage() {
                                 </div>
                                 <div>
                                     <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('teams_label')}</div>
-                                    <div className="text-neutral-900 dark:text-white font-medium">{activeTournament.registeredTeams.length}/{activeTournament.maxTeams}</div>
+                                    <div className="text-neutral-900 dark:text-white font-medium">{activeTournament.teams.length}/{activeTournament.maxTeams}</div>
                                 </div>
                                 <div>
                                     <div className="text-sm text-neutral-500 uppercase tracking-wider font-bold">{t('start_date')}</div>
