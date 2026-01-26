@@ -30,6 +30,7 @@ export interface TeamMember {
 }
 
 export interface JoinRequest {
+    id: string;
     playerId: string;
     requestedAt: string;
     status: RequestStatus;
