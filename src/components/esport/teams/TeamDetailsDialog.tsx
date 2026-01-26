@@ -125,7 +125,37 @@ export function TeamDetailsDialog({ teamId, isOpen, onClose, onJoinRequest, user
         setConfirmAction({ type: 'DISBAND' });
     };
 
-    // ... (Keep handleAccept/Reject from previous phase) ...
+    const handleAcceptRequest = async (requestId: string) => {
+        if (!currentUserId) return;
+        try {
+            const res = await fetch('/api/teams/join-request/accept', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ requestId, ownerId: currentUserId })
+            });
+            if (!res.ok) throw new Error('Failed to accept');
+            window.location.reload();
+        } catch (e) {
+            console.error(e);
+            alert("Error accepting request");
+        }
+    };
+
+    const handleRejectRequest = async (requestId: string) => {
+        if (!currentUserId) return;
+        try {
+            const res = await fetch('/api/teams/join-request/reject', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ requestId, ownerId: currentUserId })
+            });
+            if (!res.ok) throw new Error('Failed to reject');
+            window.location.reload();
+        } catch (e) {
+            console.error(e);
+            alert("Error rejecting request");
+        }
+    };
 
     const confirm = async () => {
         if (!confirmAction || !currentUserId) return;
