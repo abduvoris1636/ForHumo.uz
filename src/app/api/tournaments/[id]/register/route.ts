@@ -20,6 +20,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             return NextResponse.json({ error: 'Unauthorized: Only Owner or Captain can register team' }, { status: 403 })
         }
 
+        const team = await prisma.team.findUnique({
+            where: { id: teamId }
+        })
+        if (!team) return NextResponse.json({ error: 'Team not found' }, { status: 404 })
+
         // 2. Tournament Checks
         const tournament = await prisma.tournament.findUnique({
             where: { id: tournamentId },
@@ -56,7 +61,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         const registration = await prisma.tournamentTeam.create({
             data: {
                 tournamentId,
-                teamId
+                teamId,
+                snapshotName: team.name,
+                snapshotLogo: team.logo
             }
         })
 

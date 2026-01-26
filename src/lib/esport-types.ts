@@ -84,7 +84,7 @@ export interface Team {
 
 export type TeamStatus = Team['status'];
 
-export type TournamentStatus = 'UPCOMING' | 'LIVE' | 'FINISHED' | 'CANCELLED';
+export type TournamentStatus = 'UPCOMING' | 'LIVE' | 'COMPLETED' | 'CANCELLED';
 
 export interface TournamentTeam {
     teamId: string;
@@ -125,7 +125,7 @@ export interface Tournament {
     season: string; // "Autumn 2025"
     prizePool: number;
     maxTeams: number;
-    status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
+    status: TournamentStatus;
 
     game: GameType;
     startDate: string;

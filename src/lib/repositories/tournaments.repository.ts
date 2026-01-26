@@ -8,6 +8,7 @@ const AUTUMN_2025: Tournament = {
     name: 'Humo Autumn Cup 2025',
     season: 'Autumn 2025',
     prizePool: 200000,
+    maxTeams: 16,
     status: 'COMPLETED',
     game: 'PUBG_MOBILE',
     startDate: '2025-09-01',
@@ -41,6 +42,7 @@ const mapPrismaToTournament = (t: any): Tournament => ({
     name: t.name,
     season: t.season,
     prizePool: t.prizePool,
+    maxTeams: t.maxTeams || 16, // Default if missing
     status: t.status,
     game: t.game,
     startDate: t.startDate.toISOString(),

@@ -18,6 +18,23 @@ model User {
   role      UserRole @default(USER)
 }
 
+model PlayerProfile {
+  id          String   @id @default(cuid())
+  nickname    String   @unique
+  firstName   String
+  lastName    String
+  telegram    String
+  avatar      String?
+  
+  level       Int      @default(1)
+  gamesPlayed Int      @default(0)
+  isActive    Boolean  @default(false)
+  joinedAt    DateTime @default(now())
+  
+  mlbbInfo    Json?
+  pubgInfo    Json?
+}
+
 model Team {
   id        String   @id @default(cuid())
   name      String
@@ -29,7 +46,7 @@ model Team {
   owner     User     @relation(fields: [ownerId], references: [id])
 
   members       TeamMember[]
-  joinRequests  JoinRequest[]
+  requests      JoinRequest[]
   invites       TeamInvite[]
   tournaments   TournamentTeam[]
 }
@@ -95,13 +112,18 @@ model Tournament {
   id          String           @id @default(cuid())
   name        String
   slug        String           @unique
+  season      String
   game        String
+  prizePool   Int
   maxTeams    Int
   status      TournamentStatus @default(UPCOMING)
   startDate   DateTime
+  endDate     DateTime?
   createdAt   DateTime         @default(now())
 
   teams       TournamentTeam[]
+  matches     TournamentMatch[]
+  standings   TournamentStanding[]
 }
 
 model TournamentTeam {
@@ -109,15 +131,64 @@ model TournamentTeam {
   tournamentId  String
   teamId        String
   registeredAt  DateTime   @default(now())
+  
+  snapshotName  String
+  snapshotLogo  String?
 
   tournament    Tournament @relation(fields: [tournamentId], references: [id])
   team          Team       @relation(fields: [teamId], references: [id])
 
+  matchesAsA    TournamentMatch[] @relation("TeamA")
+  matchesAsB    TournamentMatch[] @relation("TeamB")
+  matchesWon    TournamentMatch[] @relation("Winner")
+  standings     TournamentStanding[]
+
   @@unique([tournamentId, teamId])
+}
+
+model TournamentMatch {
+  id          String   @id @default(cuid())
+  matchNumber Int
+  stage       String
+  date        DateTime
+  time        String
+
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+
+  teamAId     String
+  teamA       TournamentTeam @relation("TeamA", fields: [teamAId], references: [id])
+
+  teamBId     String
+  teamB       TournamentTeam @relation("TeamB", fields: [teamBId], references: [id])
+
+  scoreA      Int?
+  scoreB      Int?
+
+  winnerId    String?
+  winner      TournamentTeam? @relation("Winner", fields: [winnerId], references: [id])
+
+  status      String
+  youtubeUrl  String?
+  adminNote   String?
+}
+
+model TournamentStanding {
+  id          String   @id @default(cuid())
+  position    Int
+  prize       Int
+  proofUrl    String?
+  
+  tournamentId String
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+
+  teamId      String
+  team        TournamentTeam @relation(fields: [teamId], references: [id])
 }
 
 enum TournamentStatus {
   UPCOMING
-  ONGOING
-  FINISHED
+  LIVE
+  COMPLETED
+  CANCELLED
 }

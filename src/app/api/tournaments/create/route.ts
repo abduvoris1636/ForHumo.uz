@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function POST(req: Request) {
     try {
         const body = await req.json()
-        const { name, slug, game, maxTeams, startDate, requesterId } = body
+        const { name, slug, game, maxTeams, startDate, requesterId, season, prizePool } = body
 
         if (!name || !slug || !game || !maxTeams || !startDate || !requesterId) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
@@ -28,6 +28,8 @@ export async function POST(req: Request) {
                 name,
                 slug,
                 game,
+                season: season || ' Season 1',
+                prizePool: prizePool ? parseInt(prizePool) : 0,
                 maxTeams: parseInt(maxTeams),
                 startDate: new Date(startDate),
                 status: 'UPCOMING'
