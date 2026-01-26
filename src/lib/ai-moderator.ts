@@ -1,15 +1,15 @@
-import { Match, ValidationResult } from './esport-types';
+import { TournamentMatch, ValidationResult } from './esport-types';
 
-export function validateMatchUpdate(match: Partial<Match>): ValidationResult {
+export function validateMatchUpdate(match: Partial<TournamentMatch>): ValidationResult {
     const flags: string[] = [];
 
     // Rule 1: Negative Scores
-    if ((match.scoreA !== undefined && match.scoreA < 0) || (match.scoreB !== undefined && match.scoreB < 0)) {
+    if ((match.scoreA !== undefined && match.scoreA !== null && match.scoreA < 0) || (match.scoreB !== undefined && match.scoreB !== null && match.scoreB < 0)) {
         flags.push("Impossible Score: Negative value detected");
     }
 
     // Rule 2: Same Team
-    if (match.teamAId && match.teamBId && match.teamAId === match.teamBId) {
+    if (match.teamA?.id && match.teamB?.id && match.teamA.id === match.teamB.id) {
         flags.push("Logic Error: Team cannot play against itself");
     }
 
