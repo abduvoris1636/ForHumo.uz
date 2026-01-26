@@ -124,6 +124,7 @@ export interface Tournament {
     name: string;
     season: string; // "Autumn 2025"
     prizePool: number;
+    maxTeams: number;
     status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
 
     game: GameType;
