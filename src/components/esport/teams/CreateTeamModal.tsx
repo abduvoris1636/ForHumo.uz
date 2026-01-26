@@ -18,8 +18,13 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
     const [name, setName] = useState('');
     const [tag, setTag] = useState('');
     const [logo, setLogo] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Initial Load
+    // Note: We rely on API response and page reload for data sync in Phase 5B.
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -66,26 +71,46 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = () => {
-        if (validate()) {
-            const newTeam: Team = {
-                id: `team_${Date.now()}`, // Auto-generated ID
-                name: name.trim(),
-                tag: tag,
-                logo: logo,
-                ownerId: currentUserId,
-                captainId: currentUserId,
-                level: 1,
-                members: [
-                    { playerId: currentUserId, role: 'OWNER', joinedAt: new Date().toISOString() }
-                ],
-                requests: [],
-                invites: [],
-                createdAt: new Date().toISOString().split('T')[0],
-                stats: { wins: 0, losses: 0, tournamentsPlayed: 0 }
-            };
-            onSave(newTeam);
+    // We can use the store to update local state if we want, or rely on SWR/refresh.
+    // For now, let's keep it simple: API call -> Reload Page or Store.initialize()
+
+    const handleCreate = async () => {
+        if (!validate()) {
+            return;
+        }
+
+        setError('');
+        setIsLoading(true);
+
+        try {
+            const res = await fetch('/api/teams/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: name.trim(),
+                    tag,
+                    logo,
+                    ownerId: currentUserId
+                }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Failed to create team');
+            }
+
+            const team = await res.json();
+
+            // Success
             onClose();
+            // Optional: Trigger a refresh of the teams list here. 
+            // For Phase 5B, a full page reload is safest to see DB data if the list pulls from DB.
+            window.location.reload();
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -167,18 +192,22 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
+                    <div className="p-6 border-t border-white/5 flex justify-end gap-3 bg-black/20">
                         <button
+                            type="button"
                             onClick={onClose}
-                            className="px-4 py-2 rounded font-medium text-zinc-400 hover:text-white transition-colors"
+                            className="px-4 py-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 transition-colors text-sm font-bold"
+                            disabled={isLoading}
                         >
                             Cancel
                         </button>
                         <button
-                            onClick={handleSubmit}
-                            className="px-6 py-2 rounded font-bold bg-green-500 text-black hover:bg-green-400 transition-colors shadow-[0_0_15px_-3px_rgba(34,197,94,0.4)]"
+                            type="submit"
+                            disabled={isLoading}
+                            onClick={handleCreate}
+                            className="px-6 py-2 rounded-lg bg-green-500 hover:bg-green-400 text-black font-black uppercase text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Create Team
+                            {isLoading ? 'Creating...' : 'Create Team'}
                         </button>
                     </div>
                 </div>

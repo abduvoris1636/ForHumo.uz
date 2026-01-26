@@ -79,6 +79,52 @@ export const MOCK_PLAYERS: Player[] = [
     }
 ];
 
+// Mock Users for Auth Simulation
+export const MOCK_USERS: import('./esport-types').MockUser[] = [
+    {
+        id: 'U7#m9$Kp', // Phoenix_99
+        nickname: 'Phoenix_99',
+        role: 'PLAYER',
+        teamId: 'team_03', // Assuming team owner? Logic will check Store.
+        avatar: undefined
+    },
+    {
+        id: 'X2$rL8*v', // ShadowSlayer (Owner of Shadows Gaming)
+        nickname: 'ShadowSlayer',
+        role: 'PLAYER',
+        teamId: 'team_01',
+        avatar: undefined
+    },
+    {
+        id: 'Q9@kM4!z', // MysticMage (Member of Shadows Gaming)
+        nickname: 'MysticMage',
+        role: 'PLAYER',
+        teamId: 'team_01',
+        avatar: undefined
+    },
+    {
+        id: 'W5&tP7#y', // NoobMaster (Free Agent)
+        nickname: 'NoobMaster',
+        role: 'PLAYER',
+        teamId: undefined,
+        avatar: undefined
+    },
+    {
+        id: 'H3*bN6$m', // LegionCommander (Owner of Team 2)
+        nickname: 'LegionCommander',
+        role: 'PLAYER',
+        teamId: 'team_02',
+        avatar: undefined
+    },
+    {
+        id: 'ADMIN_001', // Admin User
+        nickname: 'HumoAdmin',
+        role: 'ADMIN',
+        isAdmin: true,
+        avatar: undefined
+    }
+];
+
 export const MOCK_TEAMS: Team[] = [
     {
         id: 'team_01',
@@ -97,7 +143,8 @@ export const MOCK_TEAMS: Team[] = [
         ],
         invites: [],
         createdAt: '2025-01-10',
-        stats: { wins: 15, losses: 5, tournamentsPlayed: 2 }
+        stats: { wins: 15, losses: 5, tournamentsPlayed: 2 },
+        status: 'ACTIVE'
     },
     {
         id: 'team_02',
@@ -113,7 +160,8 @@ export const MOCK_TEAMS: Team[] = [
         requests: [],
         invites: [],
         createdAt: '2024-12-20',
-        stats: { wins: 40, losses: 12, tournamentsPlayed: 5 }
+        stats: { wins: 40, losses: 12, tournamentsPlayed: 5 },
+        status: 'ACTIVE'
     }
 ];
 

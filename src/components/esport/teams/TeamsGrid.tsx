@@ -10,183 +10,104 @@ import { JoinByCodeModal } from './JoinByCodeModal';
 import { TeamDetailsDialog } from './TeamDetailsDialog';
 import { Search, PlusCircle, Users, KeyRound, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const MY_TEAM_STORAGE_KEY = 'humo_esport_my_team_v2';
-const TEAMS_STATE_STORAGE_KEY = 'humo_esport_teams_state_v2';
-const CURRENT_USER_ID = 'U7#m9$Kp'; // Updated mock ID (Aziz - Secure)
+import { useTeamStore } from '@/lib/store/team-store';
+import { useAuthStore } from '@/store/auth-store';
 
 export function TeamsGrid() {
-    const [myTeam, setMyTeam] = useState<Team | null>(null);
-    const [teamsState, setTeamsState] = useState<Team[]>(MOCK_TEAMS);
+    const { teams, initialize: initTeams, getTeam, updateMemberRole } = useTeamStore();
+    const { currentUser, initialize: initAuth } = useAuthStore();
 
-    // Modals State
+    // Local UI State
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const [isManagementOpen, setIsManagementOpen] = useState(false); // New Unified Owner Modal
-    const [isJoinCodeModalOpen, setIsJoinCodeModalOpen] = useState(false); // For Player
-    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null); // For Team Dialog
+    const [isManagementOpen, setIsManagementOpen] = useState(false);
+    const [isJoinCodeModalOpen, setIsJoinCodeModalOpen] = useState(false);
+    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isMounted, setIsMounted] = useState(false);
 
-    // Initial Load & Merge
+    // Initial Load
     useEffect(() => {
+        initTeams();
+        initAuth();
         setIsMounted(true);
-        // Load My Team
-        const storedMyTeam = localStorage.getItem(MY_TEAM_STORAGE_KEY);
-        if (storedMyTeam) {
-            try { setMyTeam(JSON.parse(storedMyTeam)); } catch (e) { console.error(e); }
-        }
+    }, [initTeams, initAuth]);
 
-        // Load Global Teams State
-        const storedTeamsState = localStorage.getItem(TEAMS_STATE_STORAGE_KEY);
-        if (storedTeamsState) {
-            try {
-                const localState = JSON.parse(storedTeamsState) as Team[];
-                const mergedTeams = MOCK_TEAMS.map(mockTeam => {
-                    const override = localState.find(t => t.id === mockTeam.id);
-                    return override ? override : mockTeam;
-                });
-                setTeamsState(mergedTeams);
-            } catch (e) { console.error(e); }
-        }
-    }, []);
+    // Derived State
+    const currentUserId = currentUser?.id;
+    // Derive myTeam from store instead of local state
+    const myTeam = currentUserId ? teams.find(t => t.members.some(m => m.playerId === currentUserId)) || null : null;
 
-    // Helper to persist teams state
-    const updateTeamsState = (updatedTeams: Team[]) => {
-        setTeamsState(updatedTeams);
-        localStorage.setItem(TEAMS_STATE_STORAGE_KEY, JSON.stringify(updatedTeams));
+    // --- ACTIONS (Temporary Mocks or Store placeholders) ---
+    // In a real app, these would wrap Store Actions
+
+    const handleSendRequest = async (teamId: string) => {
+        if (!currentUserId) { alert("Please login first"); return; }
+
+        try {
+            const res = await fetch('/api/teams/join-request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ teamId, userId: currentUserId })
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Failed to send request');
+            }
+
+            // Success
+            alert("Join request sent!");
+            window.location.reload(); // Refresh to update UI state from DB
+        } catch (err: any) {
+            alert(err.message);
+        }
     };
 
     const handleCreateTeam = (newTeam: Team) => {
-        setMyTeam(newTeam);
-        localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(newTeam));
-        const updatedState = [...teamsState, newTeam];
-        setTeamsState(updatedState); // Add to local list too for immediate view? Actually usually my team is separate.
+        // TODO: Implement addTeam in useTeamStore
+        alert("Create Team simulated! (Logic pending migration to Store)");
         setIsCreateModalOpen(false);
     };
 
-    const handleUpdateTeam = (updatedTeam: Team) => {
-        setMyTeam(updatedTeam);
-        localStorage.setItem(MY_TEAM_STORAGE_KEY, JSON.stringify(updatedTeam));
-
-        // Also update in teamsState if present
-        const updatedState = teamsState.map(t => t.id === updatedTeam.id ? updatedTeam : t);
-        setTeamsState(updatedState);
-        localStorage.setItem(TEAMS_STATE_STORAGE_KEY, JSON.stringify(updatedState));
-    };
-
     const handleDeleteTeam = (teamId: string) => {
-        setMyTeam(null);
-        localStorage.removeItem(MY_TEAM_STORAGE_KEY);
-
-        // Note: In real app, we'd delete from server. Here just local state update if needed.
-        // If the team was in MOCK_TEAMS/teamsState, we might want to hide it, but for "My Team" logic it's mostly separate.
-        alert('Team deleted successfully.');
+        // TODO: Implement deleteTeam in useTeamStore
+        alert("Delete Team simulated! (Logic pending migration to Store)");
         setIsManagementOpen(false);
     };
 
-    // --- PHASE 2B: JOIN REQUEST LOGIC (Player Side) ---
-
-    // --- PHASE 5: STRICT RATE LIMIT (24H) ---
-    const handleSendRequest = (teamId: string) => {
-        if (myTeam) return;
-
-        // 1. Strict 24h Limit Check
-        const REQUEST_HISTORY_KEY = 'humo_esport_request_limits_v1';
-        const storedHistory = localStorage.getItem(REQUEST_HISTORY_KEY);
-        let history: number[] = storedHistory ? JSON.parse(storedHistory) : [];
-        const now = Date.now();
-        // Clean old requests (>24h)
-        history = history.filter(ts => now - ts < 24 * 60 * 60 * 1000);
-
-        if (history.length >= 5) {
-            alert('Rate Limit Reached: You can only send 5 join requests every 24 hours. Please try again later.');
-            return;
-        }
-
-        // 2. Duplicate Check
-        const targetTeam = teamsState.find(t => t.id === teamId);
-        if (!targetTeam) return;
-        if (targetTeam.requests.some(r => r.playerId === CURRENT_USER_ID && r.status === 'PENDING')) {
-            alert('You already have a pending request for this team.');
-            return;
-        }
-
-        // 3. Procced
-        const newRequest: JoinRequest = {
-            playerId: CURRENT_USER_ID,
-            requestedAt: new Date().toISOString(),
-            status: 'PENDING'
-        };
-
-        const updatedTeam = {
-            ...targetTeam,
-            requests: [...targetTeam.requests, newRequest]
-        };
-
-        const updatedState = teamsState.map(t => t.id === teamId ? updatedTeam : t);
-        updateTeamsState(updatedState);
-
-        // Update Limits
-        history.push(now);
-        localStorage.setItem(REQUEST_HISTORY_KEY, JSON.stringify(history));
-
-        alert(`Request sent to ${targetTeam.name}!`);
-        setSelectedTeamId(null); // Close dialog if open
+    const handleUpdateTeam = (updatedTeam: Team) => {
+        // TODO: Implement updateTeam in useTeamStore
+        alert("Update Team simulated! (Logic pending migration to Store)");
     };
 
-    // --- PHASE 2C: JOIN BY CODE (Player Side) ---
-    // ... (rest unchanged) ...
     const handleJoinByCode = async (code: string) => {
-        await new Promise(resolve => setTimeout(resolve, 800));
+        if (!currentUserId) { alert("Please login first"); return; }
 
-        const targetTeam = teamsState.find(t => t.joinCode?.code === code);
+        try {
+            const res = await fetch('/api/teams/invite/join', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, userId: currentUserId })
+            });
 
-        if (!targetTeam || !targetTeam.joinCode) {
-            throw new Error('Invalid code');
-        }
-
-        if (new Date(targetTeam.joinCode.expiresAt) < new Date()) {
-            throw new Error('Code expired');
-        }
-
-        if (myTeam) {
-            throw new Error('You are already in a team');
-        }
-
-        // Success: Join Logic
-        const updatedTeams = teamsState.map(t => {
-            if (t.id === targetTeam.id) {
-                const newMember: TeamMember = {
-                    playerId: CURRENT_USER_ID,
-                    role: 'MEMBER',
-                    joinedAt: new Date().toISOString()
-                };
-                // Consume Code (Invalidate)
-                return {
-                    ...t,
-                    members: [...t.members, newMember],
-                    joinCode: undefined
-                };
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Failed to join');
             }
-            // Clear other requests
-            if (t.requests.some(r => r.playerId === CURRENT_USER_ID)) {
-                return { ...t, requests: t.requests.filter(r => r.playerId !== CURRENT_USER_ID) };
-            }
-            return t;
-        });
 
-        updateTeamsState(updatedTeams);
-
-        // Update My State
-        const joinedTeam = updatedTeams.find(t => t.id === targetTeam.id);
-        if (joinedTeam) handleCreateTeam(joinedTeam);
+            const data = await res.json();
+            alert("Joined team successfully!");
+            window.location.reload();
+            setIsJoinCodeModalOpen(false);
+        } catch (err: any) {
+            throw new Error(err.message); // Pass to Modal to show error
+        }
     };
-
 
     // --- RENDER ---
 
-    const filteredTeams = teamsState.filter(t => {
+    const filteredTeams = teams.filter(t => {
         if (myTeam && t.id === myTeam.id) return false;
         const search = searchTerm.toLowerCase();
         return t.name.toLowerCase().includes(search) || t.tag.toLowerCase().includes(search);
@@ -285,8 +206,8 @@ export function TeamsGrid() {
 
                 {/* 2. OTHER TEAMS */}
                 {filteredTeams.map((team, idx) => {
-                    const isPending = team.requests.some(r => r.playerId === CURRENT_USER_ID && r.status === 'PENDING');
-                    const isOwner = team.ownerId === CURRENT_USER_ID;
+                    const isPending = team.requests.some(r => r.playerId === currentUserId && r.status === 'PENDING');
+                    const isOwner = team.ownerId === currentUserId;
 
                     return (
                         <motion.div key={team.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -315,7 +236,6 @@ export function TeamsGrid() {
                 isOpen={!!selectedTeamId}
                 onClose={() => setSelectedTeamId(null)}
                 teamId={selectedTeamId}
-                currentUserId={CURRENT_USER_ID}
                 userHasTeam={!!myTeam}
                 onJoinRequest={handleSendRequest}
             />
@@ -324,7 +244,7 @@ export function TeamsGrid() {
             <CreateTeamModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
-                currentUserId={CURRENT_USER_ID}
+                currentUserId={currentUserId || ''}
                 onSave={handleCreateTeam}
             />
 
@@ -341,19 +261,7 @@ export function TeamsGrid() {
             <JoinByCodeModal
                 isOpen={isJoinCodeModalOpen}
                 onClose={() => setIsJoinCodeModalOpen(false)}
-                onJoin={async (code) => {
-                    // Mock Logic for Join By Code
-                    // In real app, verify code on server -> get Team -> setMyTeam
-                    console.log('Joining with code:', code);
-                    // Simulate API call
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-
-                    // Mock Success finding a team (e.g., Team 1)
-                    const team = MOCK_TEAMS[0];
-                    // Add user to team logic would go here
-                    setMyTeam(team);
-                    alert(`Joined ${team.name} successfully!`);
-                }}
+                onJoin={handleJoinByCode}
             />
         </div>
     );

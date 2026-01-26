@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  nickname  String   @unique
+  createdAt DateTime @default(now())
+
+  teams     TeamMember[]
+  ownedTeams Team[]
+  sentRequests JoinRequest[]
+  role      UserRole @default(USER)
+}
+
+model Team {
+  id        String   @id @default(cuid())
+  name      String
+  tag       String   @unique
+  logo      String?
+  createdAt DateTime @default(now())
+  
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id])
+
+  members       TeamMember[]
+  joinRequests  JoinRequest[]
+  invites       TeamInvite[]
+  tournaments   TournamentTeam[]
+}
+
+model TeamInvite {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  teamId    String
+  createdBy String
+  expiresAt DateTime?
+  maxUses   Int      @default(1)
+  usedCount Int      @default(0)
+  createdAt DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id])
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  role      TeamRole
+  joinedAt  DateTime @default(now())
+
+  userId    String
+  teamId    String
+
+  user      User @relation(fields: [userId], references: [id])
+  team      Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+}
+
+enum TeamRole {
+  OWNER
+  CAPTAIN
+  MEMBER
+}
+
+model JoinRequest {
+  id        String            @id @default(cuid())
+  userId    String
+  teamId    String
+  status    JoinRequestStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+}
+
+enum JoinRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Tournament {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  game        String
+  maxTeams    Int
+  status      TournamentStatus @default(UPCOMING)
+  startDate   DateTime
+  createdAt   DateTime         @default(now())
+
+  teams       TournamentTeam[]
+}
+
+model TournamentTeam {
+  id            String     @id @default(cuid())
+  tournamentId  String
+  teamId        String
+  registeredAt  DateTime   @default(now())
+
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+  team          Team       @relation(fields: [teamId], references: [id])
+
+  @@unique([tournamentId, teamId])
+}
+
+enum TournamentStatus {
+  UPCOMING
+  ONGOING
+  FINISHED
+}

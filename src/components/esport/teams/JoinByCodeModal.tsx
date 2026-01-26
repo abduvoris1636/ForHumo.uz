@@ -19,8 +19,8 @@ export function JoinByCodeModal({ isOpen, onClose, onJoin }: JoinByCodeModalProp
         e.preventDefault();
         setError('');
 
-        if (code.length !== 5) {
-            setError('Code must be 5 characters');
+        if (code.length < 8) {
+            setError('Code must be 8 characters');
             return;
         }
 
@@ -52,10 +52,10 @@ export function JoinByCodeModal({ isOpen, onClose, onJoin }: JoinByCodeModalProp
                             autoFocus
                             value={code}
                             onChange={(e) => {
-                                setCode(e.target.value.toUpperCase().slice(0, 5));
+                                setCode(e.target.value.toUpperCase().slice(0, 8));
                                 setError('');
                             }}
-                            placeholder="T-X-Y-Z-A"
+                            placeholder="A1B2C3D4"
                             className={`w-full bg-black/50 border rounded-lg p-4 text-center text-3xl font-mono tracking-[0.5em] outline-none transition-all placeholder:tracking-normal placeholder:text-zinc-700
                                 ${error ? 'border-red-500 text-red-400' : 'border-zinc-700 focus:border-blue-500 text-white'}
                             `}
@@ -65,7 +65,7 @@ export function JoinByCodeModal({ isOpen, onClose, onJoin }: JoinByCodeModalProp
 
                     <button
                         type="submit"
-                        disabled={isLoading || code.length !== 5}
+                        disabled={isLoading || code.length < 8}
                         className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-800 disabled:text-zinc-600 rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
                     >
                         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Join Team'}

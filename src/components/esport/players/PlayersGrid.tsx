@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { Player } from '@/lib/esport-types';
-import { MOCK_PLAYERS, MOCK_TEAMS } from '@/lib/esport-data';
+import { PlayersRepository } from '@/lib/repositories';
+import { MOCK_TEAMS } from '@/lib/esport-data';
 import { PlayerCard } from './PlayerCard';
 import { EditProfileModal } from './EditProfileModal';
 import { TeamDetailsDialog } from '../teams/TeamDetailsDialog';
@@ -17,28 +18,38 @@ export function PlayersGrid() {
     const [currentUser, setCurrentUser] = useState<Player | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null); // For Team Dialog
-    const [isMounted, setIsMounted] = useState(false);
+    const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+    const [players, setPlayers] = useState<Player[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Initial Load
+    // Initial Load: Fetch Players & User
     useEffect(() => {
-        setIsMounted(true);
-        // Try to load from LocalStorage
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                setCurrentUser(JSON.parse(stored));
-            } catch (e) {
-                console.error('Failed to parse user data', e);
-                // Fallback to mock
-                const defaultUser = MOCK_PLAYERS.find(p => p.id === CURRENT_USER_ID);
-                if (defaultUser) setCurrentUser(defaultUser);
+        const initData = async () => {
+            // 1. Fetch All Players
+            const allPlayers = await PlayersRepository.getAll();
+            setPlayers(allPlayers);
+
+            // 2. Resolve Current User
+            const stored = localStorage.getItem(STORAGE_KEY);
+            let foundUser: Player | undefined;
+
+            if (stored) {
+                try {
+                    foundUser = JSON.parse(stored);
+                } catch (e) {
+                    console.error('Failed to parse user', e);
+                }
             }
-        } else {
-            // Fallback to mock
-            const defaultUser = MOCK_PLAYERS.find(p => p.id === CURRENT_USER_ID);
-            if (defaultUser) setCurrentUser(defaultUser);
-        }
+
+            if (!foundUser) {
+                foundUser = allPlayers.find(p => p.id === CURRENT_USER_ID);
+            }
+
+            if (foundUser) setCurrentUser(foundUser);
+            setIsLoading(false);
+        };
+
+        initData();
     }, []);
 
     const handleSaveProfile = (updatedPlayer: Player) => {
@@ -48,7 +59,7 @@ export function PlayersGrid() {
     };
 
     // Filter and Sort other players
-    const otherPlayers = MOCK_PLAYERS.filter(p => p.id !== CURRENT_USER_ID);
+    const otherPlayers = players.filter(p => p.id !== CURRENT_USER_ID);
 
     // Sort Logic: Active first, then Level desc
     const sortedPlayers = [...otherPlayers].sort((a, b) => {
@@ -69,7 +80,7 @@ export function PlayersGrid() {
         p.lastName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (!isMounted || !currentUser) {
+    if (isLoading || !currentUser) {
         return <div className="min-h-[50vh] flex items-center justify-center text-zinc-500">Loading IDs...</div>;
     }
 
@@ -100,6 +111,8 @@ export function PlayersGrid() {
         alert(`Request sent to team! (Mock Action)\n\nIn a full implementation, this would update the team's request list.`);
         setSelectedTeamId(null);
     };
+
+    if (isLoading) return <div className="text-center py-20 text-zinc-500">Loading players...</div>;
 
     return (
         <div className="space-y-8">
@@ -155,7 +168,6 @@ export function PlayersGrid() {
                 isOpen={!!selectedTeamId}
                 onClose={() => setSelectedTeamId(null)}
                 teamId={selectedTeamId}
-                currentUserId={CURRENT_USER_ID}
                 userHasTeam={!!currentUser.teamId}
                 onJoinRequest={handleJoinRequest}
             />

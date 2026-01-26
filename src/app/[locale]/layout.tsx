@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { Providers } from "@/app/providers";
 import { BackgroundEffects } from "@/components/background-effects";
 import { AuthBarrier } from "@/components/auth/auth-barrier";
+import { UserSwitcher } from "@/components/dev/UserSwitcher";
 import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -49,6 +50,7 @@ export default async function LocaleLayout({
                                 {children}
                             </main>
                             <Footer />
+                            <UserSwitcher />
                         </AuthBarrier>
                     </Providers>
                 </NextIntlClientProvider>

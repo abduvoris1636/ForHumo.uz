@@ -72,35 +72,69 @@ export interface Team {
         tournamentsPlayed: number;
     };
 
+    // Lifecycle
+    status: 'ACTIVE' | 'INACTIVE' | 'DISBANDED';
+    disbandedAt?: string;
+    disbandReason?: string;
+
     // Legacy support (optional, can remove if we fully migrate)
     pendingRequests?: never;
 }
 
+export type TeamStatus = Team['status'];
+
 export type TournamentStatus = 'UPCOMING' | 'LIVE' | 'FINISHED' | 'CANCELLED';
+
+export interface TournamentTeam {
+    teamId: string;
+    name: string; // Snapshot of name at tournament time
+    logo?: string;
+}
+
+export interface TournamentStanding {
+    position: number; // 1, 2, 3...
+    teamId: string;
+    prize: number; // Amount in currency (e.g. UZS)
+    proofUrl?: string; // Telegram link
+}
+
+export interface TournamentMatch {
+    id: string;
+    matchNumber: number;
+    stage: 'GROUP' | 'PLAYOFF_Q' | 'PLAYOFF_S' | 'FINAL'; // Added stage for better organization
+    date: string; // ISO Date "YYYY-MM-DD"
+    time: string; // "HH:MM"
+
+    teamA: { id: string; name: string; logo?: string }; // Snapshot
+    teamB: { id: string; name: string; logo?: string }; // Snapshot
+
+    scoreA: number | null;
+    scoreB: number | null;
+
+    winnerTeamId?: string;
+    status: 'SCHEDULED' | 'PLAYED' | 'CANCELLED' | 'TECHNICAL'; // Added TECHNICAL
+
+    youtubeUrl?: string;
+    adminNote?: string; // For technical defeats or issues
+}
 
 export interface Tournament {
     id: string;
     name: string;
-    season: string; // e.g., "2025-2026 Season"
-    status: TournamentStatus;
+    season: string; // "Autumn 2025"
+    prizePool: number;
+    status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
+
+    game: GameType;
     startDate: string;
     endDate?: string;
-    game: GameType;
-    prizePool?: string;
-    maxTeams: number;
-    registeredTeams: string[]; // List of Team IDs
-}
 
-export interface Match {
-    id: string;
-    tournamentId: string;
-    teamAId: string;
-    teamBId: string;
-    scoreA: number;
-    scoreB: number;
-    status: 'SCHEDULED' | 'LIVE' | 'FINISHED';
-    startTime: string;
-    streamUrl?: string; // YouTube link
+    // Relations
+    teams: TournamentTeam[];
+    matches: TournamentMatch[];
+    standings: TournamentStanding[]; // Empty if not valid yet
+
+    createdAt: string;
 }
 
 // RBAC Types
@@ -131,3 +165,19 @@ export interface ValidationResult {
     flags: string[];
     confidence: number; // 0-1
 }
+
+export interface CurrentUser {
+    id: string;
+    fullName: string;
+    nickname: string;
+    avatar: string;
+    telegram?: string;
+    isAdmin?: boolean; // For Role Based Access Control simulation
+    role?: 'PLAYER' | 'ADMIN'; // explicit role field
+    games: {
+        mlbb?: { nickname: string; playerId: string };
+        pubg?: { nickname: string; playerId: string };
+    };
+}
+// Alias for backward compatibility if needed, or just use CurrentUser
+export type MockUser = CurrentUser;
