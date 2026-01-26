@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 
-type Status = 'LIVE' | 'UPCOMING' | 'FINISHED' | 'SCHEDULED' | 'CANCELLED';
+type Status = 'LIVE' | 'UPCOMING' | 'FINISHED' | 'SCHEDULED' | 'CANCELLED' | 'ONGOING' | 'COMPLETED';
 
 interface StatusBadgeProps {
     status: Status;
@@ -16,20 +16,24 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     // Map status code to translation key
     const statusKeyMap = {
         'LIVE': 'live',
+        'ONGOING': 'live', // Map ONGOING to live
         'UPCOMING': 'upcoming',
         'FINISHED': 'finished',
-        'SCHEDULED': 'upcoming', // fall back
+        'COMPLETED': 'finished', // Map COMPLETED to finished
+        'SCHEDULED': 'upcoming',
         'CANCELLED': 'cancelled'
     };
 
     const getColors = (s: Status) => {
         switch (s) {
             case 'LIVE':
+            case 'ONGOING':
                 return 'bg-red-500/10 text-red-500 border-red-500/20';
             case 'UPCOMING':
             case 'SCHEDULED':
                 return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
             case 'FINISHED':
+            case 'COMPLETED':
                 return 'bg-neutral-500/10 text-neutral-400 border-neutral-500/20';
             case 'CANCELLED':
                 return 'bg-red-900/10 text-red-700 border-red-900/20 dark:text-red-400';
@@ -44,7 +48,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
             getColors(status),
             className
         )}>
-            {status === 'LIVE' && (
+        )}>
+            {(status === 'LIVE' || status === 'ONGOING') && (
                 <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
