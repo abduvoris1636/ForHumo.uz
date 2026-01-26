@@ -1,11 +1,12 @@
+```typescript
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const body = await req.json()
         const { teamId, requesterId } = body
-        const tournamentId = params.id
+        const { id: tournamentId } = await params
 
         if (!teamId || !requesterId) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
