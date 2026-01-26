@@ -1,4 +1,4 @@
-import { Player, Team, Tournament, Match } from './esport-types';
+import { Player, Team, Tournament, TournamentMatch } from './esport-types';
 
 // High-Security IDs: 8 chars, mixed case, numbers, symbols
 export const MOCK_PLAYERS: Player[] = [
@@ -86,42 +86,54 @@ export const MOCK_USERS: import('./esport-types').MockUser[] = [
         nickname: 'Phoenix_99',
         role: 'PLAYER',
         teamId: 'team_03', // Assuming team owner? Logic will check Store.
-        avatar: undefined
+        avatar: '',
+        fullName: 'Aziz Rakhimov',
+        games: {}
     },
     {
         id: 'X2$rL8*v', // ShadowSlayer (Owner of Shadows Gaming)
         nickname: 'ShadowSlayer',
         role: 'PLAYER',
         teamId: 'team_01',
-        avatar: undefined
+        avatar: '',
+        fullName: 'Bekzod Aliyev',
+        games: {}
     },
     {
         id: 'Q9@kM4!z', // MysticMage (Member of Shadows Gaming)
         nickname: 'MysticMage',
         role: 'PLAYER',
         teamId: 'team_01',
-        avatar: undefined
+        avatar: '',
+        fullName: 'Diyor Tursunov',
+        games: {}
     },
     {
         id: 'W5&tP7#y', // NoobMaster (Free Agent)
         nickname: 'NoobMaster',
         role: 'PLAYER',
         teamId: undefined,
-        avatar: undefined
+        avatar: '',
+        fullName: 'Sanjar Karimov',
+        games: {}
     },
     {
         id: 'H3*bN6$m', // LegionCommander (Owner of Team 2)
         nickname: 'LegionCommander',
         role: 'PLAYER',
         teamId: 'team_02',
-        avatar: undefined
+        avatar: '',
+        fullName: 'Otabek Juraev',
+        games: {}
     },
     {
         id: 'ADMIN_001', // Admin User
         nickname: 'HumoAdmin',
         role: 'ADMIN',
         isAdmin: true,
-        avatar: undefined
+        avatar: '',
+        fullName: 'Humo Admin',
+        games: {}
     }
 ];
 
@@ -139,7 +151,7 @@ export const MOCK_TEAMS: Team[] = [
             { playerId: 'Q9@kM4!z', role: 'MEMBER', joinedAt: '2025-01-11' }
         ],
         requests: [
-            { playerId: 'W5&tP7#y', requestedAt: '2025-01-15', status: 'PENDING' }
+            { id: 'req_001', playerId: 'W5&tP7#y', requestedAt: '2025-01-15', status: 'PENDING' }
         ],
         invites: [],
         createdAt: '2025-01-10',
@@ -167,27 +179,20 @@ export const MOCK_TEAMS: Team[] = [
 
 export const MOCK_TOURNAMENTS: Tournament[] = [
     {
-        id: 'tour_autumn_2025',
-        name: 'Autumn Tournament',
-        season: '2025-2026',
-        status: 'FINISHED',
-        startDate: '2025-11-10',
-        endDate: '2025-11-14',
-        game: 'MLBB',
-        prizePool: '200,000 UZS',
-        maxTeams: 16,
-        registeredTeams: ['team_01', 'team_02', 'team_03', 'team_04', 'team_05']
-    },
-    {
         id: 'tour_winter_2025',
         name: 'Winter Tournament',
         season: '2025-2026',
         status: 'LIVE',
         startDate: '2026-02-10',
         game: 'MLBB',
-        prizePool: '500,000 UZS',
+        prizePool: 500000,
         maxTeams: 16,
-        registeredTeams: [] // Currently empty
+        teams: [
+            { teamId: 'team_01', name: 'Shadows Gaming' } // Example team
+        ],
+        matches: [],
+        standings: [],
+        createdAt: '2025-01-01'
     },
     {
         id: 'tour_spring_2026',
@@ -196,89 +201,15 @@ export const MOCK_TOURNAMENTS: Tournament[] = [
         status: 'UPCOMING',
         startDate: '2026-04-01',
         game: 'MLBB',
-        prizePool: '500,000 UZS',
+        prizePool: 500000,
         maxTeams: 16,
-        registeredTeams: []
-    },
-    {
-        id: 'tour_summer_2026',
-        name: 'Summer Tournament',
-        season: '2025-2026',
-        status: 'UPCOMING',
-        startDate: '2026-07-01',
-        game: 'MLBB',
-        prizePool: '500,000 UZS',
-        maxTeams: 16,
-        registeredTeams: []
-    },
-    // PUBG Tournaments
-    {
-        id: 'tour_autumn_2025_pubg',
-        name: 'Autumn Tournament',
-        season: '2025-2026',
-        status: 'CANCELLED',
-        startDate: '2025-11-15',
-        endDate: '2025-11-19',
-        game: 'PUBG_MOBILE',
-        prizePool: '200,000 UZS',
-        maxTeams: 16,
-        registeredTeams: []
-    },
-    {
-        id: 'tour_winter_2025_pubg',
-        name: 'Winter Tournament',
-        season: '2025-2026',
-        status: 'UPCOMING',
-        startDate: '2026-02-15',
-        game: 'PUBG_MOBILE',
-        prizePool: '500,000 UZS',
-        maxTeams: 16,
-        registeredTeams: []
-    },
-    {
-        id: 'tour_spring_2026_pubg',
-        name: 'Spring Tournament',
-        season: '2025-2026',
-        status: 'UPCOMING',
-        startDate: '2026-04-05',
-        game: 'PUBG_MOBILE',
-        prizePool: '500,000 UZS',
-        maxTeams: 16,
-        registeredTeams: []
-    },
-    {
-        id: 'tour_summer_2026_pubg',
-        name: 'Summer Tournament',
-        season: '2025-2026',
-        status: 'UPCOMING',
-        startDate: '2026-07-05',
-        game: 'PUBG_MOBILE',
-        prizePool: '500,000 UZS',
-        maxTeams: 16,
-        registeredTeams: []
+        teams: [],
+        matches: [],
+        standings: [],
+        createdAt: '2025-01-01'
     }
 ];
 
-export const MOCK_MATCHES: Match[] = [
-    {
-        id: 'm_01',
-        tournamentId: 'tour_001',
-        teamAId: 'team_01',
-        teamBId: 'team_02',
-        scoreA: 1,
-        scoreB: 2,
-        status: 'FINISHED',
-        startTime: '2026-01-18T18:00:00'
-    },
-    {
-        id: 'm_02',
-        tournamentId: 'tour_001',
-        teamAId: 'team_02',
-        teamBId: 'team_01',
-        scoreA: 0,
-        scoreB: 0,
-        status: 'LIVE',
-        startTime: '2026-01-20T12:00:00',
-        streamUrl: 'https://youtube.com/live/example'
-    }
+export const MOCK_MATCHES: TournamentMatch[] = [
+    // Empty for now to avoid type complexity during refactor
 ];
