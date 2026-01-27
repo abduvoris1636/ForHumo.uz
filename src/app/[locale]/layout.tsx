@@ -13,6 +13,14 @@ import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const metadata = {
+    title: "For Humo",
+    description: "A unified ecosystem of digital platforms including eSPort, AI, TV, and more.",
+    icons: {
+        icon: "/logo.png",
+    },
+};
+
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }));
 }
