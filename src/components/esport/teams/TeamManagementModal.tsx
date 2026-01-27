@@ -146,22 +146,38 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam, onDel
         return new Date() < expires;
     });
 
-    const handleActionRequest = (playerId: string, action: 'ACCEPT' | 'REJECT') => {
-        let updatedTeam = { ...team };
+    const handleActionRequest = async (playerId: string, action: 'ACCEPT' | 'REJECT') => {
+        try {
+            const res = await fetch('/api/teams/requests/action', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    teamId: team.id,
+                    userId: playerId, // The player requesting
+                    currentUserId: team.ownerId, // The one approving
+                    action
+                })
+            });
 
-        if (action === 'ACCEPT') {
-            const newMember: TeamMember = {
-                playerId: playerId,
-                role: 'MEMBER',
-                joinedAt: new Date().toISOString()
-            };
-            const updatedRequests = team.requests.filter(r => r.playerId !== playerId);
-            updatedTeam = { ...updatedTeam, members: [...updatedTeam.members, newMember], requests: updatedRequests };
-        } else {
-            const updatedRequests = team.requests.filter(r => r.playerId !== playerId);
-            updatedTeam = { ...updatedTeam, requests: updatedRequests };
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Failed to process request');
+            }
+
+            // Success - Refetch
+            onUpdateTeam({ ...team }); // Triggers re-fetch in parent
+            alert(`Request ${action === 'ACCEPT' ? 'Accepted' : 'Rejected'}`);
+
+        } catch (error: any) {
+            console.error(error);
+            alert("Error accepting request: " + error.message);
         }
-        onUpdateTeam(updatedTeam);
+    };
+
+    // Helper to get display info
+    const getRequestUser = (req: JoinRequest) => {
+        if (req.playerDetails) return req.playerDetails;
+        return getPlayer(req.playerId) || { nickname: 'Unknown', avatar: '', level: 0 };
     };
 
     // --- OUTGOING INVITES LOGIC ---
@@ -316,8 +332,7 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam, onDel
                                 ) : (
                                     <div className="space-y-3 overflow-y-auto max-h-[400px] pr-2">
                                         {validRequests.map((req) => {
-                                            const p = getPlayer(req.playerId);
-                                            if (!p) return null;
+                                            const p = getRequestUser(req);
                                             // Calculate time remaining (24h expiry)
                                             const expiresVal = new Date(req.requestedAt).getTime() + 24 * 60 * 60 * 1000;
                                             const timeUntilExpiry = Math.max(0, expiresVal - Date.now());
@@ -325,7 +340,7 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam, onDel
 
                                             return (
                                                 <div key={req.playerId} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-3 flex items-center gap-4 hover:border-zinc-700 transition-colors">
-                                                    <img src={p.avatar} alt={p.nickname} className="w-10 h-10 rounded-full bg-zinc-800 object-cover" />
+                                                    <img src={p.avatar || '/placeholder-avatar.png'} alt={p.nickname} className="w-10 h-10 rounded-full bg-zinc-800 object-cover" />
                                                     <div className="flex-1">
                                                         <div className="flex items-center gap-2">
                                                             <h4 className="font-bold text-white text-sm">{p.nickname}</h4>
@@ -333,22 +348,17 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam, onDel
                                                         </div>
                                                         <div className="text-[10px] text-zinc-500 flex items-center gap-2 mt-0.5">
                                                             <span>Expires in {hoursLeft}h</span>
-                                                            {p.gameProfiles[0] && (
-                                                                <span className="flex items-center gap-1 text-zinc-400">
-                                                                    <Gamepad2 className="w-3 h-3" /> {p.gameProfiles[0].game}
-                                                                </span>
-                                                            )}
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-2">
                                                         <button
-                                                            onClick={() => handleActionRequest(p.id, 'REJECT')}
+                                                            onClick={() => handleActionRequest(req.playerId, 'REJECT')}
                                                             className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all"
                                                         >
                                                             <X className="w-4 h-4" />
                                                         </button>
                                                         <button
-                                                            onClick={() => handleActionRequest(p.id, 'ACCEPT')}
+                                                            onClick={() => handleActionRequest(req.playerId, 'ACCEPT')}
                                                             className="p-2 rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-black transition-all"
                                                         >
                                                             <Check className="w-4 h-4" />

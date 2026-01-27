@@ -27,13 +27,23 @@ export interface TeamMember {
     playerId: string;
     role: TeamRole;
     joinedAt: string;
+    playerDetails?: {
+        nickname: string;
+        avatar: string;
+        level: number;
+    };
 }
 
 export interface JoinRequest {
-    id: string;
+    id: string; // generated ID or compound key
     playerId: string;
     requestedAt: string;
     status: RequestStatus;
+    playerDetails?: {
+        nickname: string;
+        avatar: string;
+        level: number;
+    };
 }
 
 export interface TeamInvite {

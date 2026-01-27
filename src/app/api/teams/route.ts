@@ -9,7 +9,14 @@ export async function GET() {
 
         try {
             const teams = await prisma.team.findMany({
-                include: { members: true, requests: true }
+                include: {
+                    members: {
+                        include: { user: true }
+                    },
+                    requests: {
+                        include: { user: true }
+                    }
+                }
             });
 
             // Map to safe format (copy of repository logic)
@@ -33,12 +40,22 @@ export async function GET() {
                 members: (t.members || []).map((m: any) => ({
                     playerId: m.userId, // Schema uses userId, frontend expects playerId
                     role: m.role,
-                    joinedAt: m.joinedAt.toISOString()
+                    joinedAt: m.joinedAt.toISOString(),
+                    playerDetails: m.user ? {
+                        nickname: m.user.nickname,
+                        avatar: m.user.avatar,
+                        level: m.user.level || 1
+                    } : undefined
                 })),
                 requests: (t.requests || []).map((r: any) => ({
                     playerId: r.userId, // Schema: userId
                     status: r.status,
-                    requestedAt: r.createdAt.toISOString() // Schema: createdAt, Frontend expects requestedAt
+                    requestedAt: r.createdAt.toISOString(), // Schema: createdAt
+                    playerDetails: r.user ? {
+                        nickname: r.user.nickname,
+                        avatar: r.user.avatar,
+                        level: r.user.level || 1
+                    } : undefined
                 })),
                 invites: [],
             }));
