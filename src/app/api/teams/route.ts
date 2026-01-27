@@ -36,9 +36,9 @@ export async function GET() {
                     joinedAt: m.joinedAt.toISOString()
                 })),
                 requests: (t.requests || []).map((r: any) => ({
-                    playerId: r.playerId,
+                    playerId: r.userId, // Schema: userId
                     status: r.status,
-                    requestedAt: r.requestedAt.toISOString()
+                    requestedAt: r.createdAt.toISOString() // Schema: createdAt, Frontend expects requestedAt
                 })),
                 invites: [],
             }));

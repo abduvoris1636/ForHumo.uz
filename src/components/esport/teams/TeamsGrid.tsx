@@ -77,8 +77,10 @@ export function TeamsGrid() {
     };
 
     const handleUpdateTeam = (updatedTeam: Team) => {
-        // TODO: Implement updateTeam in useTeamStore
-        alert("Update Team simulated! (Logic pending migration to Store)");
+        // Since we are using an API-first approach now, the easiest way to sync 
+        // changes (like new invite keys) is to re-fetch the teams data.
+        // In a more complex app, we'd update the store optimally.
+        initTeams();
     };
 
     const handleJoinByCode = async (code: string) => {
