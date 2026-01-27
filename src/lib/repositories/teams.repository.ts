@@ -21,12 +21,12 @@ const mapPrismaToTeam = (t: any): Team => ({
         losses: t.losses,
         tournamentsPlayed: t.tournamentsPlayed
     },
-    members: t.members.map((m: any) => ({
+    members: (t.members || []).map((m: any) => ({
         playerId: m.playerId,
         role: m.role,
         joinedAt: m.joinedAt.toISOString()
     })),
-    requests: t.requests.map((r: any) => ({
+    requests: (t.requests || []).map((r: any) => ({
         playerId: r.playerId,
         status: r.status,
         requestedAt: r.requestedAt.toISOString()
