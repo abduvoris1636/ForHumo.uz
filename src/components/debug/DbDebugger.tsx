@@ -8,10 +8,16 @@ export function DbDebugger() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        debugDatabase().then(res => {
-            setLogs(res.logs);
-            setLoading(false);
-        });
+        debugDatabase()
+            .then(res => {
+                setLogs(res.logs);
+            })
+            .catch(err => {
+                setLogs(["CLIENT ERROR: Failed to call server action", err.message]);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
 
     if (loading) return <div className="text-xs text-yellow-500">Running Diagnostics...</div>;

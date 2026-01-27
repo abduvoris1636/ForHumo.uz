@@ -19,13 +19,16 @@ export async function debugDatabase() {
         logs.push(`Team Count: ${teamCount}`);
 
         // 4. Fetch Raw Teams
-        const teams = await db.team.findMany({ select: { id: true, name: true, tag: true } });
+        const teams = await Promise.race([
+            db.team.findMany({ select: { id: true, name: true, tag: true } }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("DB Timeout")), 5000))
+        ]) as any[];
+
         logs.push(`Raw Teams Fetch: ${JSON.stringify(teams)}`);
 
         return { success: true, logs };
     } catch (error: any) {
         logs.push(`ERROR: ${error.message}`);
-        logs.push(`STACK: ${error.stack}`);
         return { success: false, logs };
     }
 }
