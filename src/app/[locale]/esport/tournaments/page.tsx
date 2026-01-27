@@ -5,10 +5,17 @@ import { TournamentCard } from '@/components/esport/tournaments/TournamentCard';
 export const dynamic = 'force-dynamic';
 
 export default async function TournamentsPage() {
-    const tournamentsData = await prisma.tournament.findMany({
-        orderBy: { startDate: 'asc' },
-        include: { teams: true }
-    });
+    let tournamentsData: any[] = [];
+    try {
+        tournamentsData = await prisma.tournament.findMany({
+            orderBy: { startDate: 'asc' },
+            include: { teams: true }
+        });
+    } catch (error) {
+        console.error("Failed to fetch tournaments:", error);
+        // Fallback or empty array
+        tournamentsData = [];
+    }
 
     const tournaments = JSON.parse(JSON.stringify(tournamentsData));
 
