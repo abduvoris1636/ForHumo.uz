@@ -11,17 +11,22 @@ export async function POST(req: Request) {
         }
 
         // Ensure User exists (Sync Mock User to DB)
-        // Since we are using an ID from the client, we must confirm this ID exists in our User table
-        // or create a placeholder user to satisfy the FK constraint.
-        await prisma.user.upsert({
-            where: { id: ownerId },
-            update: {}, // No updates if exists
-            create: {
-                id: ownerId,
-                nickname: `User_${ownerId.slice(0, 4)}`, // Fallback nickname
-                // Add other required fields if any, schema shows nickname is @unique and required
-            }
-        })
+        try {
+            await prisma.user.upsert({
+                where: { id: ownerId },
+                update: {}, // No updates if exists
+                create: {
+                    id: ownerId,
+                    nickname: `User_${Math.floor(Date.now() / 1000)}_${ownerId.slice(0, 4)}`, // Timestamp + Suffix for uniqueness
+                    // Add other required fields if any, schema shows nickname is @unique and required
+                }
+            })
+        } catch (upsertError) {
+            console.error("Failed to upsert user:", upsertError);
+            // Continue? If upsert failed, likely foreign key constraint will fail next, but let's let it fail there or handle here.
+            // If nickname collision (very rare with timestamp), it needs retry. 
+            // For now, logging helps.
+        }
 
         // Check if tag exists
         const existing = await prisma.team.findUnique({
@@ -51,8 +56,8 @@ export async function POST(req: Request) {
         })
 
         return NextResponse.json(team)
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating team:', error)
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 })
     }
 }

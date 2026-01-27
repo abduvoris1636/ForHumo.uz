@@ -35,8 +35,9 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
             const base64 = await compressImage(file);
             setLogo(base64);
             setErrors(prev => ({ ...prev, logo: '' })); // Clear error
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
+            alert(`Error: ${err.message}`); // Explicit alert for user/dev to see
             setErrors(prev => ({ ...prev, logo: 'Failed to process image' }));
         } finally {
             setIsUploading(false);
@@ -108,7 +109,9 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
             window.location.reload();
 
         } catch (err: any) {
+            console.error("Create Team Error:", err);
             setError(err.message);
+            alert(`Failed to create team: ${err.message}`); // Alert for immediate feedback
         } finally {
             setIsLoading(false);
         }
