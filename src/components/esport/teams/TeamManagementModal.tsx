@@ -77,16 +77,32 @@ export function TeamManagementModal({ isOpen, onClose, team, onUpdateTeam, onDel
         return () => clearInterval(interval);
     }, [isOpen, team.joinCode]);
 
-    const handleGenerateCode = () => {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let code = '';
-        for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-        const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+    const handleGenerateCode = async () => {
+        try {
+            const res = await fetch('/api/teams/invite/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ teamId: team.id, userId: team.ownerId })
+            });
 
-        onUpdateTeam({
-            ...team,
-            joinCode: { code, expiresAt, createdAt: new Date().toISOString() }
-        });
+            if (!res.ok) throw new Error('Failed to generate code');
+
+            const invite = await res.json();
+
+            // Update local state and parent
+            onUpdateTeam({
+                ...team,
+                joinCode: {
+                    code: invite.code,
+                    expiresAt: invite.expiresAt,
+                    createdAt: invite.createdAt
+                }
+            });
+
+        } catch (error) {
+            console.error(error);
+            alert("Failed to generate invite key");
+        }
     };
 
     const handleCopyCode = () => {

@@ -1,45 +1,52 @@
-import { prisma } from '@/lib/prisma'
-import { NextResponse } from 'next/server'
-import { randomBytes } from 'crypto'
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     try {
-        const body = await req.json()
-        const { teamId, ownerId, maxUses } = body
+        const { teamId, userId } = await req.json();
 
-        if (!teamId || !ownerId) {
-            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+        if (!teamId || !userId) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // 1. Verify Team Ownership
+        // Verify ownership
         const team = await prisma.team.findUnique({
-            where: { id: teamId }
-        })
+            where: { id: teamId },
+        });
 
-        if (!team || team.ownerId !== ownerId) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+        if (!team) {
+            return NextResponse.json({ error: 'Team not found' }, { status: 404 });
         }
 
-        // 2. Generate Unique Code (uppercase alphanumeric)
-        // Using randomBytes tailored to be readable? Or just a simple string.
-        // Let's use 8 chars hex for simplicity, uppercased.
-        const code = randomBytes(4).toString('hex').toUpperCase();
+        if (team.ownerId !== userId) {
+            return NextResponse.json({ error: 'Only the owner can generate invite codes' }, { status: 403 });
+        }
 
-        // 3. Create Invite
+        // Generate 5-char code
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+
+        // Create Invite Record
+        // We treat this as a "Public" code for the team, valid for 5 minutes
         const invite = await prisma.teamInvite.create({
             data: {
-                code,
                 teamId,
-                createdBy: ownerId,
-                maxUses: maxUses || 10,
-                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // Default 24h expiry
+                createdBy: userId,
+                code,
+                expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
+                maxUses: 100, // Allow multiple people to use it within 5 mins
             }
-        })
+        });
 
-        return NextResponse.json(invite)
+        return NextResponse.json(invite);
 
     } catch (error) {
-        console.error('Error creating invite:', error)
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        console.error('Error creating invite:', error);
+        return NextResponse.json({ error: 'Failed to create invite code' }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
 }
