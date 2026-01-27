@@ -26,13 +26,15 @@ export const useTeamStore = create<TeamState>()(
 
             initialize: async () => {
                 try {
-                    const teams = await TeamsRepository.getAll();
-                    console.log("[TeamStore] Initialized with teams:", teams.length);
+                    // Switch to API fetch because Server Actions are unstable in this env
+                    const res = await fetch('/api/teams', { cache: 'no-store' });
+                    if (!res.ok) throw new Error('Failed to fetch teams via API');
+
+                    const teams = await res.json();
+                    console.log("[TeamStore] Initialized via API with teams:", teams.length);
                     set({ teams: teams, initialized: true });
                 } catch (error) {
                     console.error("Failed to fetch teams:", error);
-                    // Don't overwrite existing teams on error if we have them?
-                    // For now, simple logging.
                 }
             },
 
