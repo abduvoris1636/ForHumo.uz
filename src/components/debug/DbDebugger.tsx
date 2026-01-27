@@ -8,12 +8,13 @@ export function DbDebugger() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        debugDatabase()
-            .then(res => {
-                setLogs(res.logs);
+        fetch('/api/debug')
+            .then(res => res.json())
+            .then(data => {
+                setLogs(data.logs || ["No logs returned"]);
             })
             .catch(err => {
-                setLogs(["CLIENT ERROR: Failed to call server action", err.message]);
+                setLogs(["CLIENT FETCH ERROR", err.message]);
             })
             .finally(() => {
                 setLoading(false);
