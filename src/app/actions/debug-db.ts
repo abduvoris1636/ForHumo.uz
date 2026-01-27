@@ -1,34 +1,53 @@
 'use server';
 
-import db from '@/lib/db';
+import { PrismaClient } from '@prisma/client';
 
 export async function debugDatabase() {
     const logs: string[] = [];
     try {
-        logs.push("Starting DB Debug...");
+        logs.push("Starting DB Debug (Safemode)...");
 
         // 1. Check Env
-        logs.push(`DATABASE_URL Present: ${process.env.DATABASE_URL ? 'Yes ' + process.env.DATABASE_URL.substring(0, 10) + '...' : 'NO'}`);
+        const url = process.env.DATABASE_URL;
+        logs.push(`DATABASE_URL Type: ${typeof url}`);
+        logs.push(`DATABASE_URL Length: ${url ? url.length : 0}`);
 
-        // 2. Count Users
-        const userCount = await db.user.count();
-        logs.push(`User Count: ${userCount}`);
+        if (!url) {
+            logs.push("CRITICAL: DATABASE_URL is missing!");
+            return { success: false, logs };
+        }
 
-        // 3. Count Teams
-        const teamCount = await db.team.count();
-        logs.push(`Team Count: ${teamCount}`);
+        // 2. Instantiate Local Prisma
+        logs.push("Instantiating Client...");
+        const prisma = new PrismaClient();
 
-        // 4. Fetch Raw Teams
-        const teams = await Promise.race([
-            db.team.findMany({ select: { id: true, name: true, tag: true } }),
-            new Promise((_, reject) => setTimeout(() => reject(new Error("DB Timeout")), 5000))
-        ]) as any[];
+        try {
+            // 3. Connect/Query with Timeout
+            logs.push("Connecting...");
 
-        logs.push(`Raw Teams Fetch: ${JSON.stringify(teams)}`);
+            const result = await Promise.race([
+                prisma.team.count(),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout (5s)")), 5000))
+            ]);
+
+            logs.push(`Connection Success! Team Count: ${result}`);
+
+            // 4. Raw Query check
+            const teams = await prisma.team.findMany({
+                take: 5,
+                select: { id: true, name: true, tag: true }
+            });
+            logs.push(`Sample Teams: ${teams.length}`);
+
+        } catch (innerErr: any) {
+            logs.push(`DB OP ERROR: ${innerErr.message}`);
+        } finally {
+            await prisma.$disconnect();
+        }
 
         return { success: true, logs };
     } catch (error: any) {
-        logs.push(`ERROR: ${error.message}`);
+        logs.push(`FATAL ACTION ERROR: ${error.message}`);
         return { success: false, logs };
     }
 }
