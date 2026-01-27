@@ -10,6 +10,19 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
         }
 
+        // Ensure User exists (Sync Mock User to DB)
+        // Since we are using an ID from the client, we must confirm this ID exists in our User table
+        // or create a placeholder user to satisfy the FK constraint.
+        await prisma.user.upsert({
+            where: { id: ownerId },
+            update: {}, // No updates if exists
+            create: {
+                id: ownerId,
+                nickname: `User_${ownerId.slice(0, 4)}`, // Fallback nickname
+                // Add other required fields if any, schema shows nickname is @unique and required
+            }
+        })
+
         // Check if tag exists
         const existing = await prisma.team.findUnique({
             where: { tag },
