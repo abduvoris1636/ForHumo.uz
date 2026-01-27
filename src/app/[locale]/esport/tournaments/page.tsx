@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { TournamentCard } from '@/components/esport/tournaments/TournamentCard';
+import { TournamentsContent } from '@/components/esport/tournaments/TournamentsContent';
 
 // Force dynamic rendering since we are fetching data that changes
 export const dynamic = 'force-dynamic';
@@ -26,17 +26,7 @@ export default async function TournamentsPage() {
                 <p className="text-zinc-400">Join upcoming competitive events.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {tournaments.map((t: any) => (
-                    <TournamentCard key={t.id} tournament={t} />
-                ))}
-            </div>
-
-            {tournaments.length === 0 && (
-                <div className="text-center py-20 text-zinc-500">
-                    No tournaments available at the moment.
-                </div>
-            )}
+            <TournamentsContent activeTournaments={tournaments} />
         </div>
     );
 }
