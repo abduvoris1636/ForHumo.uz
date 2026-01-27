@@ -31,7 +31,7 @@ export async function GET() {
                     tournamentsPlayed: t.tournamentsPlayed
                 },
                 members: (t.members || []).map((m: any) => ({
-                    playerId: m.playerId,
+                    playerId: m.userId, // Schema uses userId, frontend expects playerId
                     role: m.role,
                     joinedAt: m.joinedAt.toISOString()
                 })),
