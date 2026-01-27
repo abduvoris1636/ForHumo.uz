@@ -95,6 +95,17 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
                 }),
             });
 
+            if (res.status === 409) {
+                // Team Tag/Name exists
+                const data = await res.json();
+                if (data.error.includes("tag")) {
+                    setErrors({ ...errors, tag: "This short tag is already taken." });
+                } else {
+                    setErrors({ ...errors, name: "This team name is already taken." });
+                }
+                return; // Stop here, don't throw generic error
+            }
+
             if (!res.ok) {
                 const data = await res.json();
                 throw new Error(data.error || 'Failed to create team');
@@ -111,7 +122,10 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
         } catch (err: any) {
             console.error("Create Team Error:", err);
             setError(err.message);
-            alert(`Failed to create team: ${err.message}`); // Alert for immediate feedback
+            // Only alert if it's not a validation error we already handled
+            if (!errors.tag && !errors.name) {
+                alert(`Failed to create team: ${err.message}`);
+            }
         } finally {
             setIsLoading(false);
         }
