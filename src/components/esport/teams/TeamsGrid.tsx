@@ -256,6 +256,7 @@ export function TeamsGrid() {
                     isOpen={isManagementOpen}
                     onClose={() => setIsManagementOpen(false)}
                     team={myTeam}
+                    currentUserId={currentUserId || ''} // Pass ID
                     onUpdateTeam={handleUpdateTeam}
                     onDeleteTeam={handleDeleteTeam}
                 />
