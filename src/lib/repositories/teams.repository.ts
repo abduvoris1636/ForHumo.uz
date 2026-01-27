@@ -40,6 +40,7 @@ export const TeamsRepository = {
             const teams = await db.team.findMany({
                 include: { members: true, requests: true }
             });
+            console.log(`[TeamsRepository] Fetching all teams. Found: ${teams.length}`);
             if (teams.length === 0) return [];
             return teams.map(mapPrismaToTeam);
         } catch (e) {

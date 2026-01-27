@@ -27,6 +27,7 @@ export const useTeamStore = create<TeamState>()(
             initialize: async () => {
                 try {
                     const teams = await TeamsRepository.getAll();
+                    console.log("[TeamStore] Initialized with teams:", teams.length);
                     set({ teams: teams, initialized: true });
                 } catch (error) {
                     console.error("Failed to fetch teams:", error);
