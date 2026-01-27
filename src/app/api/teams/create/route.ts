@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 
 export async function POST(req: Request) {
     try {
@@ -54,6 +55,10 @@ export async function POST(req: Request) {
                 members: true,
             },
         })
+
+        // Revalidate the teams page to refresh cache
+        revalidatePath('/[locale]/esport/teams');
+        revalidatePath('/esport/teams');
 
         return NextResponse.json(team)
     } catch (error: any) {

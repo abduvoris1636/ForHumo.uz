@@ -153,6 +153,7 @@ export function TeamsGrid() {
                     Showing <span className="text-white font-bold">
                         {filteredTeams.length + (displayMyTeam ? 1 : 0)}
                     </span> teams
+                    <span className="text-xs text-zinc-700 ml-2">(Total Loaded: {teams.length})</span>
                 </div>
             </div>
 
