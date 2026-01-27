@@ -48,13 +48,15 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
         const newErrors: Record<string, string> = {};
 
         // Name Validation
+        const latinNameRegex = /^[a-zA-Z0-9 ]+$/;
         if (!name.trim()) newErrors.name = 'Team Name is required';
         else if (name.length < 3) newErrors.name = 'Name too short (min 3 chars)';
+        else if (!latinNameRegex.test(name)) newErrors.name = 'Only Latin letters and numbers allowed';
 
         // Tag Validation
-        const tagRegex = /^[A-Z]{2,4}$/;
+        const tagRegex = /^[A-Z0-9]{2,4}$/;
         if (!tag) newErrors.tag = 'Tag is required';
-        else if (!tagRegex.test(tag)) newErrors.tag = 'Tag must be 2-4 uppercase letters (A-Z)';
+        else if (!tagRegex.test(tag)) newErrors.tag = 'Tag must be 2-4 uppercase Latin letters/numbers';
         else {
             // Check uniqueness
             const isTaken = MOCK_TEAMS.some(t => t.tag === tag);
@@ -104,6 +106,12 @@ export function CreateTeamModal({ isOpen, onClose, currentUserId, onSave }: Crea
                     setErrors({ ...errors, name: "This team name is already taken." });
                 }
                 return; // Stop here, don't throw generic error
+            }
+
+            if (res.status === 403) {
+                // User already in a team
+                alert("You are already a member of a team. You must leave your current team to create a new one.")
+                return;
             }
 
             if (!res.ok) {

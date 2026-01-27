@@ -24,7 +24,6 @@ export default function TeamsPage() {
                 </div>
 
                 {/* Main Grid Component */}
-                <DbDebugger />
                 <TeamsGrid />
             </div>
         </div>

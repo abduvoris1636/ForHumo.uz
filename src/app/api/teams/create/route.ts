@@ -29,13 +29,36 @@ export async function POST(req: Request) {
             // For now, logging helps.
         }
 
-        // Check if tag exists
-        const existing = await prisma.team.findUnique({
+        // 1. Check if user is already in ANY team
+        const existingMembership = await prisma.teamMember.findFirst({
+            where: { userId: ownerId }
+        });
+
+        if (existingMembership) {
+            return NextResponse.json({ error: 'User is already a member of a team' }, { status: 403 });
+        }
+
+        // 2. Check if tag exists
+        const existingTag = await prisma.team.findUnique({
             where: { tag },
         })
 
-        if (existing) {
+        if (existingTag) {
             return NextResponse.json({ error: 'Team tag already exists' }, { status: 409 })
+        }
+
+        // 3. Check if name exists (Case Insensitive)
+        const existingName = await prisma.team.findFirst({
+            where: {
+                name: {
+                    equals: name,
+                    mode: 'insensitive', // PostgreSQL specific
+                }
+            }
+        });
+
+        if (existingName) {
+            return NextResponse.json({ error: 'Team name already exists' }, { status: 409 })
         }
 
         // Create Team and assign Owner role
