@@ -16,22 +16,23 @@ export async function GET(req: Request) {
     try {
         const prisma = new PrismaClient();
 
-        // Delete in order of dependencies (though cascade might handle it, better explicit)
-        await prisma.joinRequest.deleteMany({});
-        await prisma.teamMember.deleteMany({});
-        const deleted = await prisma.team.deleteMany({});
+        try {
+            // Delete in order of dependencies (though cascade might handle it, better explicit)
+            await prisma.joinRequest.deleteMany({});
+            await prisma.teamMember.deleteMany({});
+            const deleted = await prisma.team.deleteMany({});
 
-        return NextResponse.json({
-            success: true,
-            message: `Deleted ${deleted.count} teams. Database is clean.`,
-            nextStep: "Go back to /esport/teams and create your fresh team!"
-        });
+            return NextResponse.json({
+                success: true,
+                message: `Deleted ${deleted.count} teams. Database is clean.`,
+                nextStep: "Go back to /esport/teams and create your fresh team!"
+            });
 
-    } finally {
-        await prisma.$disconnect();
+        } finally {
+            await prisma.$disconnect();
+        }
+
+    } catch (err: any) {
+        return NextResponse.json({ error: err.message }, { status: 500 });
     }
-
-} catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
-}
 }
