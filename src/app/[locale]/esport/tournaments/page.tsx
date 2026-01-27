@@ -5,10 +5,12 @@ import { TournamentCard } from '@/components/esport/tournaments/TournamentCard';
 export const dynamic = 'force-dynamic';
 
 export default async function TournamentsPage() {
-    const tournaments = await prisma.tournament.findMany({
+    const tournamentsData = await prisma.tournament.findMany({
         orderBy: { startDate: 'asc' },
         include: { teams: true }
     });
+
+    const tournaments = JSON.parse(JSON.stringify(tournamentsData));
 
     return (
         <div className="space-y-8 p-4 md:p-8 pt-6">
@@ -18,8 +20,8 @@ export default async function TournamentsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {tournaments.map((t) => (
-                    <TournamentCard key={t.id} tournament={t} onClick={() => { }} />
+                {tournaments.map((t: any) => (
+                    <TournamentCard key={t.id} tournament={t} />
                 ))}
             </div>
 

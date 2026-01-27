@@ -8,7 +8,7 @@ import { useTeamStore } from '@/lib/store/team-store';
 
 interface TournamentCardProps {
     tournament: any;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 export function TournamentCard({ tournament, onClick }: TournamentCardProps) {
