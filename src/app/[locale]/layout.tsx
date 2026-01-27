@@ -58,7 +58,7 @@ export default async function LocaleLayout({
                                 {children}
                             </main>
                             <Footer />
-                            <UserSwitcher />
+                            {/* <UserSwitcher /> Removed for production */}
                         </AuthBarrier>
                     </Providers>
                 </NextIntlClientProvider>

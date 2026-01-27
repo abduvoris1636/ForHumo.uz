@@ -40,11 +40,11 @@ export const TeamsRepository = {
             const teams = await db.team.findMany({
                 include: { members: true, requests: true }
             });
-            if (teams.length === 0) return MOCK_TEAMS;
+            if (teams.length === 0) return [];
             return teams.map(mapPrismaToTeam);
         } catch (e) {
             console.error("DB Error (Teams):", e);
-            return MOCK_TEAMS;
+            return [];
         }
     },
 
@@ -54,10 +54,10 @@ export const TeamsRepository = {
                 where: { id },
                 include: { members: true, requests: true }
             });
-            if (!team) return MOCK_TEAMS.find(t => t.id === id);
+            if (!team) return undefined;
             return mapPrismaToTeam(team);
         } catch (e) {
-            return MOCK_TEAMS.find(t => t.id === id);
+            return undefined;
         }
     }
 };

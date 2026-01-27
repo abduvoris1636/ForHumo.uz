@@ -26,21 +26,21 @@ export const PlayersRepository = {
     getAll: async (): Promise<Player[]> => {
         try {
             const profiles = await db.playerProfile.findMany();
-            if (profiles.length === 0) return MOCK_PLAYERS; // Fallback for demo
+            if (profiles.length === 0) return []; // Fallback for demo
             return profiles.map(mapPrismaToPlayer);
         } catch (e) {
             console.error("DB Error (Players):", e);
-            return MOCK_PLAYERS; // Fallback
+            return []; // Fallback
         }
     },
 
     getById: async (id: string): Promise<Player | undefined> => {
         try {
             const profile = await db.playerProfile.findUnique({ where: { id } });
-            if (!profile) return MOCK_PLAYERS.find(p => p.id === id); // Fallback
+            if (!profile) return undefined; // Fallback
             return mapPrismaToPlayer(profile);
         } catch (e) {
-            return MOCK_PLAYERS.find(p => p.id === id);
+            return undefined;
         }
     }
 };

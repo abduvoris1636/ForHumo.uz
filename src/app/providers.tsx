@@ -2,6 +2,7 @@
 
 import { ThemeProvider } from 'next-themes';
 import { SessionProvider } from "next-auth/react";
+import { AuthSync } from "@/components/auth/auth-sync";
 
 export function Providers({
     children,
@@ -10,6 +11,7 @@ export function Providers({
 }) {
     return (
         <SessionProvider>
+            <AuthSync />
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                 {children}
             </ThemeProvider>
